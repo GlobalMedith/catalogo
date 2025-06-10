@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GlobalMediTH - Catálogo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #4CAF50, #2196F3);
+      color: #333;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+    }
+    .logo img {
+      height: 100px;
+      display: block;
+      margin: 0 auto 20px;
+    }
+    h1 {
+      text-align: center;
+      color: white;
+      margin-bottom: 10px;
+    }
+    .persuasive {
+      text-align: center;
+      background: white;
+      padding: 15px;
+      margin: 20px auto;
+      border-radius: 10px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .form input {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+    }
+    .search-box {
+      margin-bottom: 20px;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    .card input[type='checkbox'] {
+      margin-right: 10px;
+    }
+    .actions {
+      text-align: center;
+      margin-top: 30px;
+    }
+    button {
+      margin: 10px;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px;
+      background: #25D366;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <img src="logo.jpg" alt="GlobalMediTH Logo"/>
+    </div>
+    <h1>Catálogo de Medicamentos</h1>
+    <div class="persuasive">
+      ¡Solicita tu pedido ahora! Atención personalizada y medicamentos confiables.
+    </div>
+
+    <form id="formulario" class="form">
+      <input type="text" id="nombre" placeholder="Nombre Completo" required />
+      <input type="tel" id="celular" placeholder="Número de Celular" required />
+      <input type="text" id="ciudad" placeholder="Ciudad" required />
+      <input type="email" id="correo" placeholder="Correo Electrónico" required />
+    </form>
+
+    <div class="search-box">
+      <input type="text" id="busqueda" placeholder="Buscar medicamentos por descripción, fórmula o laboratorio" />
+    </div>
+
+    <div class="products" id="catalogo"></div>
+
+    <div class="actions">
+      <button onclick="generarPDF()">Generar PDF</button>
+      <button onclick="enviarWhatsApp()">Solicitar Cotización</button>
+    </div>
+  </div>
+
+  <script>
+    let medicamentos = [];
+    let seleccionados = [];
+
+    window.onload = async () => {
+      const res = await fetch('medicamentos.json');
+      medicamentos = await res.json();
+      medicamentos.shift(); // Esto elimina el primer elemento del JSON (que es el encabezado)
+      renderCatalogo(medicamentos);
+    };
+
+    function renderCatalogo(data) {
+      const contenedor = document.getElementById('catalogo');
+      contenedor.innerHTML = "";
+      data.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <label>
+            <input type="checkbox" onchange="seleccionar(${index}, this.checked)">
+            <strong>${item.descripcion}</strong>
+          </label>
+          <p><strong>Fórmula:</strong> ${item.formula}</p>
+          <p><strong>Laboratorio:</strong> ${item.laboratorio}</p>
+          <p><strong>Código:</strong> ${item.codigoBarras}</p>
+          <p><strong>Cantidad:</strong> <input type="number" min="1" value="1" onchange="actualizarCantidad(${index}, this.value)" /></p>
+        `;
+        contenedor.appendChild(card);
+      });
+    }
+
+    function seleccionar(index, checked) {
+      const item = medicamentos[index];
+      const cantidad = 1;
+      if (checked) {
+        seleccionados.push({ ...item, cantidad });
+      } else {
+        seleccionados = seleccionados.filter(p => p.codigoBarras !== item.codigoBarras);
+      }
+    }
+
+    function actualizarCantidad(index, cantidad) {
+      const item = medicamentos[index];
+      const seleccionado = seleccionados.find(p => p.codigoBarras === item.codigoBarras);
+      if (seleccionado) {
+        seleccionado.cantidad = cantidad;
+      }
+    }
+
+    document.getElementById('busqueda').addEventListener('input', function() {
+      const q = this.value.toLowerCase();
+      const filtrados = medicamentos.filter(m =>
+        m.descripcion.toLowerCase().includes(q) ||
+        m.formula.toLowerCase().includes(q) ||
+        m.laboratorio.toLowerCase().includes(q)
+      );
+      renderCatalogo(filtrados);
+    });
+
+    function generarPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const nombre = document.getElementById('nombre').value;
+      const celular = document.getElementById('celular').value;
+      const ciudad = document.getElementById('ciudad').value;
+      const correo = document.getElementById('correo').value;
+
+      doc.setFontSize(14);
+      doc.text("Solicitud de Cotización - GlobalMediTH", 10, 10);
+      doc.text(`Nombre: ${nombre}`, 10, 20);
+      doc.text(`Celular: ${celular}`, 10, 30);
+      doc.text(`Ciudad: ${ciudad}`, 10, 40);
+      doc.text(`Correo: ${correo}`, 10, 50);
+
+      let y = 60;
+      seleccionados.forEach(item => {
+        doc.text(`- ${item.descripcion} | Cantidad: ${item.cantidad}`, 10, y);
+        y += 10;
+      });
+
+      doc.save("cotizacion.pdf");
+    }
+
+    function enviarWhatsApp() {
+      const nombre = document.getElementById('nombre').value;
+      const celular = document.getElementById('celular').value;
+      const ciudad = document.getElementById('ciudad').value;
+      const correo = document.getElementById('correo').value;
+
+      let mensaje = `Hola, me gustaría solicitar una cotización:\n\n`;
+      mensaje += `Nombre: ${nombre}\nCelular: ${celular}\nCiudad: ${ciudad}\nCorreo: ${correo}\n\n`;
+mensaje += `Productos seleccionados:\n`;
+      seleccionados.forEach(item => {
+        mensaje += `- ${item.descripcion} | Cantidad: ${item.cantidad}\n`;
+      });
+
+      const url = `https://wa.me/5212381646718?text=${encodeURIComponent(mensaje)}`;
+      window.open(url, "_blank");
+    }
+  </script>
+</body>
+</html>
