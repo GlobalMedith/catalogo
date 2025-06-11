@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GlobalMediTH - Sistema de Cotización</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* PANTALLA 1 - REGISTRO */
+    .screen {
+      display: none;
+    }
+    
+    .screen.active {
+      display: block;
+    }
+
+    .welcome-screen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .welcome-card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .logo {
+      margin-bottom: 30px;
+    }
+
+    .logo img {
+      height: 150px;
+      width: auto;
+      border-radius: 10px;
+    }
+
+    .welcome-title {
+      font-size: 2.5em;
+      color: #2c3e50;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .welcome-subtitle {
+      font-size: 1.2em;
+      color: #7f8c8d;
+      margin-bottom: 20px;
+    }
+
+    .persuasive-message {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      font-size: 1.1em;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .medicine-types {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 30px;
+      gap: 15px;
+    }
+
+    .medicine-type {
+      text-align: center;
+      flex: 1;
+    }
+
+    .medicine-type i {
+      font-size: 2em;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .medicine-type.patente i { color: #e74c3c; }
+    .medicine-type.genericos i { color: #3498db; }
+    .medicine-type.curacion i { color: #f39c12; }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 1em;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 15px 40px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    /* PANTALLA 2 - CATÁLOGO */
+    .catalog-screen {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 30px;
+      min-height: 100vh;
+    }
+
+    .catalog-main {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .catalog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .catalog-title {
+      font-size: 2em;
+      color: #2c3e50;
+      font-weight: 700;
+    }
+
+    .search-box {
+      position: relative;
+      max-width: 400px;
+      margin-bottom: 30px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 15px 50px 15px 20px;
+      border: 2px solid #e0e0e0;
+      border-radius: 50px;
+      font-size: 1em;
+    }
+
+    .search-box i {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #7f8c8d;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      max-height: 600px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .product-card {
+      background: #f8f9fa;
+      border: 2px solid #e9ecef;
+      border-radius: 15px;
+      padding: 20px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+    }
+
+    .product-card.selected {
+      border-color: #28a745;
+      background: #d4edda;
+    }
+
+    .product-title {
+      font-size: 1.1em;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .product-info {
+      font-size: 0.9em;
+      color: #6c757d;
+      margin-bottom: 8px;
+    }
+
+    .quantity-selector {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .quantity-input {
+      width: 60px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    /* CARRITO LATERAL */
+    .cart-sidebar {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      height: fit-content;
+      position: sticky;
+      top: 20px;
+    }
+
+    .cart-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      font-size: 1.3em;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+
+    .cart-items {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
+
+    .cart-item {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .cart-item-title {
+      font-weight: 600;
+      font-size: 0.9em;
+      margin-bottom: 5px;
+      line-height: 1.2;
+    }
+
+    .cart-item-info {
+      font-size: 0.8em;
+      color: #6c757d;
+    }
+
+    .cart-item-quantity {
+      position: absolute;
+      top: 10px;
+      right: 35px;
+      background: #667eea;
+      color: white;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8em;
+      font-weight: bold;
+    }
+
+    .remove-item {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7em;
+      cursor: pointer;
+    }
+
+    .cart-summary {
+      border-top: 2px solid #e9ecef;
+      padding-top: 20px;
+      text-align: center;
+    }
+
+    .cart-total {
+      font-size: 1.2em;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+
+    /* PANTALLA 3 - RESUMEN */
+    .summary-screen {
+      background: white;
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .summary-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .summary-logo {
+      margin-bottom: 20px;
+    }
+
+    .summary-logo img {
+      height: 120px;
+      width: auto;
+    }
+
+    .summary-title {
+      font-size: 2.2em;
+      color: #2c3e50;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .contact-info {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+
+    .contact-info h3 {
+      color: #2c3e50;
+      margin-bottom: 15px;
+      font-size: 1.2em;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      color: #495057;
+    }
+
+    .client-info {
+      background: #e3f2fd;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+
+    .products-summary {
+      background: #f1f8e9;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    .summary-table th,
+    .summary-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .summary-table th {
+      background: #f8f9fa;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    .summary-actions {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+    }
+
+    .btn-success {
+      background: #28a745;
+    }
+
+    .btn-whatsapp {
+      background: #25D366;
+    }
+
+    /* Navegación */
+    .navigation {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+
+    .nav-btn {
+      background: rgba(255,255,255,0.9);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.2em;
+      color: #2c3e50;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+    }
+
+    .nav-btn:hover {
+      transform: scale(1.1);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .catalog-screen {
+        grid-template-columns: 1fr;
+      }
+      
+      .cart-sidebar {
+        position: relative;
+        top: 0;
+      }
+      
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .medicine-types {
+        flex-direction: column;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navigation">
+    <button class="nav-btn" onclick="goBack()" id="backBtn" style="display: none;">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+  </div>
+
+  <div class="container">
+    <!-- PANTALLA 1: REGISTRO DE CLIENTE -->
+    <div id="screen1" class="screen active">
+      <div class="welcome-screen">
+        <div class="welcome-card">
+          <div class="logo">
+            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMjc0OWI4Ii8+Cjx0ZXh0IHg9Ijc1IiB5PSI0NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='" />
+          </div>
+          
+          <h1 class="welcome-title">Bienvenido</h1>
+          <p class="welcome-subtitle">Sistema de Cotización Profesional</p>
+          
+          <div class="persuasive-message">
+            <i class="fas fa-star"></i>
+            ¡Solicita tu pedido ahora y recibe atención personalizada! Nuestros medicamentos de calidad están listos para ti.
+          </div>
+
+          <div class="medicine-types">
+            <div class="medicine-type patente">
+              <i class="fas fa-certificate"></i>
+              <strong>Patente</strong>
+            </div>
+            <div class="medicine-type genericos">
+              <i class="fas fa-pills"></i>
+              <strong>Genéricos</strong>
+            </div>
+            <div class="medicine-type curacion">
+              <i class="fas fa-first-aid"></i>
+              <strong>Material de Curación</strong>
+            </div>
+          </div>
+
+          <form id="clientForm">
+            <div class="form-group">
+              <label for="nombre"><i class="fas fa-user"></i> Nombre Completo</label>
+              <input type="text" id="nombre" required />
+            </div>
+            <div class="form-group">
+              <label for="celular"><i class="fas fa-phone"></i> Número de Celular</label>
+              <input type="tel" id="celular" required />
+            </div>
+            <div class="form-group">
+              <label for="ciudad"><i class="fas fa-map-marker-alt"></i> Ciudad</label>
+              <input type="text" id="ciudad" required />
+            </div>
+            <div class="form-group">
+              <label for="correo"><i class="fas fa-envelope"></i> Correo Electrónico</label>
+              <input type="email" id="correo" required />
+            </div>
+            
+            <button type="submit" class="btn">
+              <i class="fas fa-arrow-right"></i>
+              Continuar al Catálogo
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANTALLA 2: CATÁLOGO -->
+    <div id="screen2" class="screen">
+      <div class="catalog-screen">
+        <div class="catalog-main">
+          <div class="catalog-header">
+            <h2 class="catalog-title">
+              <i class="fas fa-pills"></i>
+              Catálogo de Medicamentos
+            </h2>
+          </div>
+          
+          <div class="search-box">
+            <input type="text" id="busqueda" placeholder="Buscar por descripción, fórmula o laboratorio..." />
+            <i class="fas fa-search"></i>
+          </div>
+
+          <div class="products-grid" id="productsGrid">
+            <!-- Los productos se cargarán aquí -->
+          </div>
+        </div>
+
+        <div class="cart-sidebar">
+          <div class="cart-header">
+            <i class="fas fa-shopping-cart"></i>
+            Cotización
+          </div>
+          
+          <div class="cart-items" id="cartItems">
+            <p style="text-align: center; color: #6c757d; font-style: italic;">
+              No hay productos seleccionados
+            </p>
+          </div>
+          
+          <div class="cart-summary">
+            <div class="cart-total" id="cartTotal">
+              Total: 0 productos
+            </div>
+            <button class="btn btn-success" onclick="goToSummary()" id="quoteBtnMain" disabled>
+              <i class="fas fa-file-invoice"></i>
+              Generar Cotización
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANTALLA 3: RESUMEN Y PDF -->
+    <div id="screen3" class="screen">
+      <div class="summary-screen">
+        <div class="summary-header">
+          <div class="summary-logo">
+            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMjc0OWI4Ii8+Cjx0ZXh0IHg9Ijc1IiB5PSI0NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='" />
+          </div>
+          <h1 class="summary-title">Cotización - GlobalMediTH</h1>
+          <div class="persuasive-message">
+            <i class="fas fa-star"></i>
+            ¡Medicamentos de calidad con atención personalizada para tu tranquilidad!
+          </div>
+        </div>
+
+        <div class="contact-info">
+          <h3><i class="fas fa-info-circle"></i> Datos de Contacto de Ventas</h3>
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <span>Celular: 2381646718</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <span>Correo: globalmedith@gmail.com</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Ubicación: Tehuacán, Puebla</span>
+          </div>
+        </div>
+
+        <div class="client-info">
+          <h3><i class="fas fa-user"></i> Datos del Cliente</h3>
+          <div id="clientSummary">
+            <!-- Se llenará dinámicamente -->
+          </div>
+        </div>
+
+        <div class="products-summary">
+          <h3><i class="fas fa-pills"></i> Productos Seleccionados</h3>
+          <table class="summary-table" id="summaryTable">
+            <thead>
+              <tr>
+                <th>Código de Barras</th>
+                <th>Descripción</th>
+                <th>Fórmula</th>
+                <th>Laboratorio</th>
+                <th>Cantidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Se llenará dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="summary-actions">
+          <button class="btn btn-secondary" onclick="goToScreen(2)">
+            <i class="fas fa-arrow-left"></i>
+            Regresar al Catálogo
+          </button>
+          <button class="btn" onclick="generarPDF()">
+            <i class="fas fa-file-pdf"></i>
+            Descargar PDF
+          </button>
+          <button class="btn btn-whatsapp" onclick="enviarWhatsApp()">
+            <i class="fab fa-whatsapp"></i>
+            Enviar por WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let medicamentos = [];
+    let selectedProducts = new Map();
+    let currentScreen = 1;
+    let clientData = {};
+
+    // Navegación entre pantallas
+    function goToScreen(screenNumber) {
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      document.getElementById(`screen${screenNumber}`).classList.add('active');
+      currentScreen = screenNumber;
+      
+      const backBtn = document.getElementById('backBtn');
+      backBtn.style.display = screenNumber > 1 ? 'block' : 'none';
+    }
+
+    function goBack() {
+      if (currentScreen > 1) {
+        goToScreen(currentScreen - 1);
+      }
+    }
+
+    // Formulario de cliente
+    document.getElementById('clientForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      clientData = {
+        nombre: document.getElementById('nombre').value,
+        celular: document.getElementById('celular').value,
+        ciudad: document.getElementById('ciudad').value,
+        correo: document.getElementById('correo').value
+      };
+      
+      goToScreen(2);
+    });
+
+    // Cargar medicamentos
+    window.onload = async () => {
+      try {
+        const res = await fetch('medicamentos.json');
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        medicamentos = await res.json();
+        if (medicamentos.length > 0 && medicamentos[0].codigoBarras === "Codigo de Barras") {
+          medicamentos.shift();
+        }
+        renderProducts(medicamentos);
+      } catch (error) {
+        console.error("Error al cargar los medicamentos:", error);
+        document.getElementById('productsGrid').innerHTML = 
+          "<p style='text-align: center; color: #dc3545;'>Error al cargar el catálogo. Por favor, intente más tarde.</p>";
+      }
+    };
+
+    // Renderizar productos
+    function renderProducts(products) {
+      const grid = document.getElementById('productsGrid');
+      grid.innerHTML = '';
+      
+      if (products.length === 0) {
+        grid.innerHTML = "<p style='text-align: center; color: #6c757d;'>No se encontraron medicamentos.</p>";
+        return;
+      }
+
+      products.forEach((product, index) => {
+        const isSelected = selectedProducts.has(product.codigoBarras);
+        const quantity = isSelected ? selectedProducts.get(product.codigoBarras).cantidad : 1;
+        
+        const card = document.createElement('div');
+        card.className = `product-card ${isSelected ? 'selected' : ''}`;
+        card.onclick = () => toggleProduct(product);
+        
+        card.innerHTML = `
+          <div class="product-title">${product.descripcion || 'Sin descripción'}</div>
+          <div class="product-info"><strong>Fórmula:</strong> ${product.formula || 'No especificada'}</div>
+          <div class="product-info"><strong>Laboratorio:</strong> ${product.laboratorio || 'No especificado'}</div>
+          <div class="product-info"><strong>Código:</strong> ${product.codigoBarras || 'No disponible'}</div>
+          <div class="quantity-selector" onclick="event.stopPropagation()">
+            <label>Cantidad:</label>
+            <input type="number" class="quantity-input" min="1" value="${quantity}" 
+                   onchange="updateQuantity('${product.codigoBarras}', this.value)" />
+          </div>
+        `;
+        
+        grid.appendChild(card);
+      });
+    }
+
+    // Alternar selección de producto
+    function toggleProduct(product) {
+      if (selectedProducts.has(product.codigoBarras)) {
+        selectedProducts.delete(product.codigoBarras);
+      } else {
+        selectedProducts.set(product.codigoBarras, { ...product, cantidad: 1 });
+      }
+      renderProducts(medicamentos.filter(m => filterProduct(m)));
+      updateCart();
+    }
+
+    // Actualizar cantidad
+    function updateQuantity(codigo, cantidad) {
+      const qty = parseInt(cantidad) || 1;
+      if (selectedProducts.has(codigo)) {
+        const product = selectedProducts.get(codigo);
+        product.cantidad = qty;
+        selectedProducts.set(codigo, product);
+        updateCart();
+      }
+    }
+
+    // Actualizar carrito
+    function updateCart() {
+      const cartItems = document.getElementById('cartItems');
+      const cartTotal = document.getElementById('cartTotal');
+      const quoteBtn = document.getElementById('quoteBtnMain');
+      
+      if (selectedProducts.size === 0) {
+        cartItems.innerHTML = "<p style='text-align: center; color: #6c757d; font-style: italic;'>No hay productos seleccionados</p>";
+        cartTotal.textContent = "Total: 0 productos";
+        quoteBtn.disabled = true;
+        return;
+      }
+
+      let html = '';
+      let totalItems = 0;
+      
+      selectedProducts.forEach((product, codigo) => {
+        totalItems += product.cantidad;
+        html += `
+          <div class="cart-item">
+            <div class="cart-item-title">${product.descripcion}</div>
+            <div class="cart-item-info">
