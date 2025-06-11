@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GlobalMediTH - Sistema de Cotización</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+  <style>
+    /* Estilos Generales y Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      height: 100%; /* La altura de la ventana del navegador */
+      overflow: hidden; /* EVITAR SCROLL GENERAL DEL NAVEGADOR */
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      width: 100%;
+      height: 100%; /* El contenedor principal también ocupa el 100% de la altura */
+      display: flex; /* Para que las pantallas se comporten como flex items */
+      flex-direction: column; /* Apilar pantallas verticalmente */
+      justify-content: center; /* Centrar contenido de pantalla activa */
+      align-items: center;
+    }
+
+    /* Manejo de Pantallas (Cada pantalla ocupa el 100% de la altura del contenedor) */
+    .screen {
+      display: none;
+      width: 100%;
+      height: 100%; /* CADA PANTALLA OCUPA EL 100% DE LA ALTURA DISPONIBLE */
+      flex-shrink: 0; /* Evita que las pantallas se encojan */
+      display: flex; /* Para centrar contenido dentro de cada pantalla */
+      justify-content: center;
+      align-items: center;
+      overflow: hidden; /* Por defecto, no scroll en la pantalla, scroll será en sub-elementos */
+    }
+    
+    .screen.active {
+      display: flex; /* Mostrar la pantalla activa */
+    }
+
+    /* PANTALLA 1 - REGISTRO */
+    .welcome-card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px; /* Reducir padding general */
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: auto; /* Ajuste automático de altura */
+      max-height: calc(100vh - 80px); /* Altura máxima para la tarjeta de bienvenida */
+      overflow-y: auto; /* Scroll si el contenido es demasiado largo para esta tarjeta */
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+    .welcome-card::-webkit-scrollbar { /* Chrome, Safari, Opera */
+      display: none;
+    }
+
+    .logo {
+      margin-bottom: 15px; /* Reducir margen */
+    }
+
+    .logo img {
+      height: 100px; /* Reducir tamaño por defecto */
+      width: auto;
+      border-radius: 10px;
+      max-width: 100%;
+    }
+
+    .welcome-title {
+      font-size: 1.8em; /* Reducir tamaño */
+      color: #2c3e50;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .welcome-subtitle {
+      font-size: 0.9em; /* Reducir tamaño */
+      color: #7f8c8d;
+      margin-bottom: 12px;
+    }
+
+    .persuasive-message {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: white;
+      padding: 12px; /* Reducir padding */
+      border-radius: 15px;
+      margin-bottom: 15px;
+      font-size: 0.9em; /* Reducir tamaño */
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .medicine-types {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 15px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .medicine-type {
+      text-align: center;
+      flex: 1;
+      min-width: 80px; /* Reducir min-width */
+      max-width: 120px; /* Limitar max-width */
+      padding: 3px;
+    }
+
+    .medicine-type i {
+      font-size: 1.6em; /* Reducir tamaño */
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 10px; /* Reducir margen */
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 3px;
+      font-weight: 600;
+      color: #2c3e50;
+      font-size: 0.9em;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px; /* Reducir padding */
+      border: 2px solid #e0e0e0;
+      border-radius: 8px; /* Reducir radio */
+      font-size: 0.9em;
+      transition: border-color 0.3s;
+    }
+
+    .btn {
+      padding: 10px 25px; /* Reducir padding */
+      font-size: 0.95em; /* Reducir tamaño de fuente */
+      margin-top: 8px; /* Añadir margen superior */
+    }
+    
+    .copyright {
+        margin-top: 15px;
+        font-size: 0.75em;
+        color: #7f8c8d;
+    }
+
+    /* PANTALLA 2 - CATÁLOGO */
+    .catalog-screen {
+      display: grid;
+      grid-template-columns: 1fr 320px; /* Ajustar ancho del carrito lateral */
+      gap: 20px; /* Reducir gap */
+      height: 100%; /* Ocupar toda la altura de la pantalla */
+      align-items: flex-start;
+      padding: 15px; /* Reducir padding */
+    }
+
+    .catalog-main {
+      background: white;
+      border-radius: 15px;
+      padding: 20px; /* Reducir padding */
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      height: 100%; /* Ocupar toda la altura disponible */
+    }
+
+    .catalog-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+      flex-shrink: 0; /* Evita que el encabezado se encoja */
+    }
+
+    .catalog-header .logo-small {
+        height: 50px; /* Tamaño del logo en el catálogo */
+        flex-shrink: 0;
+    }
+
+    .catalog-header .header-text-group {
+        flex-grow: 1;
+        min-width: 0; /* Permite que el texto se encoja si es necesario */
+    }
+
+    .catalog-header .persuasive-text-small {
+        font-size: 0.8em;
+        color: #6c757d;
+        text-align: left;
+        line-height: 1.2;
+    }
+
+    .catalog-title {
+      font-size: 1.6em;
+      margin-bottom: 5px;
+    }
+
+    .search-box {
+      margin-bottom: 15px;
+      flex-shrink: 0; /* Evita que la barra de búsqueda se encoja */
+    }
+
+    .search-box input {
+      padding: 10px 35px 10px 15px;
+      font-size: 0.9em;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Ajustar minmax */
+      gap: 12px; /* Reducir gap */
+      max-height: 100%; /* Ajuste a la altura disponible del contenedor principal */
+      overflow-y: auto; /* SCROLL INDIVIDUAL PARA EL GRID DE PRODUCTOS */
+      padding-right: 8px; /* Espacio para la barra de scroll */
+      flex-grow: 1; /* Permite que el grid crezca y tome el espacio restante */
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+    .products-grid::-webkit-scrollbar { /* Chrome, Safari, Opera */
+      display: none;
+    }
+
+    .product-card {
+      padding: 12px;
+      font-size: 0.9em; /* Ajustar tamaño de fuente */
+    }
+
+    .product-title {
+      font-size: 0.95em;
+      margin-bottom: 6px;
+    }
+
+    .product-info {
+      font-size: 0.8em;
+      margin-bottom: 4px;
+    }
+
+    .quantity-selector {
+      margin-top: 8px;
+    }
+
+    .quantity-input {
+      width: 45px;
+      padding: 4px;
+      font-size: 0.8em;
+    }
+
+    /* CARRITO LATERAL */
+    .cart-sidebar {
+      background: white;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      height: 100%; /* Ocupar toda la altura de la pantalla */
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-header {
+      margin-bottom: 10px;
+      font-size: 1.1em;
+      flex-shrink: 0; /* Evita que el encabezado se encoja */
+    }
+
+    .cart-items {
+      max-height: 100%; /* Ajuste a la altura disponible del contenedor principal */
+      overflow-y: auto; /* SCROLL INDIVIDUAL PARA LOS ITEMS DEL CARRITO */
+      margin-bottom: 10px;
+      flex-grow: 1; /* Permite que los items crezcan y tomen el espacio disponible */
+      padding-right: 5px;
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+    .cart-items::-webkit-scrollbar { /* Chrome, Safari, Opera */
+      display: none;
+    }
+
+    .cart-item {
+      padding: 10px;
+      margin-bottom: 6px;
+    }
+
+    .cart-item-title {
+      font-size: 0.8em;
+      margin-bottom: 3px;
+    }
+
+    .cart-item-info {
+      font-size: 0.7em;
+    }
+
+    .cart-item-quantity {
+      width: 20px;
+      height: 20px;
+      font-size: 0.7em;
+      top: 6px;
+      right: 25px;
+    }
+
+    .remove-item {
+      width: 16px;
+      height: 16px;
+      font-size: 0.6em;
+      top: 6px;
+      right: 6px;
+    }
+
+    .cart-summary {
+      padding-top: 10px;
+      margin-top: auto; /* Empuja el resumen al final */
+      flex-shrink: 0; /* Evita que el resumen se encoja */
+    }
+
+    .cart-total {
+      font-size: 1em;
+      margin-bottom: 10px;
+    }
+
+    /* PANTALLA 3 - RESUMEN */
+    .summary-screen {
+      background: white;
+      border-radius: 15px;
+      padding: 25px; /* Reducir padding */
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      max-width: 800px;
+      width: 100%;
+      height: 100%; /* Ocupar toda la altura de la pantalla */
+      display: flex;
+      flex-direction: column;
+      overflow-y: hidden; /* Controlar scroll en el contenedor de tabla */
+    }
+
+    .summary-header {
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+
+    .summary-logo {
+      margin-bottom: 10px;
+    }
+
+    .summary-logo img {
+      height: 80px; /* Reducir tamaño */
+    }
+
+    .summary-title {
+      font-size: 1.8em;
+      margin-bottom: 8px;
+    }
+
+    .contact-info, .client-info, .products-summary {
+      padding: 10px;
+      margin-bottom: 15px;
+      flex-shrink: 0; /* Evitar que estas secciones se encojan */
+    }
+    
+    .products-summary {
+        flex-grow: 1; /* Permitir que la tabla de productos crezca */
+        display: flex;
+        flex-direction: column;
+        overflow: hidden; /* Ocultar scroll si no es necesario en el table-container */
+    }
+    
+    .summary-table-container {
+        flex-grow: 1;
+        overflow-y: auto; /* SCROLL INDIVIDUAL PARA LA TABLA DE PRODUCTOS */
+        padding-right: 5px; /* Espacio para la barra de scroll */
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+    .summary-table-container::-webkit-scrollbar { /* Chrome, Safari, Opera */
+      display: none;
+    }
+
+
+    .contact-info h3, .client-info h3, .products-summary h3 {
+      font-size: 1em;
+      margin-bottom: 8px;
+    }
+
+    .contact-item {
+      font-size: 0.85em;
+      margin-bottom: 6px;
+    }
+
+    .summary-table {
+      margin-top: 8px;
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .summary-table th, .summary-table td {
+      padding: 7px;
+      font-size: 0.8em;
+    }
+    .summary-table th {
+        background: #f8f9fa;
+        font-weight: 600;
+        color: #2c3e50;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    .summary-table td {
+        border-bottom: 1px solid #ddd;
+    }
+
+
+    .summary-actions {
+      gap: 10px;
+      margin-top: 15px;
+      flex-shrink: 0;
+    }
+
+    /* Navegación (Botón de Regresar) */
+    .navigation {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+
+    .nav-btn {
+      width: 40px;
+      height: 40px;
+      font-size: 1em;
+      background: rgba(255,255,255,0.9);
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #2c3e50;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+    }
+
+    .nav-btn:hover {
+      transform: scale(1.1);
+    }
+
+    /* Responsive Media Queries */
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+      .screen {
+        height: 100%; /* Mantener la altura 100% en móvil también */
+        align-items: flex-start; /* Permite que el contenido empiece desde arriba */
+        overflow-y: auto; /* Permitir scroll en la pantalla si el contenido interno lo necesita */
+        padding: 10px 0; /* Padding vertical para cada pantalla */
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+      }
+      .screen::-webkit-scrollbar { /* Chrome, Safari, Opera */
+        display: none;
+      }
+      
+      .welcome-card {
+        max-height: unset; /* Quitar el límite de altura fijo en móvil */
+        padding: 15px;
+        height: auto; /* Ajustar altura al contenido */
+      }
+      .logo img {
+        height: 70px;
+      }
+      .welcome-title {
+        font-size: 1.6em;
+      }
+      .welcome-subtitle, .persuasive-message {
+        font-size: 0.85em;
+        padding: 10px;
+      }
+      .medicine-types {
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 10px;
+      }
+      .medicine-type {
+        min-width: unset;
+        max-width: unset;
+        width: 100%;
+        font-size: 0.9em;
+      }
+      .form-group label {
+        font-size: 0.85em;
+      }
+      .form-group input {
+        padding: 8px;
+        font-size: 0.85em;
+      }
+      .btn {
+        padding: 8px 15px;
+        font-size: 0.9em;
+        width: 100%; /* Botones de ancho completo */
+      }
+      .copyright {
+        font-size: 0.7em;
+        margin-top: 10px;
+      }
+
+      .catalog-screen {
+        grid-template-columns: 1fr;
+        padding: 10px;
+        gap: 10px;
+        height: 100%; /* Mantener 100% de altura en móvil */
+      }
+      .catalog-main, .cart-sidebar {
+        height: 100%; /* Ajustar altura al 100% de su columna/fila */
+        padding: 15px;
+      }
+      .catalog-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+      }
+      .catalog-header .logo-small {
+        height: 40px;
+        margin-bottom: 5px;
+      }
+      .catalog-title {
+        font-size: 1.4em;
+      }
+      .catalog-header .persuasive-text-small {
+        font-size: 0.75em;
+      }
+      .search-box {
+        margin-bottom: 10px;
+      }
+      .search-box input {
+        padding: 8px 30px 8px 12px;
+        font-size: 0.85em;
+      }
+      .products-grid {
+        grid-template-columns: 1fr;
+        max-height: unset; /* Remover max-height fijo, flex-grow y overflow lo manejan */
+        gap: 8px;
+        padding-right: 5px;
+      }
+      .product-card {
+        padding: 10px;
+      }
+      .product-title {
+        font-size: 0.9em;
+      }
+      .product-info {
+        font-size: 0.75em;
+      }
+      .quantity-input {
+        width: 40px;
+        font-size: 0.8em;
+      }
+      
+      .cart-header {
+        font-size: 1em;
+      }
+      .cart-items {
+        max-height: unset; /* Remover max-height fijo, flex-grow y overflow lo manejan */
+      }
+      .cart-item {
+        padding: 8px;
+      }
+      .cart-item-title {
+        font-size: 0.75em;
+      }
+      .cart-item-info {
+        font-size: 0.65em;
+      }
+      .cart-item-quantity {
+        width: 18px;
+        height: 18px;
+        font-size: 0.65em;
+      }
+      .remove-item {
+        width: 14px;
+        height: 14px;
+        font-size: 0.55em;
+      }
+      .cart-total {
+        font-size: 0.9em;
+      }
+
+      .summary-screen {
+        padding: 15px;
+        height: 100%; /* Mantener altura 100% en móvil */
+        max-height: unset; /* Remover max-height fijo */
+      }
+      .summary-title {
+        font-size: 1.6em;
+      }
+      .contact-info, .client-info, .products-summary {
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+      .contact-info h3, .client-info h3, .products-summary h3 {
+        font-size: 0.95em;
+      }
+      .contact-item {
+        font-size: 0.75em;
+      }
+      .summary-table th, .summary-table td {
+        padding: 6px;
+        font-size: 0.7em;
+      }
+      .summary-actions {
+        gap: 8px;
+      }
+      .nav-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navigation">
+    <button class="nav-btn" onclick="goBack()" id="backBtn" style="display: none;">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+  </div>
+
+  <div class="container">
+    <div id="screen1" class="screen active">
+      <div class="welcome-card">
+        <div class="logo">
+          <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMjc0OWI4Ii8+Cjx0ZXh0IHg9Ijc1IiB5PSI0NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TWVkaWNhbWVudG9zPC90ZXh0Pgo8L3N2Zz4='"/>
+        </div>
+        
+        <h1 class="welcome-title">Bienvenido</h1>
+        <p class="welcome-subtitle">Sistema de Cotización Profesional</p>
+        
+        <div class="persuasive-message">
+          <i class="fas fa-star"></i>
+          ¡Solicita tu pedido ahora y recibe atención personalizada! Nuestros medicamentos de calidad están listos para ti.
+        </div>
+
+        <div class="medicine-types">
+          <div class="medicine-type patente">
+            <i class="fas fa-certificate"></i>
+            <strong>Patente</strong>
+          </div>
+          <div class="medicine-type genericos">
+            <i class="fas fa-pills"></i>
+            <strong>Genéricos</strong>
+          </div>
+          <div class="medicine-type curacion">
+            <i class="fas fa-first-aid"></i>
+            <strong>Material de Curación</strong>
+          </div>
+        </div>
+
+        <form id="clientForm">
+          <div class="form-group">
+            <label for="nombre"><i class="fas fa-user"></i> Nombre Completo</label>
+            <input type="text" id="nombre" required />
+          </div>
+          <div class="form-group">
+            <label for="celular"><i class="fas fa-phone"></i> Número de Celular</label>
+            <input type="tel" id="celular" required />
+          </div>
+          <div class="form-group">
+            <label for="ciudad"><i class="fas fa-map-marker-alt"></i> Ciudad</label>
+            <input type="text" id="ciudad" required />
+          </div>
+          <div class="form-group">
+            <label for="correo"><i class="fas fa-envelope"></i> Correo Electrónico</label>
+            <input type="email" id="correo" required />
+          </div>
+          
+          <button type="submit" class="btn">
+            <i class="fas fa-arrow-right"></i>
+            Continuar al Catálogo
+          </button>
+        </form>
+        <div class="copyright">
+            Todos los derechos reservados 2025.
+        </div>
+      </div>
+    </div>
+
+    <div id="screen2" class="screen">
+      <div class="catalog-screen">
+        <div class="catalog-main">
+          <div class="catalog-header">
+            <img src="logo.png" alt="GlobalMediTH Logo" class="logo-small" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCA1MCAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjMwIiBmaWxsPSIjMjc0OWI4Ii8+Cjx0ZXh0IHg9IjI1IiB5PSIxOCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjUiIGZvbnQtd2VpZ2h0PSJib2x0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R0xPQkFMIDwvdGV4dD4KPHRleHQgeD0iMjUiIHk9IjI1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMyIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk1FRElUSDwvdGV4dD4KPC9zdmc+'"/>
+            <div class="header-text-group">
+                <h2 class="catalog-title">
+                  <i class="fas fa-pills"></i>
+                  Catálogo de Medicamentos
+                </h2>
+                <p class="persuasive-text-small">
+                    Explora nuestra amplia selección de medicamentos de calidad garantizada. ¡Tu salud es nuestra prioridad!
+                </p>
+            </div>
+          </div>
+          
+          <div class="search-box">
+            <input type="text" id="busqueda" placeholder="Buscar por descripción, fórmula o laboratorio..." />
+            <i class="fas fa-search"></i>
+          </div>
+
+          <div class="products-grid" id="productsGrid">
+            </div>
+        </div>
+
+        <div class="cart-sidebar">
+          <div class="cart-header">
+            <i class="fas fa-shopping-cart"></i>
+            Cotización
+          </div>
+          
+          <div class="cart-items" id="cartItems">
+            <p style="text-align: center; color: #6c757d; font-style: italic;">
+              No hay productos seleccionados
+            </p>
+          </div>
+          
+          <div class="cart-summary">
+            <div class="cart-total" id="cartTotal">
+              Total: 0 producto(s)
+            </div>
+            <button class="btn btn-success" onclick="goToSummary()" id="quoteBtnMain" disabled>
+              <i class="fas fa-file-invoice"></i>
+              Generar Cotización
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="screen3" class="screen">
+      <div class="summary-screen">
+        <div class="summary-header">
+          <div class="summary-logo">
+            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMjc0OWI4Ii8+Cjx0ZXh0IHg9Ijc1IiB5PSI0NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TWVkaWNhbWVudG9zPC90ZXh0Pgo8L3N2Zz4='"/>
+          </div>
+          <h1 class="summary-title">Cotización - GlobalMediTH</h1>
+          <div class="persuasive-message">
+            <i class="fas fa-star"></i>
+            ¡Medicamentos de calidad con atención personalizada para tu tranquilidad!
+          </div>
+        </div>
+
+        <div class="contact-info">
+          <h3><i class="fas fa-info-circle"></i> Datos de Contacto de Ventas</h3>
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <span>Celular: 2381646718</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <span>Correo: globalmedith@gmail.com</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Ubicación: Tehuacán, Puebla</span>
+          </div>
+        </div>
+
+        <div class="client-info">
+          <h3><i class="fas fa-user"></i> Datos del Cliente</h3>
+          <div id="clientSummary">
+            </div>
+        </div>
+
+        <div class="products-summary">
+          <h3><i class="fas fa-pills"></i> Productos Seleccionados</h3>
+          <div class="summary-table-container">
+            <table class="summary-table" id="summaryTable">
+              <thead>
+                <tr>
+                  <th>Código de Barras</th>
+                  <th>Descripción</th>
+                  <th>Fórmula</th>
+                  <th>Laboratorio</th>
+                  <th>Cantidad</th>
+                </tr>
+              </thead>
+              <tbody>
+                </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="summary-actions">
+          <button class="btn btn-secondary" onclick="goToScreen(2)">
+            <i class="fas fa-arrow-left"></i>
+            Regresar al Catálogo
+          </button>
+          <button class="btn" onclick="generarPDF()">
+            <i class="fas fa-file-pdf"></i>
+            Descargar PDF
+          </button>
+          <button class="btn btn-whatsapp" onclick="enviarWhatsApp()">
+            <i class="fab fa-whatsapp"></i>
+            Enviar por WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let medicamentos = [];
+    let selectedProducts = new Map();
+    let currentScreen = 1;
+    let clientData = {};
+
+    // Función para obtener la imagen en Base64 (para PDF)
+    function getBase64Image(imgUrl, callback) {
+        var img = new Image();
+        img.src = imgUrl;
+        img.onload = function () {
+            var canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            var dataURL = canvas.toDataURL("image/png");
+            callback(dataURL);
+        };
+        img.onerror = function() {
+            console.error("Error al cargar la imagen para Base64. Usando fallback SVG.");
+            // SVG de fallback para el logo si logo.png no carga
+            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMjc0OWI4Ii8+Cjx0ZXh0IHg9Ijc1IiB5PSI0NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TWVkaWNhbWVudG9zPC90ZXh0Pgo8L3N2Zz4=';
+            callback(fallbackSvg);
+        };
+    }
+
+    // Navegación entre pantallas
+    function goToScreen(screenNumber) {
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      document.getElementById(`screen${screenNumber}`).classList.add('active');
+      currentScreen = screenNumber;
+      
+      const backBtn = document.getElementById('backBtn');
+      backBtn.style.display = screenNumber > 1 ? 'block' : 'none';
+
+      if (screenNumber === 3) {
+        populateSummary();
+      }
+    }
+
+    function goBack() {
+      if (currentScreen > 1) {
+        goToScreen(currentScreen - 1);
+      }
+    }
+
+    // Formulario de cliente
+    document.getElementById('clientForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      clientData = {
+        nombre: document.getElementById('nombre').value,
+        celular: document.getElementById('celular').value,
+        ciudad: document.getElementById('ciudad').value,
+        correo: document.getElementById('correo').value
+      };
+      
+      goToScreen(2);
+    });
+
+    // Cargar medicamentos
+    window.onload = async () => {
+      try {
+        const res = await fetch('medicamentos.json');
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        medicamentos = await res.json();
+        // Asumiendo que la primera fila es una cabecera si tiene "Codigo de Barras"
+        if (medicamentos.length > 0 && medicamentos[0].codigoBarras === "Codigo de Barras") {
+          medicamentos.shift(); // Elimina la fila de cabecera
+        }
+        renderProducts(medicamentos); // Renderiza todos los productos inicialmente
+      } catch (error) {
+        console.error("Error al cargar los medicamentos:", error);
+        document.getElementById('productsGrid').innerHTML = 
+          "<p style='text-align: center; color: #dc3545;'>Error al cargar el catálogo. Por favor, asegúrese que 'medicamentos.json' existe y es accesible.</p>";
+      }
+    };
+
+    // Renderizar productos en el catálogo (Optimizado para evitar re-renderizado completo)
+    // Este renderizado solo se ejecuta la primera vez que se carga el catálogo,
+    // o si el conjunto de datos `medicamentos` cambia drásticamente.
+    // Las búsquedas y selecciones posteriores solo ocultan/muestran y actualizan clases.
+    function renderProducts(productsToDisplay) {
+        const grid = document.getElementById('productsGrid');
+        grid.innerHTML = ''; // Limpiar el grid para un nuevo renderizado completo
+        
+        if (productsToDisplay.length === 0) {
+            grid.innerHTML = "<p style='text-align: center; color: #6c757d;'>No se encontraron medicamentos.</p>";
+            return;
+        }
+
+        productsToDisplay.forEach((product) => {
+            const isSelected = selectedProducts.has(product.codigoBarras);
+            const quantity = isSelected ? selectedProducts.get(product.codigoBarras).cantidad : 1;
+
+            const card = document.createElement('div');
+            card.id = `product-card-${product.codigoBarras}`; // Asigna un ID único a cada tarjeta
+            card.className = `product-card ${isSelected ? 'selected' : ''}`;
+            
+            card.onclick = () => toggleProduct(product);
+            
+            card.innerHTML = `
+                <div class="product-title">${product.descripcion || 'Sin descripción'}</div>
+                <div class="product-info"><strong>Fórmula:</strong> ${product.formula || 'No especificada'}</div>
+                <div class="product-info"><strong>Laboratorio:</strong> ${product.laboratorio || 'No especificado'}</div>
+                <div class="product-info"><strong>Código:</strong> ${product.codigoBarras || 'No disponible'}</div>
+                <div class="quantity-selector" onclick="event.stopPropagation()">
+                    <label>Cantidad:</label>
+                    <input type="number" class="quantity-input" min="1" value="${quantity}" 
+                           onchange="updateQuantity('${product.codigoBarras}', this.value)" />
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+        updateCart(); // Asegura que el carrito se actualice después de renderizar productos
+    }
+
+    // Alternar selección de producto (OPTIMIZADO)
+    function toggleProduct(product) {
+        const cardElement = document.getElementById(`product-card-${product.codigoBarras}`);
+        
+        if (selectedProducts.has(product.codigoBarras)) {
+            selectedProducts.delete(product.codigoBarras);
+            if (cardElement) {
+                cardElement.classList.remove('selected');
+            }
+        } else {
+            selectedProducts.set(product.codigoBarras, { ...product, cantidad: 1 });
+            if (cardElement) {
+                cardElement.classList.add('selected');
+                const quantityInput = cardElement.querySelector('.quantity-input');
+                if (quantityInput) {
+                    quantityInput.value = 1; // Asegura que la cantidad sea 1 al seleccionar
+                }
+            }
+        }
+        updateCart(); // Actualiza el carrito después de la selección
+    }
+
+    // Actualizar cantidad de un producto seleccionado
+    function updateQuantity(codigo, cantidad) {
+      const qty = parseInt(cantidad) || 1;
+      if (qty < 1) { 
+        const cardElement = document.getElementById(`product-card-${codigo}`);
+        if (cardElement) {
+            cardElement.querySelector('.quantity-input').value = 1;
+        }
+        cantidad = 1;
+      }
+      
+      if (selectedProducts.has(codigo)) {
+        const product = selectedProducts.get(codigo);
+        product.cantidad = parseInt(cantidad);
+        selectedProducts.set(codigo, product);
+        updateCart();
+      }
+    }
+
+    // Eliminar producto del carrito (botón 'x' en el carrito)
+    function removeItemFromCart(codigo) {
+      selectedProducts.delete(codigo);
+      const cardElement = document.getElementById(`product-card-${codigo}`);
+      if (cardElement) {
+          cardElement.classList.remove('selected');
+          const quantityInput = cardElement.querySelector('.quantity-input');
+            if (quantityInput) {
+                quantityInput.value = 1;
+            }
+      }
+      updateCart();
+    }
+
+    // Actualizar la vista del carrito lateral
+    function updateCart() {
+      const cartItems = document.getElementById('cartItems');
+      const cartTotal = document.getElementById('cartTotal');
+      const quoteBtn = document.getElementById('quoteBtnMain');
+      
+      if (selectedProducts.size === 0) {
+        cartItems.innerHTML = "<p style='text-align: center; color: #6c757d; font-style: italic;'>No hay productos seleccionados</p>";
+        cartTotal.textContent = "Total: 0 producto(s)";
+        quoteBtn.disabled = true;
+        return;
+      }
+
+      let html = '';
+      let totalItems = 0;
+      
+      selectedProducts.forEach((product) => {
+        totalItems += product.cantidad;
+        html += `
+          <div class="cart-item">
+            <div class="cart-item-title">${product.descripcion || 'Producto sin descripción'}</div>
+            <div class="cart-item-info">Código: ${product.codigoBarras || 'N/A'}</div>
+            <div class="cart-item-quantity">${product.cantidad}</div>
+            <button class="remove-item" onclick="removeItemFromCart('${product.codigoBarras}')">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        `;
+      });
+      
+      cartItems.innerHTML = html;
+      cartTotal.textContent = `Total: ${totalItems} producto(s)`;
+      quoteBtn.disabled = false;
+    }
+
+    // Búsqueda de productos en tiempo real (OPTIMIZADO)
+    document.getElementById('busqueda').addEventListener('keyup', function() {
+      const searchTerm = this.value.toLowerCase();
+      // No re-renderizamos, solo mostramos/ocultamos elementos existentes
+      medicamentos.forEach(product => {
+        const cardElement = document.getElementById(`product-card-${product.codigoBarras}`);
+        if (cardElement) {
+          if (filterProduct(product, searchTerm)) {
+            cardElement.classList.remove('hidden');
+          } else {
+            cardElement.classList.add('hidden');
+          }
+        }
+      });
+    });
+
+    // Función auxiliar para filtrar productos
+    function filterProduct(product, searchTerm) {
+      const desc = (product.descripcion || '').toLowerCase();
+      const formula = (product.formula || '').toLowerCase();
+      const laboratorio = (product.laboratorio || '').toLowerCase();
+      const codigoBarras = (product.codigoBarras || '').toLowerCase();
+
+      return desc.includes(searchTerm) ||
+             formula.includes(searchTerm) ||
+             laboratorio.includes(searchTerm) ||
+             codigoBarras.includes(searchTerm);
+    }
+
+    // Ir a la pantalla de resumen
+    function goToSummary() {
+      if (selectedProducts.size === 0) {
+        alert("Por favor, selecciona al menos un producto para generar la cotización.");
+        return;
+      }
+      populateSummary();
+      goToScreen(3);
+    }
+
+    // Llenar datos en la pantalla de resumen (Screen 3)
+    function populateSummary() {
+      const clientSummaryDiv = document.getElementById('clientSummary');
+      clientSummaryDiv.innerHTML = `
+        <div class="contact-item">
+          <i class="fas fa-user"></i>
+          <span>Nombre: ${clientData.nombre || 'N/A'}</span>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-phone"></i>
+          <span>Celular: ${clientData.celular || 'N/A'}</span>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>Ciudad: ${clientData.ciudad || 'N/A'}</span>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-envelope"></i>
+          <span>Correo: ${clientData.correo || 'N/A'}</span>
+        </div>
+      `;
+
+      const summaryTableBody = document.querySelector('#summaryTable tbody');
+      summaryTableBody.innerHTML = '';
+      selectedProducts.forEach(product => {
+        const row = summaryTableBody.insertRow();
+        row.insertCell().textContent = product.codigoBarras || 'N/A';
+        row.insertCell().textContent = product.descripcion || 'Sin descripción';
+        row.insertCell().textContent = product.formula || 'No especificada';
+        row.insertCell().textContent = product.laboratorio || 'No especificado';
+        row.insertCell().textContent = product.cantidad;
+      });
+    }
+
+    // Generar PDF
+    async function generarPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      getBase64Image('logo.png', function(logoBase64) {
+          const pageWidth = doc.internal.pageSize.getWidth();
+          const imgWidth = 40;
+          const imgHeight = (imgWidth * 420) / 1488;
+          const imgX = (pageWidth - imgWidth) / 2;
+
+          if (logoBase64) {
+              doc.addImage(logoBase64, 'PNG', imgX, 15, imgWidth, imgHeight);
+          } else {
+              doc.addImage(document.querySelector('.summary-logo img').src, 'JPEG', imgX, 15, imgWidth, imgHeight);
+          }
+          
+          let y = 15 + imgHeight + 10;
+
+          doc.setFontSize(18);
+          doc.setTextColor(44, 62, 80);
+          doc.text("Cotización GlobalMediTH", pageWidth / 2, y, { align: "center" });
+          y += 8;
+          doc.setFontSize(9);
+          doc.setTextColor(50, 150, 70);
+          doc.text("¡Medicamentos de calidad con atención personalizada para tu tranquilidad!", pageWidth / 2, y, { align: "center" });
+          y += 15;
+
+          doc.setFontSize(11);
+          doc.setTextColor(0, 0, 0);
+
+          // Datos de Contacto de Ventas
+          doc.setFont(undefined, 'bold');
+          doc.text("Datos de Contacto de Ventas:", 15, y);
+          y += 6;
+          doc.setFont(undefined, 'normal');
+          doc.text(`Celular: 2381646718`, 15, y);
+          y += 6;
+          doc.text(`Correo: globalmedith@gmail.com`, 15, y);
+          y += 6;
+          doc.text(`Ubicación: Tehuacán, Puebla`, 15, y);
+          y += 10;
+
+          // Datos del Cliente
+          doc.setFont(undefined, 'bold');
+          doc.text("Datos del Cliente:", 15, y);
+          y += 6;
+          doc.setFont(undefined, 'normal');
+          doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, 15, y);
+          y += 6;
+          doc.text(`Celular: ${clientData.celular || 'N/A'}`, 15, y);
+          y += 6;
+          doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, 15, y);
+          y += 6;
+          doc.text(`Correo: ${clientData.correo || 'N/A'}`, 15, y);
+          y += 10;
+
+          // Productos seleccionados (usando autoTable)
+          doc.setFont(undefined, 'bold');
+          doc.text("Productos Seleccionados:", 15, y);
+          y += 8;
+          doc.setFont(undefined, 'normal');
+
+          const headers = [["Código de Barras", "Descripción", "Fórmula", "Laboratorio", "Cantidad"]];
+          const data = Array.from(selectedProducts.values()).map(p => [
+            p.codigoBarras || 'N/A',
+            p.descripcion || 'Sin descripción',
+            p.formula || 'No especificada',
+            p.laboratorio || 'No especificado',
+            p.cantidad
+          ]);
+
+          doc.autoTable({
+            startY: y,
+            head: headers,
+            body: data,
+            styles: { fontSize: 8, cellPadding: 1.5, overflow: 'linebreak' },
+            headStyles: { fillColor: [248, 249, 250], textColor: [44, 62, 80], fontStyle: 'bold' },
+            alternateRowStyles: { fillColor: [248, 249, 250] },
+            margin: { left: 15, right: 15 },
+            didDrawPage: function(data) {
+              doc.setFontSize(8);
+              const pageCount = doc.internal.getNumberOfPages();
+              doc.text(`Página ${data.pageNumber} de ${pageCount}`, data.settings.margin.left, doc.internal.pageSize.height - 10);
+            }
+          });
+          
+          const filename = `Cotizacion_GlobalMediTH_${(clientData.nombre || 'cliente').replace(/\s/g, '_')}.pdf`;
+          doc.save(filename);
+      });
+    }
+
+    // Enviar por WhatsApp
+    function enviarWhatsApp() {
+      const nombre = clientData.nombre || 'N/A';
+      const celular = clientData.celular || 'N/A';
+      const ciudad = clientData.ciudad || 'N/A';
+      const correo = clientData.correo || 'N/A';
+
+      let message = `¡Hola GlobalMediTH!%0A%0AMe gustaría solicitar una cotización con la siguiente información:%0A%0A`;
+      
+      message += `*Datos del Cliente:*%0A`;
+      message += `🧑‍💻 Nombre: ${nombre}%0A`;
+      message += `📱 Celular: ${celular}%0A`;
+      message += `🏙️ Ciudad: ${ciudad}%0A`;
+      message += `📧 Correo: ${correo}%0A%0A`;
+
+      message += `*Productos Solicitados:*%0A`;
+      if (selectedProducts.size === 0) {
+        message += "No se seleccionaron productos.";
+      } else {
+        selectedProducts.forEach(product => {
+          message += `💊 ${product.descripcion} (Cód: ${product.codigoBarras || 'N/A'}) - Cantidad: ${product.cantidad}%0A`;
+        });
+      }
+
+      message += `%0A¡Espero su pronta respuesta!%0A%0AGracias.%0A%0A_Sistema de Cotización GlobalMediTH_`;
+
+      const whatsappUrl = `https://wa.me/522381646718?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+    }
+  </script>
+</body>
+</html>
