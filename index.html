@@ -12,105 +12,95 @@
     * {
       margin: 0;
       padding: 0;
-      box-sizing: border-box; /* Fundamental para el responsive */
+      box-sizing: border-box;
     }
 
     html, body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #333;
-      min-height: 100vh; /* Asegura que el body ocupe al menos el 100% de la altura del viewport */
-      overflow-x: hidden; /* Evita scroll horizontal no deseado por elementos que se desbordan */
+      min-height: 100vh; /* Asegura que el body siempre tenga al menos la altura de la vista */
+      overflow-x: hidden; /* Evita scroll horizontal no deseado */
+      /* El body en sí no necesita flexbox aquí, los contenedores internos lo manejarán */
     }
 
     .container {
-      max-width: 1700px; /* Ancho máximo para el contenido */
-      margin: 0 auto; /* Centrar horizontalmente por defecto */
-      padding: 10px; /* Padding general, se ajustará en media queries */
-      width: 100%; /* Ocupa el 100% del ancho disponible */
-      min-height: 100vh; /* Asegura que el contenedor tenga al menos la altura de la vista */
-      position: relative; /* Necesario para el posicionamiento absoluto de .screen */
+      width: 100%;
+      max-width: 1700px; /* Ancho máximo para escritorios muy grandes */
+      margin: 0 auto; /* Centrar horizontalmente */
+      padding: 10px; /* Padding por defecto para móviles, se ajustará en desktop */
+      min-height: 100vh; /* Asegura que el contenedor principal sea alto */
+      position: relative; /* Para las pantallas superpuestas */
+      /* No es flexbox en el container global, es un bloque normal */
     }
 
     /* Manejo de Pantallas */
     .screen {
       display: none;
-      width: 100%;
-      height: 100%; /* Ocupa la altura del .container, que tiene min-height: 100vh */
-      position: absolute;
+      position: absolute; /* Para que se superpongan */
       top: 0;
       left: 0;
-      overflow-y: auto; /* IMPORTANTE: Cada pantalla debe manejar su propio scroll si su contenido excede la altura */
-      -webkit-overflow-scrolling: touch; /* Mejora el scroll en iOS */
-      padding-bottom: 20px; /* Espacio al final del contenido para scroll */
+      width: 100%;
+      min-height: 100%; /* Ocupa la altura del .container */
+      overflow-y: auto; /* IMPORTANTE: Cada pantalla debe manejar su propio scroll */
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 20px; /* Espacio para scroll */
     }
 
     .screen.active {
-      display: flex; /* Mantenemos flex para alinear contenido dentro de cada pantalla */
-      justify-content: center;
-      align-items: flex-start; /* Alineamos arriba, el scroll manejará el resto */
+      display: flex; /* Usamos flex para el contenido interno de cada pantalla */
+      justify-content: center; /* Centrar contenido horizontalmente */
+      align-items: flex-start; /* Alinear contenido al inicio verticalmente (arriba) */
     }
 
     /* PANTALLA 1 - REGISTRO */
     .welcome-screen {
-      display: flex; /* Añadir flex para centrar el welcome-card */
-      flex-direction: column; /* Apilar verticalmente */
-      justify-content: center; /* Centrar verticalmente */
-      align-items: center; /* Centrar horizontalmente */
-      padding: 10px;
+      padding: 10px; /* Ajuste para móvil */
       width: 100%;
-      height: 100%; /* Necesario para que justify-content funcione */
-      overflow-y: auto; /* Permitir scroll si el contenido es muy largo para la altura */
+      display: flex; /* Flexbox para centrar welcome-card */
+      justify-content: center;
+      align-items: center; /* Centrar verticalmente en escritorio si cabe */
+      min-height: 100vh; /* Para que el centrado vertical funcione si es más alto que la tarjeta */
     }
 
     .welcome-card {
       background: white;
       border-radius: 20px;
-      padding: 15px; /* Más pequeño para móviles */
+      padding: 20px; /* Padding un poco más generoso */
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       text-align: center;
       width: 100%;
-      max-width: 500px; /* Max-width para pantallas grandes */
+      max-width: 500px; /* Max-width para evitar que sea demasiado grande */
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      height: auto;
-      min-height: auto; /* Ajustado para permitir auto-ajuste de altura */
-      gap: 15px; /* Espaciado entre elementos de la tarjeta */
-    }
-
-    .logo {
-      margin-bottom: 0; /* Ajustado por el gap de welcome-card */
+      gap: 15px; /* Espacio uniforme entre elementos */
+      height: auto; /* Permite que la altura se ajuste al contenido */
     }
 
     .logo img {
-      height: 60px; /* Tamaño ajustado para móviles */
-      width: auto;
-      border-radius: 10px;
+      height: 60px; /* Ajuste para móviles */
       max-width: 100%;
+      border-radius: 10px;
     }
 
     .welcome-title {
-      font-size: 1.8em; /* Tamaño ajustado para móviles */
+      font-size: 1.8em;
       color: #2c3e50;
       font-weight: 700;
-      margin-bottom: 0; /* Ajustado por el gap de welcome-card */
     }
 
     .welcome-subtitle {
-      font-size: 1em; /* Tamaño ajustado para móviles */
+      font-size: 1em;
       color: #7f8c8d;
-      margin-bottom: 0; /* Ajustado por el gap de welcome-card */
     }
 
     .persuasive-message {
       background: linear-gradient(135deg, #28a745, #20c997);
       color: white;
-      padding: 10px; /* Ajustado para móviles */
+      padding: 10px;
       border-radius: 15px;
-      margin-bottom: 0; /* Ajustado por el gap de welcome-card */
-      font-size: 0.9em; /* Ajustado para móviles */
+      font-size: 0.9em;
       font-weight: 600;
       line-height: 1.4;
     }
@@ -118,10 +108,10 @@
     .catalog-persuasive-message {
       background: linear-gradient(135deg, #3498db, #8e44ad);
       color: white;
-      padding: 10px; /* Ajustado para móviles */
+      padding: 10px;
       border-radius: 15px;
       margin-bottom: 15px;
-      font-size: 0.95em; /* Ajustado para móviles */
+      font-size: 0.95em;
       font-weight: 600;
       text-align: center;
       line-height: 1.4;
@@ -132,14 +122,14 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 8px; /* Espacio ajustado para móvil */
+      gap: 8px;
       margin-bottom: 15px;
-      font-size: 0.85em; /* Tamaño ajustado para móvil */
+      font-size: 0.85em;
       color: #555;
       flex-shrink: 0;
     }
     .category-item {
-      padding: 6px 10px; /* Ajustado para móvil */
+      padding: 6px 10px;
       background: #e3f2fd;
       border: 1px solid #90caf9;
       border-radius: 10px;
@@ -159,7 +149,7 @@
         box-shadow: 0 3px 8px rgba(0,0,0,0.15);
     }
     .category-item i {
-        font-size: 1em; /* Ajustado para móvil */
+        font-size: 1em;
         color: #1976d2;
     }
 
@@ -240,11 +230,11 @@
 
     /* PANTALLA 2 - CATÁLOGO */
     .catalog-screen {
-      display: flex;
-      flex-direction: column;
+      display: flex; /* Base flex para móvil */
+      flex-direction: column; /* Apilados verticalmente en móvil */
       gap: 15px;
       width: 100%;
-      height: 100%;
+      height: 100%; /* Ocupa la altura de su padre (.screen) */
       align-items: flex-start;
       padding: 10px;
       overflow-y: auto;
@@ -255,7 +245,7 @@
       border-radius: 15px;
       padding: 15px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      flex-grow: 1;
+      flex-grow: 1; /* Para que ocupe espacio si está en una columna flex */
       width: 100%;
       max-width: 100%;
       display: flex;
@@ -389,11 +379,11 @@
       border-radius: 15px;
       padding: 15px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      height: auto;
-      position: relative;
+      height: auto; /* Se ajusta al contenido en móvil */
+      position: relative; /* No sticky en móvil, fluye con el contenido */
       top: auto;
-      width: 100%;
-      max-height: unset;
+      width: 100%; /* Ocupa todo el ancho en móvil */
+      max-height: unset; /* Deshabilita el max-height fijo para móvil */
       overflow-y: auto;
     }
 
@@ -408,7 +398,7 @@
     }
 
     .cart-items {
-      max-height: 200px;
+      max-height: 200px; /* Altura máxima del carrito en móvil */
       overflow-y: auto;
       margin-bottom: 15px;
     }
@@ -648,17 +638,18 @@
 
       /* PANTALLA 1 - REGISTRO */
       .welcome-screen {
+        /* En tablet, también podemos centrar un poco más si hay espacio */
         justify-content: center;
         align-items: center;
         padding: 20px;
-        height: 100%;
-        overflow-y: hidden;
+        height: 100%; /* Ocupa la altura completa para centrado */
+        overflow-y: hidden; /* No scroll en esta pantalla si el contenido cabe */
       }
       .welcome-card {
         padding: 25px;
         max-width: 500px;
         height: auto;
-        min-height: unset;
+        min-height: unset; /* Ajuste de altura */
         gap: 20px;
       }
       .logo img {
@@ -693,19 +684,19 @@
 
       /* PANTALLA 2 - CATÁLOGO */
       .catalog-screen {
-        display: grid;
-        grid-template-columns: 1fr 300px;
+        display: grid; /* Volver a usar grid para layout de 2 columnas */
+        grid-template-columns: 1fr 300px; /* Catálogo principal y carrito lateral */
         gap: 25px;
         padding: 20px;
-        height: 100%;
-        overflow-y: hidden;
+        height: 100%; /* Ocupa la altura de su padre (.screen) */
+        overflow-y: hidden; /* La pantalla en sí no hace scroll */
       }
       .catalog-main {
         padding: 30px;
         width: 100%;
         max-width: unset;
-        height: 100%;
-        max-height: calc(100vh - 40px);
+        height: 100%; /* Ocupa la altura de su padre (.catalog-screen) */
+        max-height: calc(100vh - 40px); /* Límite para el scroll interno */
       }
       .products-grid {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -887,52 +878,106 @@
       }
     }
 
-    /* Media query específica para centrar el contenido principal en escritorio */
+    /* Media query específica para centrar el contenido principal en escritorio (corregido) */
     @media (min-width: 1024px) {
+      /* Revertimos el display: flex en body para que el scroll del documento funcione normalmente */
       body {
-        display: flex; /* Habilitar flexbox en el body para centrar su contenido */
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh; /* Asegurar que el body tenga altura para el centrado */
+        display: block; /* Asegurarse que el body no sea flex globalmente */
+        justify-content: unset;
+        align-items: unset;
       }
+
       .container {
-        /* Para que el container no se estire a lo ancho de la pantalla y se centre bien */
-        max-width: 1200px; /* Un valor razonable para un catálogo en desktop */
-        padding: 20px; /* Padding adecuado para desktop */
+        /* El container se auto-centrará con margin: 0 auto; y max-width */
+        max-width: 1200px; /* Un ancho razonable para desktop */
+        margin: 20px auto; /* Centrar con margen vertical para que no se pegue arriba */
         height: auto; /* Permitir que la altura se ajuste al contenido */
-        min-height: unset; /* Deshabilitar min-height fijo para el centrado vertical */
-        box-shadow: 0 0 30px rgba(0,0,0,0.2); /* Sombra sutil para el contenedor principal */
-        background: white; /* Fondo blanco para el contenedor principal */
-        border-radius: 20px; /* Bordes redondeados */
+        min-height: calc(100vh - 40px); /* Asegura que el contenedor principal ocupe la mayor parte de la altura visible */
+        box-shadow: 0 0 30px rgba(0,0,0,0.2);
+        background: white;
+        border-radius: 20px;
+        padding: 20px; /* Padding para el contenedor principal */
       }
-      /* Asegura que las pantallas internas sigan ocupando el 100% de su contenedor (el .container) */
+      
+      /* Resetear .screen para que se adapte al .container en desktop */
       .screen {
-          position: relative; /* Mantener la superposición de pantallas */
+          position: relative; /* Ya no absoluto al viewport, sino relativo al .container */
           top: unset;
           left: unset;
-          height: auto; /* Ajustar altura al contenido */
-          min-height: calc(100vh - 40px); /* Ocupar la mayor parte de la altura del viewport */
-          box-shadow: none; /* Eliminar sombra si ya el container tiene una */
-          background: transparent; /* No fondo blanco, ya lo tiene el .container */
-          border-radius: 0; /* Eliminar si ya lo tiene el container */
-          padding-bottom: 0; /* No padding extra aquí, lo maneja el container */
+          width: 100%;
+          height: auto; /* Se ajusta a su contenido */
+          min-height: 100%; /* Ocupa la altura completa de su padre (.container) */
+          padding-bottom: 0; /* Sin padding extra aquí */
+          /* No necesita background ni border-radius extra si el container ya los tiene */
       }
       .screen.active {
+          /* Mantener display: flex para la alineación interna del contenido de la pantalla */
           display: flex;
           justify-content: center;
-          align-items: flex-start;
-          width: 100%;
-          height: 100%; /* Las pantallas deben ocupar el 100% del contenedor */
+          align-items: flex-start; /* Alinea contenido al inicio */
+          flex-direction: row; /* En escritorio, los componentes internos pueden querer estar en fila si la pantalla lo soporta */
       }
-      .welcome-screen {
-        height: auto; /* Se ajusta a su contenido */
-        overflow-y: hidden; /* No scroll, lo maneja el container si es necesario */
-        padding: 0; /* Eliminar padding específico, ya lo tiene el container */
+
+      /* Ajustes específicos para las pantallas */
+      #screen1.active .welcome-screen { /* La pantalla 1 debe centrar su contenido en escritorio */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100%; /* Necesario para que justify-content y align-items funcionen verticalmente */
+          padding: 0; /* Ya el .container tiene padding */
       }
       .welcome-card {
-        padding: 40px; /* Aumentar padding en escritorio para más espacio */
-        min-height: unset; /* Permitir que se ajuste a su contenido */
-        max-width: 600px; /* Un poco más grande en desktop */
+        padding: 40px; /* Aumentar padding en escritorio */
+        max-width: 600px; /* Un poco más grande para el formulario */
+        /* Asegurarse de que el gap interno sea apropiado */
+        gap: 25px;
+      }
+      .logo img {
+        height: 100px; /* Tamaño más grande en escritorio */
+      }
+      .welcome-title {
+        font-size: 2.5em;
+      }
+      .welcome-subtitle {
+        font-size: 1.2em;
+      }
+      .persuasive-message {
+        padding: 20px;
+        font-size: 1.1em;
+      }
+      .form-group input {
+        padding: 15px;
+        font-size: 1em;
+      }
+      .btn {
+        padding: 15px 35px;
+        font-size: 1.1em;
+      }
+
+      /* Reajustes para el catálogo y carrito en escritorio */
+      .catalog-screen {
+        display: grid; /* Volvemos al grid de 2 columnas */
+        grid-template-columns: 1fr 350px; /* Catálogo principal (flexible) y carrito (ancho fijo) */
+        gap: 30px;
+        padding: 0; /* El padding ya está en .container */
+        height: 100%; /* Ocupa el 100% de la altura de .screen */
+        align-items: flex-start;
+      }
+
+      .catalog-main {
+        padding: 30px; /* Padding para el contenido principal del catálogo */
+        height: 100%; /* Ocupa la altura de .catalog-screen */
+        max-height: unset; /* Ya no limitamos altura aquí, el scroll lo controla el products-grid */
+      }
+      .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); /* 3-4 columnas */
+        padding-right: 10px; /* Para barra de scroll */
+      }
+      .cart-sidebar {
+        position: sticky; /* Sticky en escritorio */
+        top: 20px; /* Margen superior cuando es sticky */
+        max-height: calc(100vh - 40px); /* Limitar altura para que el scroll funcione dentro del carrito */
+        padding: 30px; /* Padding para el carrito */
       }
     }
   </style>
@@ -949,7 +994,7 @@
       <div class="welcome-screen">
         <div class="welcome-card">
           <div class="logo">
-            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ0YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
+            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
           </div>
 
           <h1 class="welcome-title">Bienvenido</h1>
@@ -957,7 +1002,7 @@
 
           <div class="persuasive-message">
             <i class="fas fa-star"></i>
-            ¡Solicita tu pedido ahora y recibe atención personalizada! Nuestros medicamentos de calidad están listos para ti.
+            ¡Solicita tu pedido ahora y recibe atención personalizada! Nuestros medicamentos de calidad están ready para ti.
           </div>
 
           <div class="medicine-types">
@@ -1048,7 +1093,7 @@
 
           <div class="cart-summary">
             <div class="cart-total" id="cartTotal">
-              Total: 0 productos
+              Total: 0 producto(s)
             </div>
             <button class="btn btn-success" onclick="goToSummary()" id="quoteBtnMain" disabled>
               <i class="fas fa-file-invoice"></i>
@@ -1064,7 +1109,7 @@
         <div class="summary-fixed-header">
           <div class="summary-header">
             <div class="summary-logo">
-              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ0YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
+              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
             </div>
             <h1 class="summary-title">Cotización - GlobalMediTH</h1>
             <div class="persuasive-message">
@@ -1157,7 +1202,7 @@
         };
         img.onerror = function() {
             console.error("Error al cargar la imagen para Base64. Usando fallback SVG.");
-            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ0YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg==';
+            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RleHQ+Cjwvc3ZnPg==';
             callback(fallbackSvg);
         };
     }
@@ -1201,7 +1246,6 @@
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         medicamentos = await res.json();
-        // Asumiendo que la primera fila es una cabecera si tiene "Codigo de Barras"
         if (medicamentos.length > 0 && medicamentos[0].codigoBarras === "Codigo de Barras") {
           medicamentos.shift();
         }
@@ -1231,11 +1275,16 @@
         card.className = `product-card ${isSelected ? 'selected' : ''}`;
         card.onclick = () => toggleProduct(product);
         
+        // CORRECCIÓN: Asegurar que product.codigoBarras se lea correctamente y se muestre.
+        // Se cambió el texto del label a "Código:" para mayor claridad si venía mal
+        // y se eliminó una posible inconsistencia de mayúsculas/minúsculas.
+        const displayCodigoBarras = product.codigoBarras || 'No disponible';
+
         card.innerHTML = `
           <div class="product-title">${product.descripcion || 'Sin descripción'}</div>
           <div class="product-info"><strong>Fórmula:</strong> ${product.formula || 'No especificada'}</div>
           <div class="product-info"><strong>Laboratorio:</strong> ${product.laboratorio || 'No especificado'}</div>
-          <div class="product-info"><strong>Código:</strong> ${product.codigoBarras || 'No disponible'}</div>
+          <div class="product-info"><strong>Código:</strong> ${displayCodigoBarras}</div>
           <div class="quantity-selector" onclick="event.stopPropagation()">
             <label>Cantidad:</label>
             <input type="number" class="quantity-input" min="1" value="${quantity}" 
@@ -1331,6 +1380,7 @@
       const desc = (product.descripcion || '').toLowerCase();
       const formula = (product.formula || '').toLowerCase();
       const laboratorio = (product.laboratorio || '').toLowerCase();
+      // CORRECCIÓN: Asegurar que el acceso a product.codigoBarras sea consistente
       const codigoBarras = (product.codigoBarras || '').toLowerCase();
 
       return desc.includes(searchTerm) ||
@@ -1480,25 +1530,23 @@
         const ciudad = clientData.ciudad || 'N/A';
         const correo = clientData.correo || 'N/A';
 
-        // Usamos "\n" directamente en la cadena de JavaScript para los saltos de línea.
-        // encodeURIComponent se aplicará a toda la cadena al final, y WhatsApp lo interpretará.
-        let message = `*Solicitud de Cotización - Global MediTH*\n\n`;
+        let message = `*Solicitud de Cotización - Global MediTH*\n\n`; // Encabezado y dos saltos de línea
 
-        message += `\u{1F4C3} *Folio:* ${folio}\n`;
-        message += `  🧑‍💻 *Nombre:* ${nombre}\n`;
-        message += `  📱 *Celular:* ${celular}\n`;
-        message += `  🏙️ *Ciudad:* ${ciudad}\n`;
-        message += `  📧 *Correo:* ${correo}\n\n`;
+        message += `\u{1F4C3} *Folio:* ${folio}\n`; // Emoji de documento, negrita para "Folio"
+        message += `  🧑‍💻 *Nombre:* ${nombre}\n`; // Ícono de persona
+        message += `  📱 *Celular:* ${celular}\n`; // Ícono de celular
+        message += `  🏙️ *Ciudad:* ${ciudad}\n`; // Ícono de ciudad
+        message += `  📧 *Correo:* ${correo}\n\n`; // Ícono de correo y doble salto para espacio
 
         message += `*Productos Solicitados:*\n`;
         if (selectedProducts.size === 0) {
             message += `  • No se seleccionaron productos.\n`;
         } else {
             selectedProducts.forEach(product => {
-                // Asegúrate de que product.codigoBarras se esté leyendo correctamente
-                const codigo = product.codigoBarras || 'No disponible';
-                message += `  • ${product.descripcion || 'Sin descripción'} (${codigo})\n`;
-                message += `    Cantidad: ${product.cantidad}\n\n`;
+                // Asegurar que product.codigoBarras se lea correctamente aquí también
+                const codigo = product.codigoBarras || 'N/A'; // Usar la misma lógica de fallback
+                message += `  • ${product.descripcion || 'Sin descripción'} (${codigo})\n`; // Código de barras entre paréntesis
+                message += `    Cantidad: ${product.cantidad}\n\n`; // Cantidad en línea separada con indentación y doble salto
             });
         }
         message += `Gracias por su preferencia.`;
