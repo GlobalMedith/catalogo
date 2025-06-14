@@ -21,12 +21,11 @@
       color: #333;
       min-height: 100vh; /* Asegura que el body ocupe al menos el 100% de la altura del viewport */
       overflow-x: hidden; /* Evita scroll horizontal no deseado por elementos que se desbordan */
-      /* No display: flex; aquí, el body fluye normalmente */
     }
 
     .container {
       max-width: 1700px; /* Ancho máximo para el contenido */
-      margin: 0 auto; /* Centrar horizontalmente en pantallas grandes */
+      margin: 0 auto; /* Centrar horizontalmente por defecto */
       padding: 10px; /* Padding general, se ajustará en media queries */
       width: 100%; /* Ocupa el 100% del ancho disponible */
       min-height: 100vh; /* Asegura que el contenedor tenga al menos la altura de la vista */
@@ -44,7 +43,6 @@
       overflow-y: auto; /* IMPORTANTE: Cada pantalla debe manejar su propio scroll si su contenido excede la altura */
       -webkit-overflow-scrolling: touch; /* Mejora el scroll en iOS */
       padding-bottom: 20px; /* Espacio al final del contenido para scroll */
-      /* display: flex y alineaciones se aplican en .screen.active */
     }
 
     .screen.active {
@@ -673,18 +671,12 @@
         font-size: 1.1em;
       }
       .persuasive-message {
-        padding: 15px;
         font-size: 1em;
       }
       .medicine-types {
         flex-direction: row;
         justify-content: space-around;
         gap: 10px;
-      }
-      .medicine-type {
-        flex: 1;
-        min-width: 90px;
-        max-width: unset;
       }
       .medicine-type i {
         font-size: 1.8em;
@@ -895,7 +887,7 @@
       }
     }
 
-    /* Media query para centrar el contenido principal en escritorio */
+    /* Media query específica para centrar el contenido principal en escritorio */
     @media (min-width: 1024px) {
       body {
         display: flex; /* Habilitar flexbox en el body para centrar su contenido */
@@ -1072,7 +1064,7 @@
         <div class="summary-fixed-header">
           <div class="summary-header">
             <div class="summary-logo">
-              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHxmlnsPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zz4KPHJlY3Qgd2lkdGg9IjE1MCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMyNzQ0YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
+              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ0YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
             </div>
             <h1 class="summary-title">Cotización - GlobalMediTH</h1>
             <div class="persuasive-message">
@@ -1148,7 +1140,7 @@
         const minutes = date.getMinutes().toString().padStart(2, '0');
         const seconds = date.getSeconds().toString().padStart(2, '0');
         const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-        return `COT-<span class="math-inline">\{year\}</span>{month}<span class="math-inline">\{day\}\-</span>{hours}<span class="math-inline">\{minutes\}\-</span>{random}`;
+        return `COT-${year}${month}${day}-${hours}${minutes}-${random}`;
     }
 
     function getBase64Image(imgUrl, callback) {
@@ -1209,6 +1201,7 @@
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         medicamentos = await res.json();
+        // Asumiendo que la primera fila es una cabecera si tiene "Codigo de Barras"
         if (medicamentos.length > 0 && medicamentos[0].codigoBarras === "Codigo de Barras") {
           medicamentos.shift();
         }
@@ -1242,10 +1235,10 @@
           <div class="product-title">${product.descripcion || 'Sin descripción'}</div>
           <div class="product-info"><strong>Fórmula:</strong> ${product.formula || 'No especificada'}</div>
           <div class="product-info"><strong>Laboratorio:</strong> ${product.laboratorio || 'No especificado'}</div>
-          <div class="product-info"><strong>Código:</strong> <span class="math-inline">\{product\.codigoBarras \|\| 'No disponible'\}</div\>
-<div class\="quantity\-selector" onclick\="event\.stopPropagation\(\)"\>
-<label\>Cantidad\:</label\>
-<input type\="number" class\="quantity\-input" min\="1" value\="</span>{quantity}" 
+          <div class="product-info"><strong>Código:</strong> ${product.codigoBarras || 'No disponible'}</div>
+          <div class="quantity-selector" onclick="event.stopPropagation()">
+            <label>Cantidad:</label>
+            <input type="number" class="quantity-input" min="1" value="${quantity}" 
                    onchange="updateQuantity('${product.codigoBarras}', this.value)" />
           </div>
         `;
@@ -1306,8 +1299,8 @@
         html += `
           <div class="cart-item">
             <div class="cart-item-title">${product.descripcion || 'Producto sin descripción'}</div>
-            <div class="cart-item-info">Código: <span class="math-inline">\{product\.codigoBarras \|\| 'N/A'\}</div\>
-<div class\="cart\-item\-quantity"\></span>{product.cantidad}</div>
+            <div class="cart-item-info">Código: ${product.codigoBarras || 'N/A'}</div>
+            <div class="cart-item-quantity">${product.cantidad}</div>
             <button class="remove-item" onclick="removeItemFromCart('${product.codigoBarras}')">
               <i class="fas fa-times"></i>
             </button>
@@ -1489,26 +1482,26 @@
 
         // Usamos "\n" directamente en la cadena de JavaScript para los saltos de línea.
         // encodeURIComponent se aplicará a toda la cadena al final, y WhatsApp lo interpretará.
-        let message = `*Solicitud de Cotización - Global MediTH*\n\n`; // Encabezado y dos saltos de línea
+        let message = `*Solicitud de Cotización - Global MediTH*\n\n`;
 
-        message += `\u{1F4C3} *Folio:* ${folio}\n`; // Emoji de documento, negrita para "Folio"
-        message += `  🧑‍💻 *Nombre:* ${nombre}\n`; // Ícono de persona
-        message += `  📱 *Celular:* ${celular}\n`; // Ícono de celular
-        message += `  🏙️ *Ciudad:* ${ciudad}\n`; // Ícono de ciudad
-        message += `  📧 *Correo:* ${correo}\n\n`; // Ícono de correo y doble salto para espacio
+        message += `\u{1F4C3} *Folio:* ${folio}\n`;
+        message += `  🧑‍💻 *Nombre:* ${nombre}\n`;
+        message += `  📱 *Celular:* ${celular}\n`;
+        message += `  🏙️ *Ciudad:* ${ciudad}\n`;
+        message += `  📧 *Correo:* ${correo}\n\n`;
 
         message += `*Productos Solicitados:*\n`;
         if (selectedProducts.size === 0) {
             message += `  • No se seleccionaron productos.\n`;
         } else {
             selectedProducts.forEach(product => {
-                // Formato de producto: • Descripción (Código: XXXXX)
-                //                     Cantidad: Y
-                message += `  • <span class="math-inline">\{product\.descripcion \|\| 'Sin descripción'\} \(</span>{product.codigoBarras || 'N/A'})\n`; // Código de barras entre paréntesis
-                message += `    Cantidad: ${product.cantidad}\n\n`; // Cantidad en línea separada con indentación y doble salto
+                // Asegúrate de que product.codigoBarras se esté leyendo correctamente
+                const codigo = product.codigoBarras || 'No disponible';
+                message += `  • ${product.descripcion || 'Sin descripción'} (${codigo})\n`;
+                message += `    Cantidad: ${product.cantidad}\n\n`;
             });
         }
-        message += `Gracias por su preferencia.`; // Mensaje final
+        message += `Gracias por su preferencia.`;
 
         return message;
     }
@@ -1550,7 +1543,6 @@
                 );
 
                 const whatsappMessage = generateWhatsAppMessage();
-                // Aquí aplicamos encodeURIComponent a toda la cadena con \n
                 const whatsappUrl = `https://wa.me/522381646718?text=${encodeURIComponent(whatsappMessage)}`;
                 window.open(whatsappUrl, '_blank');
             }, 700);
