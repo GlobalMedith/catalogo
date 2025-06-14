@@ -133,20 +133,6 @@
       color: #555;
       flex-shrink: 0;
     }
-    .category-item {
-      padding: 6px 10px; /* Ajustado para móvil */
-      background: #e3f2fd;
-      border: 1px solid #90caf9;
-      border-radius: 10px;
-      font-weight: 600;
-      color: #1976d2;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
     .category-item:hover {
         background: #bbdefb;
         border-color: #64b5f6;
@@ -1453,30 +1439,33 @@
       });
     }
 
-    // Función para generar un mensaje de WhatsApp formateado con productos
+    // Función para generar un mensaje de WhatsApp formateado como en la imagen de ejemplo
     function generateWhatsAppMessage() {
+        // Uso de encodeURIComponent para asegurar que los saltos de línea y caracteres especiales se transmitan correctamente
+        // y de caracteres Unicode para íconos si se quieren usar.
+
         const nombre = clientData.nombre || 'N/A';
         const celular = clientData.celular || 'N/A';
         const ciudad = clientData.ciudad || 'N/A';
         const correo = clientData.correo || 'N/A';
 
-        let message = `¡Hola GlobalMediTH!%0A%0AMe gustaría solicitar una cotización con la siguiente información:%0A%0A`;
+        let message = `*Solicitud de Cotización - Global MediTH*%0A%0A`; // Encabezado
 
         message += `*Datos del Cliente:*%0A`;
-        message += `🧑‍💻 Nombre: ${nombre}%0A`;
-        message += `📱 Celular: ${celular}%0A`;
-        message += `🏙️ Ciudad: ${ciudad}%0A`;
-        message += `📧 Correo: ${correo}%0A%0A`;
+        message += `  🧑‍💻 Nombre: ${nombre}%0A`;
+        message += `  📱 Celular: ${celular}%0A`;
+        message += `  🏙️ Ciudad: ${ciudad}%0A`;
+        message += `  📧 Correo: ${correo}%0A%0A`;
 
         message += `*Productos Solicitados:*%0A`;
         if (selectedProducts.size === 0) {
-            message += "No se seleccionaron productos.";
+            message += `  - No se seleccionaron productos.%0A`;
         } else {
             selectedProducts.forEach(product => {
-                // Formato mejorado: Código | Descripción | Cantidad
-                message += `*Cód:* ${product.codigoBarras || 'N/A'}%0A`;
-                message += `  - *Desc:* ${product.descripcion || 'Sin descripción'}%0A`;
-                message += `  - *Cant:* ${product.cantidad}%0A%0A`; // Doble salto para espacio entre productos
+                // Formato de producto: - Descripción (Cód: XXXXX) - Cant: Y
+                message += `  - ${product.descripcion || 'Sin descripción'} `;
+                message += `(Cód: ${product.codigoBarras || 'N/A'})%0A`;
+                message += `    Cant: ${product.cantidad}%0A%0A`; // Un salto de línea extra para separación entre productos
             });
         }
         message += `%0A¡Espero su pronta respuesta!%0A%0AGracias.`;
@@ -1523,7 +1512,7 @@
                     "¡Listo! ✅ Tu cotización en PDF (`" + filename + "`) se ha descargado a tu dispositivo.\n\n" +
                     "Ahora, se abrirá WhatsApp. Por favor, realiza estos 2 pasos:\n" +
                     "1️⃣ Busca y adjunta el archivo PDF que acabas de descargar.\n" +
-                    "2️⃣ Envía el mensaje.\n\n" +
+                    "2️⃣ Envía el mensaje (el texto de la cotización ya está listo).\n\n" +
                     "¡Gracias por tu paciencia! 😉"
                 );
 
