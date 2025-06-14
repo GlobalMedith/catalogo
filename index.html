@@ -21,14 +21,14 @@
       color: #333;
       min-height: 100vh; /* Asegura que el body ocupe al menos el 100% de la altura del viewport */
       overflow-x: hidden; /* Evita scroll horizontal no deseado por elementos que se desbordan */
-      /* Eliminamos display: block aquí y lo aplicamos en media query para desktop */
+      /* No display: flex; aquí, el body fluye normalmente */
     }
 
     .container {
-      max-width: 1700px;
-      margin: 0 auto; /* Centrar horizontalmente por defecto */
-      padding: 10px; /* Padding reducido para móviles */
-      width: 100%;
+      max-width: 1700px; /* Ancho máximo para el contenido */
+      margin: 0 auto; /* Centrar horizontalmente en pantallas grandes */
+      padding: 10px; /* Padding general, se ajustará en media queries */
+      width: 100%; /* Ocupa el 100% del ancho disponible */
       min-height: 100vh; /* Asegura que el contenedor tenga al menos la altura de la vista */
       position: relative; /* Necesario para el posicionamiento absoluto de .screen */
     }
@@ -37,13 +37,14 @@
     .screen {
       display: none;
       width: 100%;
-      min-height: 100vh; /* Cada pantalla debe ocupar al menos toda la altura de la vista */
-      position: absolute; /* Permite que las pantallas se superpongan */
+      height: 100%; /* Ocupa la altura del .container, que tiene min-height: 100vh */
+      position: absolute;
       top: 0;
       left: 0;
       overflow-y: auto; /* IMPORTANTE: Cada pantalla debe manejar su propio scroll si su contenido excede la altura */
       -webkit-overflow-scrolling: touch; /* Mejora el scroll en iOS */
       padding-bottom: 20px; /* Espacio al final del contenido para scroll */
+      /* display: flex y alineaciones se aplican en .screen.active */
     }
 
     .screen.active {
@@ -54,8 +55,14 @@
 
     /* PANTALLA 1 - REGISTRO */
     .welcome-screen {
+      display: flex; /* Añadir flex para centrar el welcome-card */
+      flex-direction: column; /* Apilar verticalmente */
+      justify-content: center; /* Centrar verticalmente */
+      align-items: center; /* Centrar horizontalmente */
       padding: 10px;
       width: 100%;
+      height: 100%; /* Necesario para que justify-content funcione */
+      overflow-y: auto; /* Permitir scroll si el contenido es muy largo para la altura */
     }
 
     .welcome-card {
@@ -71,7 +78,7 @@
       flex-direction: column;
       justify-content: space-between;
       height: auto;
-      min-height: 100%; /* Asegura que la tarjeta ocupe la altura completa de la pantalla en móvil */
+      min-height: auto; /* Ajustado para permitir auto-ajuste de altura */
       gap: 15px; /* Espaciado entre elementos de la tarjeta */
     }
 
@@ -888,26 +895,52 @@
       }
     }
 
-    /* Media query específica para centrar en desktop el Welcome Screen */
+    /* Media query para centrar el contenido principal en escritorio */
     @media (min-width: 1024px) {
-      html, body {
+      body {
         display: flex; /* Habilitar flexbox en el body para centrar su contenido */
         justify-content: center;
         align-items: center;
+        min-height: 100vh; /* Asegurar que el body tenga altura para el centrado */
       }
       .container {
-        /* No necesitas height: 100% aquí si el body ya lo centra, pero asegúrate de que el contenido no se desborde */
-        height: auto;
-        min-height: auto; /* Permitir que se ajuste a su contenido para el centrado */
+        /* Para que el container no se estire a lo ancho de la pantalla y se centre bien */
+        max-width: 1200px; /* Un valor razonable para un catálogo en desktop */
+        padding: 20px; /* Padding adecuado para desktop */
+        height: auto; /* Permitir que la altura se ajuste al contenido */
+        min-height: unset; /* Deshabilitar min-height fijo para el centrado vertical */
+        box-shadow: 0 0 30px rgba(0,0,0,0.2); /* Sombra sutil para el contenedor principal */
+        background: white; /* Fondo blanco para el contenedor principal */
+        border-radius: 20px; /* Bordes redondeados */
+      }
+      /* Asegura que las pantallas internas sigan ocupando el 100% de su contenedor (el .container) */
+      .screen {
+          position: relative; /* Mantener la superposición de pantallas */
+          top: unset;
+          left: unset;
+          height: auto; /* Ajustar altura al contenido */
+          min-height: calc(100vh - 40px); /* Ocupar la mayor parte de la altura del viewport */
+          box-shadow: none; /* Eliminar sombra si ya el container tiene una */
+          background: transparent; /* No fondo blanco, ya lo tiene el .container */
+          border-radius: 0; /* Eliminar si ya lo tiene el container */
+          padding-bottom: 0; /* No padding extra aquí, lo maneja el container */
+      }
+      .screen.active {
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+          width: 100%;
+          height: 100%; /* Las pantallas deben ocupar el 100% del contenedor */
       }
       .welcome-screen {
-        justify-content: center; /* Asegura que el contenido de la pantalla 1 se centre */
-        align-items: center;
-        height: 100%; /* Ocupa el 100% de la altura disponible para el centrado */
+        height: auto; /* Se ajusta a su contenido */
+        overflow-y: hidden; /* No scroll, lo maneja el container si es necesario */
+        padding: 0; /* Eliminar padding específico, ya lo tiene el container */
       }
       .welcome-card {
-        height: auto; /* Permite que la tarjeta se ajuste al contenido */
-        min-height: unset; /* Ya no necesita 100% min-height */
+        padding: 40px; /* Aumentar padding en escritorio para más espacio */
+        min-height: unset; /* Permitir que se ajuste a su contenido */
+        max-width: 600px; /* Un poco más grande en desktop */
       }
     }
   </style>
@@ -924,7 +957,7 @@
       <div class="welcome-screen">
         <div class="welcome-card">
           <div class="logo">
-            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHxmlnsPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zz4KPHJlY3Qgd2lkdGg9IjE1MCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMyNzQ0YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
+            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ0YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
           </div>
 
           <h1 class="welcome-title">Bienvenido</h1>
@@ -1115,7 +1148,7 @@
         const minutes = date.getMinutes().toString().padStart(2, '0');
         const seconds = date.getSeconds().toString().padStart(2, '0');
         const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-        return `COT-${year}${month}${day}-${hours}${minutes}-${random}`;
+        return `COT-<span class="math-inline">\{year\}</span>{month}<span class="math-inline">\{day\}\-</span>{hours}<span class="math-inline">\{minutes\}\-</span>{random}`;
     }
 
     function getBase64Image(imgUrl, callback) {
@@ -1132,7 +1165,7 @@
         };
         img.onerror = function() {
             console.error("Error al cargar la imagen para Base64. Usando fallback SVG.");
-            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHxmlnsPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zz4KPHJlY3Qgd2lkdGg9IjE1MCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMyNzQ0YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg==';
+            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ0YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg==';
             callback(fallbackSvg);
         };
     }
@@ -1209,10 +1242,10 @@
           <div class="product-title">${product.descripcion || 'Sin descripción'}</div>
           <div class="product-info"><strong>Fórmula:</strong> ${product.formula || 'No especificada'}</div>
           <div class="product-info"><strong>Laboratorio:</strong> ${product.laboratorio || 'No especificado'}</div>
-          <div class="product-info"><strong>Código:</strong> ${product.codigoBarras || 'No disponible'}</div>
-          <div class="quantity-selector" onclick="event.stopPropagation()">
-            <label>Cantidad:</label>
-            <input type="number" class="quantity-input" min="1" value="${quantity}" 
+          <div class="product-info"><strong>Código:</strong> <span class="math-inline">\{product\.codigoBarras \|\| 'No disponible'\}</div\>
+<div class\="quantity\-selector" onclick\="event\.stopPropagation\(\)"\>
+<label\>Cantidad\:</label\>
+<input type\="number" class\="quantity\-input" min\="1" value\="</span>{quantity}" 
                    onchange="updateQuantity('${product.codigoBarras}', this.value)" />
           </div>
         `;
@@ -1273,8 +1306,8 @@
         html += `
           <div class="cart-item">
             <div class="cart-item-title">${product.descripcion || 'Producto sin descripción'}</div>
-            <div class="cart-item-info">Código: ${product.codigoBarras || 'N/A'}</div>
-            <div class="cart-item-quantity">${product.cantidad}</div>
+            <div class="cart-item-info">Código: <span class="math-inline">\{product\.codigoBarras \|\| 'N/A'\}</div\>
+<div class\="cart\-item\-quantity"\></span>{product.cantidad}</div>
             <button class="remove-item" onclick="removeItemFromCart('${product.codigoBarras}')">
               <i class="fas fa-times"></i>
             </button>
@@ -1471,7 +1504,7 @@
             selectedProducts.forEach(product => {
                 // Formato de producto: • Descripción (Código: XXXXX)
                 //                     Cantidad: Y
-                message += `  • ${product.descripcion || 'Sin descripción'} (${product.codigoBarras || 'N/A'})\n`; // Código de barras entre paréntesis
+                message += `  • <span class="math-inline">\{product\.descripcion \|\| 'Sin descripción'\} \(</span>{product.codigoBarras || 'N/A'})\n`; // Código de barras entre paréntesis
                 message += `    Cantidad: ${product.cantidad}\n\n`; // Cantidad en línea separada con indentación y doble salto
             });
         }
