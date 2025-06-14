@@ -20,13 +20,13 @@
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #333;
       min-height: 100vh; /* Asegura que el body ocupe al menos el 100% de la altura del viewport */
-      display: block; /* Vuelve al flujo normal de bloque para el body */
       overflow-x: hidden; /* Evita scroll horizontal no deseado por elementos que se desbordan */
+      /* Eliminamos display: block aquí y lo aplicamos en media query para desktop */
     }
 
     .container {
       max-width: 1700px;
-      margin: 0 auto;
+      margin: 0 auto; /* Centrar horizontalmente por defecto */
       padding: 10px; /* Padding reducido para móviles */
       width: 100%;
       min-height: 100vh; /* Asegura que el contenedor tenga al menos la altura de la vista */
@@ -887,6 +887,29 @@
           font-size: 1.5em;
       }
     }
+
+    /* Media query específica para centrar en desktop el Welcome Screen */
+    @media (min-width: 1024px) {
+      html, body {
+        display: flex; /* Habilitar flexbox en el body para centrar su contenido */
+        justify-content: center;
+        align-items: center;
+      }
+      .container {
+        /* No necesitas height: 100% aquí si el body ya lo centra, pero asegúrate de que el contenido no se desborde */
+        height: auto;
+        min-height: auto; /* Permitir que se ajuste a su contenido para el centrado */
+      }
+      .welcome-screen {
+        justify-content: center; /* Asegura que el contenido de la pantalla 1 se centre */
+        align-items: center;
+        height: 100%; /* Ocupa el 100% de la altura disponible para el centrado */
+      }
+      .welcome-card {
+        height: auto; /* Permite que la tarjeta se ajuste al contenido */
+        min-height: unset; /* Ya no necesita 100% min-height */
+      }
+    }
   </style>
 </head>
 <body>
@@ -901,7 +924,7 @@
       <div class="welcome-screen">
         <div class="welcome-card">
           <div class="logo">
-            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHxmlnsPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zz4KPHJlY3Qgd2lkdGg9IjE1MCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
+            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHxmlnsPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zz4KPHJlY3Qgd2lkdGg9IjE1MCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMyNzQ0YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
           </div>
 
           <h1 class="welcome-title">Bienvenido</h1>
@@ -1016,7 +1039,7 @@
         <div class="summary-fixed-header">
           <div class="summary-header">
             <div class="summary-logo">
-              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHxmlnsPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zz4KPHJlY3Qgd2lkdGg9IjE1MCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
+              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHxmlnsPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zz4KPHJlY3Qgd2lkdGg9IjE1MCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMyNzQ0YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
             </div>
             <h1 class="summary-title">Cotización - GlobalMediTH</h1>
             <div class="persuasive-message">
@@ -1078,13 +1101,11 @@
 
   <script>
     // Variables globales
-    let medicamentos = []; // Se inicializa aquí, pero es rellenada por la carga del JSON
+    let medicamentos = [];
     let selectedProducts = new Map();
     let currentScreen = 1;
     let clientData = {};
-    const productsGrid = document.getElementById('productsGrid'); // Referencia al grid de productos
 
-    // Función para generar un folio único de seguimiento
     function generateTrackingId() {
         const date = new Date();
         const year = date.getFullYear().toString().slice(-2);
@@ -1094,10 +1115,9 @@
         const minutes = date.getMinutes().toString().padStart(2, '0');
         const seconds = date.getSeconds().toString().padStart(2, '0');
         const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-        return `COT-${year}${month}${day}-${hours}${minutes}-${random}`; // Formato de folio como en la imagen
+        return `COT-${year}${month}${day}-${hours}${minutes}-${random}`;
     }
 
-    // Función para obtener la imagen en Base64 (para PDF)
     function getBase64Image(imgUrl, callback) {
         var img = new Image();
         img.src = imgUrl;
@@ -1107,57 +1127,48 @@
             canvas.height = img.height;
             var ctx = canvas.getContext("2d");
             ctx.drawImage(img, 0, 0);
-            var dataURL = canvas.toDataURL("image/png"); // Preferir PNG para logos con transparencia
+            var dataURL = canvas.toDataURL("image/png");
             callback(dataURL);
         };
         img.onerror = function() {
             console.error("Error al cargar la imagen para Base64. Usando fallback SVG.");
-            // Llama al callback con el SVG base64 de fallback
-            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHxmlnsPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zz4KPHJlY3Qgd2lkdGg9IjE1MCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg==';
+            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHxmlnsPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zz4KPHJlY3Qgd2lkdGg9IjE1MCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMyNzQ0YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg==';
             callback(fallbackSvg);
         };
     }
 
-    // Navegación entre pantallas
     function goToScreen(screenNumber) {
       document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
       });
       document.getElementById(`screen${screenNumber}`).classList.add('active');
       currentScreen = screenNumber;
-
       const backBtn = document.getElementById('backBtn');
-      // El botón de retroceso superior SIEMPRE debe estar visible si no es la primera pantalla.
       backBtn.style.display = (screenNumber > 1) ? 'block' : 'none';
     }
 
     function goBack() {
       if (currentScreen > 1) {
-        // Lógica de retroceso. Si estamos en la pantalla de resumen, regresamos al catálogo.
         if (currentScreen === 3) {
-            goToScreen(2); // De resumen a catálogo
+            goToScreen(2);
         } else {
             goToScreen(currentScreen - 1);
         }
       }
     }
 
-    // Formulario de cliente
     document.getElementById('clientForm').addEventListener('submit', function(e) {
       e.preventDefault();
-
       clientData = {
         nombre: document.getElementById('nombre').value,
         celular: document.getElementById('celular').value,
         ciudad: document.getElementById('ciudad').value,
         correo: document.getElementById('correo').value,
-        folio: generateTrackingId() // Generar el folio al enviar el formulario de cliente
+        folio: generateTrackingId()
       };
-
-      goToScreen(2); // Avanza a la pantalla del catálogo
+      goToScreen(2);
     });
 
-    // Cargar medicamentos
     window.onload = async () => {
       try {
         const res = await fetch('medicamentos.json');
@@ -1165,40 +1176,35 @@
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         medicamentos = await res.json();
-        // Asumiendo que la primera fila es una cabecera si tiene "Codigo de Barras"
         if (medicamentos.length > 0 && medicamentos[0].codigoBarras === "Codigo de Barras") {
-          medicamentos.shift(); // Elimina la fila de cabecera
+          medicamentos.shift();
         }
-        // NO LLAMAR renderProducts(medicamentos) AQUÍ para que no muestre todo al inicio
       } catch (error) {
         console.error("Error al cargar los medicamentos:", error);
-        productsGrid.innerHTML =
+        document.getElementById('productsGrid').innerHTML =
           "<p style='text-align: center; color: #dc3545;'>Error al cargar el catálogo. Por favor, intente más tarde.</p>";
       }
     };
 
-    // Renderizar productos en el catálogo
     function renderProducts(productsToRender) {
-      productsGrid.innerHTML = ''; // Limpia el grid antes de renderizar
-      productsGrid.classList.remove('empty-message'); // Elimina la clase si hay productos
+      const productsGrid = document.getElementById('productsGrid');
+      productsGrid.innerHTML = '';
+      productsGrid.classList.remove('empty-message');
 
       if (productsToRender.length === 0) {
         productsGrid.innerHTML = "<p class='empty-message'>No se encontraron resultados para tu búsqueda.</p>";
-        productsGrid.classList.add('empty-message'); // Agrega la clase para centrar el mensaje
+        productsGrid.classList.add('empty-message');
         return;
       }
 
       productsToRender.forEach((product) => {
         const isSelected = selectedProducts.has(product.codigoBarras);
-        // Obtener la cantidad si ya está seleccionado, si no, por defecto 1
         const quantity = isSelected ? selectedProducts.get(product.codigoBarras).cantidad : 1;
-
+        
         const card = document.createElement('div');
         card.className = `product-card ${isSelected ? 'selected' : ''}`;
-
-        // Al hacer click en la tarjeta, alterna la selección del producto
         card.onclick = () => toggleProduct(product);
-
+        
         card.innerHTML = `
           <div class="product-title">${product.descripcion || 'Sin descripción'}</div>
           <div class="product-info"><strong>Fórmula:</strong> ${product.formula || 'No especificada'}</div>
@@ -1206,69 +1212,62 @@
           <div class="product-info"><strong>Código:</strong> ${product.codigoBarras || 'No disponible'}</div>
           <div class="quantity-selector" onclick="event.stopPropagation()">
             <label>Cantidad:</label>
-            <input type="number" class="quantity-input" min="1" value="${quantity}"
+            <input type="number" class="quantity-input" min="1" value="${quantity}" 
                    onchange="updateQuantity('${product.codigoBarras}', this.value)" />
           </div>
         `;
-
         productsGrid.appendChild(card);
       });
-      updateCart(); // Asegura que el carrito se actualice después de renderizar productos
+      updateCart();
     }
 
-    // Alternar selección de producto (al hacer click en la tarjeta)
     function toggleProduct(product) {
       if (selectedProducts.has(product.codigoBarras)) {
         selectedProducts.delete(product.codigoBarras);
       } else {
         selectedProducts.set(product.codigoBarras, { ...product, cantidad: 1 });
       }
-      // Re-renderiza los productos filtrados para actualizar su estado visual
       const searchTerm = document.getElementById('busqueda').value.toLowerCase();
       const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
       renderProducts(filtered);
-      updateCart(); // Actualiza el carrito después de la selección
+      updateCart();
     }
 
-    // Actualizar cantidad de un producto seleccionado
     function updateQuantity(codigo, cantidad) {
       const qty = parseInt(cantidad) || 1;
-      if (qty < 1) return; // Evita cantidades menores a 1
+      if (qty < 1) return;
 
       if (selectedProducts.has(codigo)) {
         const product = selectedProducts.get(codigo);
         product.cantidad = qty;
         selectedProducts.set(codigo, product);
-        updateCart(); // Actualiza el carrito después de cambiar la cantidad
+        updateCart();
       }
     }
 
-    // Eliminar producto del carrito (botón 'x' en el carrito)
     function removeItemFromCart(codigo) {
       selectedProducts.delete(codigo);
-      // Re-renderiza los productos filtrados para desmarcar el elemento eliminado
       const searchTerm = document.getElementById('busqueda').value.toLowerCase();
       const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
       renderProducts(filtered);
-      updateCart(); // Actualiza el carrito
+      updateCart();
     }
 
-    // Actualizar la vista del carrito lateral
     function updateCart() {
       const cartItems = document.getElementById('cartItems');
       const cartTotal = document.getElementById('cartTotal');
       const quoteBtn = document.getElementById('quoteBtnMain');
-
+      
       if (selectedProducts.size === 0) {
         cartItems.innerHTML = "<p style='text-align: center; color: #6c757d; font-style: italic;'>No hay productos seleccionados</p>";
         cartTotal.textContent = "Total: 0 producto(s)";
-        quoteBtn.disabled = true; // Deshabilita el botón si no hay productos
+        quoteBtn.disabled = true;
         return;
       }
 
       let html = '';
       let totalItems = 0;
-
+      
       selectedProducts.forEach((product) => {
         totalItems += product.cantidad;
         html += `
@@ -1282,28 +1281,26 @@
           </div>
         `;
       });
-
+      
       cartItems.innerHTML = html;
       cartTotal.textContent = `Total: ${totalItems} producto(s)`;
-      quoteBtn.disabled = false; // Habilita el botón si hay productos
+      quoteBtn.disabled = false;
     }
 
-    // Búsqueda de productos en tiempo real
     document.getElementById('busqueda').addEventListener('keyup', function() {
-      const searchTerm = this.value.toLowerCase().trim(); // Elimina espacios en blanco
-      if (searchTerm.length > 0) { // Solo busca si hay al menos un carácter
+      const searchTerm = this.value.toLowerCase().trim();
+      if (searchTerm.length > 0) {
         const filteredProducts = medicamentos.filter(product => {
           return filterProduct(product, searchTerm);
         });
         renderProducts(filteredProducts);
       } else {
-        // Si el buscador está vacío, limpia el grid y muestra el mensaje inicial
+        const productsGrid = document.getElementById('productsGrid');
         productsGrid.innerHTML = '<p class="empty-message">Por favor, usa el buscador para encontrar productos.</p>';
-        productsGrid.classList.add('empty-message'); // Agrega la clase para centrar el mensaje
+        productsGrid.classList.add('empty-message');
       }
     });
 
-    // Función auxiliar para filtrar productos
     function filterProduct(product, searchTerm) {
       const desc = (product.descripcion || '').toLowerCase();
       const formula = (product.formula || '').toLowerCase();
@@ -1316,17 +1313,15 @@
              codigoBarras.includes(searchTerm);
     }
 
-    // Ir a la pantalla de resumen
     function goToSummary() {
       if (selectedProducts.size === 0) {
         alert("Por favor, selecciona al menos un producto para generar la cotización.");
         return;
       }
-      populateSummary(); // Llena los datos del resumen antes de cambiar de pantalla
+      populateSummary();
       goToScreen(3);
     }
 
-    // Llenar datos en la pantalla de resumen (Screen 3)
     function populateSummary() {
       const clientSummaryDiv = document.getElementById('clientSummary');
       clientSummaryDiv.innerHTML = `
@@ -1363,7 +1358,6 @@
       }
     }
 
-    // Generar PDF (misma función, ahora envuelve en una promesa para esperar su resolución)
     async function generarPDF() {
       return new Promise((resolve) => {
         const { jsPDF } = window.jspdf;
@@ -1447,7 +1441,7 @@
               }
             });
 
-            resolve(doc.output('blob')); // Resuelve la promesa con el PDF como Blob
+            resolve(doc.output('blob'));
         });
       });
     }
@@ -1460,6 +1454,8 @@
         const ciudad = clientData.ciudad || 'N/A';
         const correo = clientData.correo || 'N/A';
 
+        // Usamos "\n" directamente en la cadena de JavaScript para los saltos de línea.
+        // encodeURIComponent se aplicará a toda la cadena al final, y WhatsApp lo interpretará.
         let message = `*Solicitud de Cotización - Global MediTH*\n\n`; // Encabezado y dos saltos de línea
 
         message += `\u{1F4C3} *Folio:* ${folio}\n`; // Emoji de documento, negrita para "Folio"
@@ -1481,13 +1477,10 @@
         }
         message += `Gracias por su preferencia.`; // Mensaje final
 
-        // NOTA: No aplicamos encodeURIComponent aquí. Se hará automáticamente cuando se construya la URL.
-        // La clave para la previsualización limpia es confiar en que WhatsApp maneje los \n correctamente.
         return message;
     }
 
 
-    // Nueva función para generar PDF y luego guiar al usuario para enviar por WhatsApp
     async function generarPDFyEnviarWhatsApp() {
         if (selectedProducts.size === 0) {
             alert("Por favor, selecciona al menos un producto para generar la cotización.");
@@ -1495,16 +1488,13 @@
         }
 
         try {
-            // Deshabilitar el botón temporalmente para evitar múltiples clics
             const whatsappBtn = document.querySelector('.btn-whatsapp');
             whatsappBtn.disabled = true;
             whatsappBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando Cotización...';
 
-            // *** Paso 1: Generar y descargar el PDF ***
-            const pdfBlob = await generarPDF(); // Espera a que el PDF se genere
+            const pdfBlob = await generarPDF();
             const filename = `Cotizacion_GlobalMediTH_${(clientData.nombre || 'cliente').replace(/\s/g, '_')}.pdf`;
 
-            // Crea un enlace temporal y simula un clic para descargar el PDF
             const url = URL.createObjectURL(pdfBlob);
             const a = document.createElement('a');
             a.href = url;
@@ -1512,14 +1502,11 @@
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            URL.revokeObjectURL(url); // Libera la URL del objeto
+            URL.revokeObjectURL(url);
 
-            // Restaurar el botón y mostrar el mensaje al usuario
             whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar por WhatsApp';
             whatsappBtn.disabled = false;
 
-            // *** Paso 2: Guiar al usuario y abrir WhatsApp ***
-            // Mensaje de alerta claro y orientador
             setTimeout(() => {
                 alert(
                     "¡Listo! ✅ Tu cotización en PDF (`" + filename + "`) se ha descargado a tu dispositivo.\n\n" +
@@ -1529,18 +1516,15 @@
                     "¡Gracias por tu paciencia! 😉"
                 );
 
-                // Prepara el mensaje de WhatsApp con formato de texto
                 const whatsappMessage = generateWhatsAppMessage();
-                // Aquí usamos encodeURIComponent para asegurar que la URL sea válida,
-                // confiando en que WhatsApp interpretará los caracteres como saltos de línea.
+                // Aquí aplicamos encodeURIComponent a toda la cadena con \n
                 const whatsappUrl = `https://wa.me/522381646718?text=${encodeURIComponent(whatsappMessage)}`;
                 window.open(whatsappUrl, '_blank');
-            }, 700); // Pequeño retraso para que el usuario perciba la descarga antes de la alerta
+            }, 700);
 
         } catch (error) {
             console.error("Error al generar PDF o enviar WhatsApp:", error);
             alert("Hubo un error al generar la cotización o abrir WhatsApp. Por favor, inténtalo de nuevo.");
-            // Asegurarse de que el botón se restaure si falla
             const whatsappBtn = document.querySelector('.btn-whatsapp');
             whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar por WhatsApp';
             whatsappBtn.disabled = false;
