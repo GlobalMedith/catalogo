@@ -12,116 +12,111 @@
     * {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-    
-    html, body { /* CLAVE: Asegurar que HTML y BODY ocupen toda la altura y no tengan scroll */
-      height: 100%;
-      overflow: hidden; /* Evita el scroll general del navegador */
+      box-sizing: border-box; /* Fundamental para el responsive */
     }
 
-    body {
+    html, body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh; /* Se mantiene, pero height:100% en html/body es más estricto */
       color: #333;
-      display: flex; /* Usar flexbox para centrar el contenedor principal */
-      justify-content: center;
-      align-items: center;
+      min-height: 100vh; /* Asegura que el body ocupe al menos el 100% de la altura del viewport */
+      display: block; /* Vuelve al flujo normal de bloque para el body */
+      overflow-x: hidden; /* Evita scroll horizontal no deseado por elementos que se desbordan */
     }
 
     .container {
-      max-width: 1700px; /* Ampliado aún más para dar más espacio horizontal al catálogo */
+      max-width: 1700px;
       margin: 0 auto;
-      padding: 20px;
-      width: 100%; /* Asegurar que el contenedor ocupe el ancho disponible */
-      height: 100%; /* CLAVE: el contenedor principal también ocupa el 100% de la altura */
-      position: relative; /* Para que las pantallas se superpongan dentro de él */
+      padding: 10px; /* Padding reducido para móviles */
+      width: 100%;
+      min-height: 100vh; /* Asegura que el contenedor tenga al menos la altura de la vista */
+      position: relative; /* Necesario para el posicionamiento absoluto de .screen */
     }
 
     /* Manejo de Pantallas */
     .screen {
       display: none;
       width: 100%;
-      height: 100%;
-      position: absolute;
+      min-height: 100vh; /* Cada pantalla debe ocupar al menos toda la altura de la vista */
+      position: absolute; /* Permite que las pantallas se superpongan */
       top: 0;
       left: 0;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
+      overflow-y: auto; /* IMPORTANTE: Cada pantalla debe manejar su propio scroll si su contenido excede la altura */
+      -webkit-overflow-scrolling: touch; /* Mejora el scroll en iOS */
+      padding-bottom: 20px; /* Espacio al final del contenido para scroll */
     }
-    
+
     .screen.active {
-      display: flex;
+      display: flex; /* Mantenemos flex para alinear contenido dentro de cada pantalla */
+      justify-content: center;
+      align-items: flex-start; /* Alineamos arriba, el scroll manejará el resto */
     }
 
     /* PANTALLA 1 - REGISTRO */
     .welcome-screen {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      padding: 10px;
       width: 100%;
-      height: 100%;
     }
 
     .welcome-card {
       background: white;
       border-radius: 20px;
-      padding: 25px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+      padding: 15px; /* Más pequeño para móviles */
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       text-align: center;
-      max-width: 500px;
       width: 100%;
+      max-width: 500px; /* Max-width para pantallas grandes */
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       height: auto;
+      min-height: 100%; /* Asegura que la tarjeta ocupe la altura completa de la pantalla en móvil */
+      gap: 15px; /* Espaciado entre elementos de la tarjeta */
     }
 
     .logo {
-      margin-bottom: 20px;
+      margin-bottom: 0; /* Ajustado por el gap de welcome-card */
     }
 
     .logo img {
-      height: 80px;
+      height: 60px; /* Tamaño ajustado para móviles */
       width: auto;
       border-radius: 10px;
       max-width: 100%;
     }
 
     .welcome-title {
-      font-size: 2.2em;
+      font-size: 1.8em; /* Tamaño ajustado para móviles */
       color: #2c3e50;
-      margin-bottom: 10px;
       font-weight: 700;
+      margin-bottom: 0; /* Ajustado por el gap de welcome-card */
     }
 
     .welcome-subtitle {
-      font-size: 1.1em;
+      font-size: 1em; /* Tamaño ajustado para móviles */
       color: #7f8c8d;
-      margin-bottom: 15px;
+      margin-bottom: 0; /* Ajustado por el gap de welcome-card */
     }
 
     .persuasive-message {
       background: linear-gradient(135deg, #28a745, #20c997);
       color: white;
-      padding: 15px;
+      padding: 10px; /* Ajustado para móviles */
       border-radius: 15px;
-      margin-bottom: 20px;
-      font-size: 1em;
+      margin-bottom: 0; /* Ajustado por el gap de welcome-card */
+      font-size: 0.9em; /* Ajustado para móviles */
       font-weight: 600;
       line-height: 1.4;
     }
-    
+
     .catalog-persuasive-message {
       background: linear-gradient(135deg, #3498db, #8e44ad);
       color: white;
-      padding: 15px;
+      padding: 10px; /* Ajustado para móviles */
       border-radius: 15px;
-      margin-bottom: 20px;
-      font-size: 1.1em;
+      margin-bottom: 15px;
+      font-size: 0.95em; /* Ajustado para móviles */
       font-weight: 600;
       text-align: center;
       line-height: 1.4;
@@ -132,14 +127,14 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
-      margin-bottom: 20px;
-      font-size: 0.95em;
+      gap: 8px; /* Espacio ajustado para móvil */
+      margin-bottom: 15px;
+      font-size: 0.85em; /* Tamaño ajustado para móvil */
       color: #555;
       flex-shrink: 0;
     }
     .category-item {
-      padding: 8px 12px;
+      padding: 6px 10px; /* Ajustado para móvil */
       background: #e3f2fd;
       border: 1px solid #90caf9;
       border-radius: 10px;
@@ -159,28 +154,27 @@
         box-shadow: 0 3px 8px rgba(0,0,0,0.15);
     }
     .category-item i {
-        font-size: 1.1em;
+        font-size: 1em; /* Ajustado para móvil */
         color: #1976d2;
     }
 
-
     .medicine-types {
       display: flex;
-      justify-content: space-around;
-      margin-bottom: 20px;
+      flex-wrap: wrap; /* Asegura que se envuelvan en móvil */
+      justify-content: center; /* Centra los elementos */
+      margin-bottom: 15px;
       gap: 10px;
-      flex-wrap: wrap;
     }
 
     .medicine-type {
       text-align: center;
-      flex: 1;
-      min-width: 90px;
+      flex: 1 1 100px; /* Permite que crezca y se encoja, con un tamaño base de 100px */
+      max-width: 150px; /* Limita el ancho máximo para evitar que se estiren demasiado */
       padding: 5px;
     }
 
     .medicine-type i {
-      font-size: 1.8em;
+      font-size: 1.5em; /* Tamaño ajustado para móviles */
       margin-bottom: 8px;
       display: block;
     }
@@ -190,7 +184,7 @@
     .medicine-type.curacion i { color: #f39c12; }
 
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 10px; /* Ajustado para móviles */
       text-align: left;
     }
 
@@ -199,15 +193,15 @@
       margin-bottom: 5px;
       font-weight: 600;
       color: #2c3e50;
-      font-size: 0.9em;
+      font-size: 0.85em; /* Ajustado para móviles */
     }
 
     .form-group input {
       width: 100%;
-      padding: 12px;
+      padding: 10px; /* Ajustado para móviles */
       border: 2px solid #e0e0e0;
       border-radius: 10px;
-      font-size: 0.9em;
+      font-size: 0.85em; /* Ajustado para móviles */
       transition: border-color 0.3s;
     }
 
@@ -219,10 +213,10 @@
     .btn {
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
-      padding: 12px 30px;
+      padding: 10px 20px; /* Ajustado para móviles */
       border: none;
       border-radius: 50px;
-      font-size: 1em;
+      font-size: 0.95em; /* Ajustado para móviles */
       font-weight: 600;
       cursor: pointer;
       transition: transform 0.3s, box-shadow 0.3s;
@@ -230,41 +224,43 @@
       align-items: center;
       gap: 10px;
       margin-top: 10px;
+      width: 100%; /* Ocupa todo el ancho en móvil */
+      justify-content: center; /* Centra el contenido del botón */
     }
 
     .btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
-    
+
     /* PANTALLA 2 - CATÁLOGO */
     .catalog-screen {
-      display: grid;
-      grid-template-columns: 1fr 350px;
-      gap: 30px;
+      display: flex; /* Cambiamos a flexbox para un control más fino en móvil */
+      flex-direction: column; /* Apilados verticalmente por defecto (móvil) */
+      gap: 15px; /* Espacio entre el catálogo principal y el carrito */
       width: 100%;
-      height: 100%;
-      align-items: flex-start;
-      padding-top: 20px;
-      justify-content: center;
+      height: 100%; /* Ocupa la altura completa de la pantalla */
+      align-items: flex-start; /* Alinea los elementos al inicio */
+      padding: 10px; /* Padding para móvil */
+      overflow-y: auto; /* Permitir scroll si la pantalla completa lo necesita */
     }
 
     .catalog-main {
       background: white;
       border-radius: 15px;
-      padding: 30px;
+      padding: 15px; /* Ajusta el padding para móvil */
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      max-height: calc(100vh - 80px);
+      flex-grow: 1; /* Permite que ocupe el espacio disponible */
+      width: 100%; /* Ocupa todo el ancho disponible en móvil */
+      max-width: 100%; /* Asegura que no se desborde */
       display: flex;
       flex-direction: column;
-      width: 100%;
-      min-width: 1000px;
-      max-width: 1300px;
+      height: auto; /* Se ajusta a su contenido */
     }
 
     .fixed-header-content {
       flex-shrink: 0;
-      margin-bottom: 20px;
+      margin-bottom: 15px; /* Ajustado para móvil */
       text-align: center;
     }
 
@@ -273,14 +269,14 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 15px; /* Ajustado para móvil */
     }
 
     .catalog-title {
-      font-size: 1.8em;
+      font-size: 1.5em; /* Ajustado para móviles */
       color: #2c3e50;
       font-weight: 700;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
 
     .search-box {
@@ -292,36 +288,52 @@
 
     .search-box input {
       width: 100%;
-      padding: 12px 45px 12px 18px;
+      padding: 10px 40px 10px 15px; /* Ajustado padding para móvil */
       border: 2px solid #e0e0e0;
       border-radius: 50px;
-      font-size: 0.9em;
+      font-size: 0.85em; /* Ajustado para móviles */
       text-transform: uppercase;
     }
 
     .search-box i {
       position: absolute;
-      right: 18px;
+      right: 15px; /* Ajustado para móvil */
       top: 50%;
       transform: translateY(-50%);
       color: #7f8c8d;
+      font-size: 0.9em;
     }
 
     .products-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-      gap: 20px;
+      /* minmax(140px, 1fr) para permitir elementos más pequeños en pantallas muy estrechas */
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 15px; /* Ajusta el espacio entre tarjetas */
       overflow-y: auto;
       flex-grow: 1;
-      padding-right: 10px;
+      padding-right: 0; /* No padding-right fijo aquí */
       min-height: 200px;
+      align-content: start; /* Alinea el contenido al inicio en vez de estirarlo */
+    }
+
+    /* Estilo para el mensaje cuando no hay productos */
+    .products-grid.empty-message {
+        display: flex;
+        flex-direction: column; /* Para centrar el texto si ocupa varias líneas */
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: #6c757d;
+        font-style: italic;
+        min-height: 200px; /* Aumenta un poco el espacio mínimo */
+        padding: 0 20px; /* Añade un poco de padding horizontal */
     }
 
     .product-card {
       background: #f8f9fa;
       border: 2px solid #e9ecef;
       border-radius: 15px;
-      padding: 15px;
+      padding: 12px; /* Ajustado para móviles */
       transition: all 0.1s ease-out;
       cursor: pointer;
     }
@@ -337,211 +349,179 @@
     }
 
     .product-title {
-      font-size: 1em;
+      font-size: 0.95em; /* Ajustado para móviles */
       font-weight: 600;
       color: #2c3e50;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       line-height: 1.3;
       overflow-wrap: break-word;
     }
 
     .product-info {
-      font-size: 0.85em;
+      font-size: 0.8em; /* Ajustado para móviles */
       color: #6c757d;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       line-height: 1.3;
     }
 
     .quantity-selector {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-top: 10px;
+      gap: 5px; /* Ajustado para móviles */
+      margin-top: 8px; /* Ajustado para móviles */
     }
 
     .quantity-input {
-      width: 50px;
-      padding: 6px;
+      width: 45px; /* Ajustado para móviles */
+      padding: 4px; /* Ajustado para móviles */
       border: 1px solid #ddd;
       border-radius: 5px;
       text-align: center;
+      font-size: 0.8em;
     }
 
     /* CARRITO LATERAL */
     .cart-sidebar {
       background: white;
       border-radius: 15px;
-      padding: 25px;
+      padding: 15px; /* Ajustado para móvil */
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      height: fit-content;
-      position: sticky;
-      top: 20px;
-      max-height: calc(100vh - 40px);
-      overflow-y: auto;
+      height: auto; /* Permitir que la altura se ajuste a su contenido en móvil */
+      position: relative; /* No sticky en móvil, fluye con el contenido */
+      top: auto;
+      width: 100%; /* Ocupa todo el ancho en móvil */
+      max-height: unset; /* Deshabilita el max-height fijo para móvil */
+      overflow-y: auto; /* Permite scroll interno si hay muchos items */
     }
 
     .cart-header {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-      font-size: 1.3em;
+      gap: 8px; /* Ajustado para móvil */
+      margin-bottom: 15px; /* Ajustado para móvil */
+      font-size: 1.1em; /* Ajustado para móvil */
       font-weight: 700;
       color: #2c3e50;
     }
 
     .cart-items {
-      max-height: 400px;
+      max-height: 200px; /* Altura máxima del carrito en móvil */
       overflow-y: auto;
-      margin-bottom: 20px;
+      margin-bottom: 15px; /* Ajustado para móvil */
     }
 
     .cart-item {
       background: #f8f9fa;
-      padding: 15px;
+      padding: 12px; /* Ajustado para móvil */
       border-radius: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 8px; /* Ajustado para móvil */
       position: relative;
     }
 
     .cart-item-title {
       font-weight: 600;
-      font-size: 0.9em;
-      margin-bottom: 5px;
+      font-size: 0.85em; /* Ajustado para móvil */
+      margin-bottom: 4px;
       line-height: 1.2;
     }
 
     .cart-item-info {
-      font-size: 0.8em;
+      font-size: 0.75em; /* Ajustado para móvil */
       color: #6c757d;
     }
 
     .cart-item-quantity {
-      position: absolute;
-      top: 10px;
-      right: 35px;
-      background: #667eea;
-      color: white;
-      border-radius: 50%;
-      width: 25px;
-      height: 25px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8em;
-      font-weight: bold;
+      top: 8px; /* Ajustado para móvil */
+      right: 30px; /* Ajustado para móvil */
+      width: 22px; /* Ajustado para móvil */
+      height: 22px; /* Ajustado para móvil */
+      font-size: 0.75em; /* Ajustado para móvil */
     }
 
     .remove-item {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: #dc3545;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7em;
-      cursor: pointer;
+      top: 8px; /* Ajustado para móvil */
+      right: 8px; /* Ajustado para móvil */
+      width: 18px; /* Ajustado para móvil */
+      height: 18px; /* Ajustado para móvil */
+      font-size: 0.6em; /* Ajustado para móvil */
     }
 
     .cart-summary {
       border-top: 2px solid #e9ecef;
-      padding-top: 20px;
+      padding-top: 15px; /* Ajustado para móvil */
       text-align: center;
     }
 
     .cart-total {
-      font-size: 1.2em;
+      font-size: 1.1em; /* Ajustado para móvil */
       font-weight: 700;
       color: #2c3e50;
-      margin-bottom: 20px;
+      margin-bottom: 15px; /* Ajustado para móvil */
     }
 
     /* PANTALLA 3 - RESUMEN */
     .summary-screen {
       background: white;
       border-radius: 15px;
-      padding: 20px;
+      padding: 15px; /* Ajustado para móvil */
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      max-width: 800px;
+      max-width: 100%; /* Ocupa todo el ancho en móvil */
       margin: 0 auto;
-      max-height: calc(100vh - 40px);
+      max-height: calc(100vh - 20px); /* Ajuste la altura máxima para tener un pequeño margen */
       display: flex;
       flex-direction: column;
+      overflow-y: auto; /* Permitir scroll en toda la pantalla de resumen si es necesario */
     }
 
     .summary-fixed-header {
       flex-shrink: 0;
-      margin-bottom: 10px; /* Reducido a 10px para mayor compacidad */
-      padding-bottom: 10px; /* Añadido padding inferior para separar */
-      border-bottom: 1px solid #eee; /* Separador sutil */
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
       text-align: center;
-    }
-    
-    /* Contenedor para las dos columnas de datos */
-    .summary-data-columns {
-        display: grid;
-        grid-template-columns: 1fr 1fr; /* Dos columnas de igual ancho */
-        gap: 8px; /* Espacio reducido entre columnas para mayor compacidad */
-        align-items: start; /* Alinear contenido al inicio de cada celda */
-        margin-top: 10px; /* Reducido el margen superior */
-        margin-bottom: 5px; /* Pequeño margen inferior */
+      display: grid; /* Usar grid para las columnas de datos */
+      grid-template-columns: 1fr; /* Una columna en móvil */
+      gap: 10px;
     }
 
-    /* Reorganizar elementos dentro del grid */
     .summary-fixed-header .summary-header {
-        grid-column: 1 / span 2; /* Ocupa ambas columnas */
-        margin-bottom: 10px; /* Reducido el margen */
+        grid-column: auto; /* No ocupa varias columnas en móvil */
+        margin-bottom: 0; /* Ajustado por el gap */
     }
 
-    .summary-fixed-header .contact-info {
-        grid-column: 1; /* Columna 1 */
-        margin-bottom: 0; /* Eliminar margen inferior si es el último en su columna */
-        padding: 5px; /* Más compacto */
-    }
-
+    .summary-fixed-header .contact-info,
     .summary-fixed-header .client-info {
-        grid-column: 2; /* Columna 2 */
-        margin-bottom: 0; /* Eliminar margen inferior si es el último en su columna */
-        padding: 5px; /* Más compacto */
-    }
-
-
-    .summary-header {
-      margin-bottom: 6px; /* Reducido margen */
+        grid-column: auto;
+        padding: 8px; /* Ajustado para móvil */
+        margin-bottom: 0;
     }
 
     .summary-logo {
-      margin-bottom: 5px; /* Reducido margen */
+      margin-bottom: 5px;
     }
 
     .summary-logo img {
-      height: 45px; /* Más pequeño aún el logo */
+      height: 40px; /* Ajustado para móvil */
       width: auto;
       max-width: 100%;
     }
 
     .summary-title {
-      font-size: 1.3em; /* Más pequeño aún el título */
+      font-size: 1.2em; /* Ajustado para móvil */
       color: #2c3e50;
-      margin-bottom: 3px; /* Reducido margen */
+      margin-bottom: 3px;
       font-weight: 700;
     }
 
     .summary-screen .persuasive-message {
         font-size: 0.75em;
-        padding: 4px 6px;
+        padding: 5px 8px;
         margin-bottom: 8px;
     }
 
     .contact-info, .client-info {
       background: #f8f9fa;
-      padding: 6px;
+      padding: 8px; /* Ajustado para móvil */
       border-radius: 6px;
       height: fit-content;
       display: flex;
@@ -555,7 +535,7 @@
     .contact-info h3, .client-info h3 {
       color: #2c3e50;
       margin-bottom: 3px;
-      font-size: 0.8em;
+      font-size: 0.75em; /* Reducido un poco más */
     }
 
     .contact-item {
@@ -564,33 +544,38 @@
       gap: 2px;
       margin-bottom: 2px;
       color: #495057;
-      font-size: 0.65em;
+      font-size: 0.6em; /* Reducido un poco más */
     }
     .contact-item i {
-        font-size: 0.8em;
+        font-size: 0.75em; /* Ajustado para móvil */
     }
 
     .products-summary {
       background: #f1f8e9;
-      padding: 15px;
+      padding: 10px; /* Ajustado para móvil */
       border-radius: 10px;
       flex-grow: 1;
       overflow-y: auto;
+      margin-top: 10px;
     }
 
+    .products-summary h3 {
+        font-size: 1em; /* Ajustado para móvil */
+        margin-bottom: 8px;
+    }
 
     .summary-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
+      margin-top: 5px; /* Ajustado para móvil */
     }
 
     .summary-table th,
     .summary-table td {
-      padding: 5px;
+      padding: 4px; /* Ajustado para móvil */
       text-align: left;
       border-bottom: 1px solid #ddd;
-      font-size: 0.7em;
+      font-size: 0.65em; /* Ajustado para móvil */
     }
 
     .summary-table th {
@@ -601,9 +586,8 @@
 
     .summary-actions {
       display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
+      flex-direction: column; /* Apilados verticalmente en móvil */
+      gap: 10px; /* Ajustado para móvil */
       margin-top: 15px;
       flex-shrink: 0;
     }
@@ -623,8 +607,8 @@
     /* Navegación */
     .navigation {
       position: fixed;
-      top: 20px;
-      left: 20px;
+      top: 10px; /* Ajustado para móvil */
+      left: 10px; /* Ajustado para móvil */
       z-index: 1000;
     }
 
@@ -632,13 +616,13 @@
       background: rgba(255,255,255,0.9);
       border: none;
       border-radius: 50%;
-      width: 50px;
-      height: 50px;
+      width: 40px; /* Ajustado para móvil */
+      height: 40px; /* Ajustado para móvil */
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 1.2em;
+      font-size: 1em; /* Ajustado para móvil */
       color: #2c3e50;
       box-shadow: 0 5px 15px rgba(0,0,0,0.1);
       transition: all 0.3s;
@@ -648,75 +632,262 @@
       transform: scale(1.1);
     }
 
-    /* Responsive */
-    @media (max-width: 768px) {
+    /* ------------------------------------------- */
+    /* Media Query para Tablets y Escritorios Pequeños (min-width: 768px) */
+    /* ------------------------------------------- */
+    @media (min-width: 768px) {
       .container {
-        padding: 10px;
+        padding: 20px; /* Restaurar el padding original */
       }
+      .screen {
+          padding-bottom: 0; /* No padding extra si el contenido ya cabe */
+      }
+
+      /* PANTALLA 1 - REGISTRO */
       .welcome-screen {
-        min-height: unset;
-        padding: 10px;
+        justify-content: center; /* Centrar en el medio de la pantalla */
+        align-items: center;
+        padding: 20px; /* Restaurar padding */
+        height: 100%; /* Retomar 100% de la altura */
+        overflow-y: hidden; /* No scroll en esta pantalla si el contenido cabe */
       }
       .welcome-card {
-        padding: 20px;
-      }
-      .welcome-title {
-        font-size: 2em;
-      }
-      .welcome-subtitle {
-        font-size: 1em;
+        padding: 25px;
+        max-width: 500px; /* Restaurar max-width para desktop */
+        height: auto; /* Puede ser auto, ya que se centra */
+        min-height: unset; /* Deshabilitar min-height para que se ajuste a su contenido */
+        gap: 20px; /* Restaurar el gap original */
       }
       .logo img {
-        height: 100px;
+        height: 80px; /* Restaurar tamaño de logo */
+      }
+      .welcome-title {
+        font-size: 2.2em;
+      }
+      .welcome-subtitle {
+        font-size: 1.1em;
+      }
+      .persuasive-message {
+        padding: 15px;
+        font-size: 1em;
       }
       .medicine-types {
-        flex-direction: column;
+        flex-direction: row; /* Volver a horizontal */
+        justify-content: space-around;
         gap: 10px;
       }
       .medicine-type {
-        min-width: unset;
-        width: 100%;
+        flex: 1; /* Permite que los elementos se distribuyan uniformemente */
+        min-width: 90px;
+        max-width: unset;
       }
-
-      .catalog-screen {
-        grid-template-columns: 1fr;
+      .medicine-type i {
+        font-size: 1.8em;
       }
-      
-      .cart-sidebar {
-        position: relative;
-        top: 0;
-        margin-top: 20px;
-      }
-      
-      .products-grid {
-        grid-template-columns: 1fr; /* Volver a una columna en móvil */
-      }
-      
-      .summary-actions {
-        flex-direction: column;
-        gap: 10px;
+      .form-group input {
+        padding: 12px;
+        font-size: 0.9em;
       }
       .btn {
-        width: 100%;
+        padding: 12px 30px;
+        font-size: 1em;
+        width: auto; /* Restaurar ancho automático */
       }
 
-      /* Responsive para pantalla de resumen en móvil */
-      .summary-data-columns {
-          grid-template-columns: 1fr; /* Volver a una columna en móvil */
-          gap: 10px;
+      /* PANTALLA 2 - CATÁLOGO */
+      .catalog-screen {
+        display: grid; /* Volver a usar grid para layout de 2 columnas */
+        grid-template-columns: 1fr 300px; /* Catálogo principal y carrito lateral */
+        gap: 25px; /* Espacio entre columnas */
+        padding: 20px;
+        height: 100%; /* Ocupa la altura completa de la pantalla */
+        overflow-y: hidden; /* La pantalla en sí no hace scroll, los elementos internos sí */
       }
-    }
-
-    /* Responsive para tablets y desktops pequeños, para 3 columnas antes de 4 */
-    @media (min-width: 769px) and (max-width: 1200px) {
+      .catalog-main {
+        padding: 30px;
+        width: 100%; /* Ocupa todo el ancho disponible */
+        max-width: unset; /* Eliminar max-width fijo para que el grid lo maneje */
+        height: 100%; /* Ocupa la altura completa disponible */
+        max-height: calc(100vh - 40px); /* Ajuste de altura */
+      }
       .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Mantener 3 o 4 columnas si el minmax lo permite */
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 3-4 columnas */
+        padding-right: 10px; /* Espacio para la barra de scroll si la hay */
+      }
+      .cart-sidebar {
+        position: sticky; /* Vuelve a ser sticky */
+        top: 20px;
+        height: fit-content; /* Se ajusta al contenido */
+        max-height: calc(100vh - 40px); /* Limita la altura máxima */
+        padding: 25px;
+      }
+      .catalog-persuasive-message {
+        font-size: 1.1em;
+        padding: 15px;
+        margin-bottom: 20px;
+      }
+      .category-list {
+        gap: 10px;
+        font-size: 0.95em;
+        margin-bottom: 20px;
+      }
+      .category-item {
+        padding: 8px 12px;
+        font-size: 0.95em;
+      }
+      .catalog-title {
+        font-size: 1.8em;
+        margin-bottom: 15px;
+      }
+      .search-box input {
+        padding: 12px 45px 12px 18px;
+        font-size: 0.9em;
+      }
+      .search-box i {
+        right: 18px;
+        font-size: 1em;
+      }
+      .product-card {
+        padding: 15px;
+      }
+      .product-title {
+        font-size: 1em;
+      }
+      .product-info {
+        font-size: 0.85em;
+      }
+      .quantity-selector {
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .quantity-input {
+        width: 50px;
+        padding: 6px;
+        font-size: 0.9em;
+      }
+      .cart-header {
+        font-size: 1.3em;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .cart-items {
+        max-height: 400px;
+        margin-bottom: 20px;
+      }
+      .cart-item {
+        padding: 15px;
+        margin-bottom: 10px;
+      }
+      .cart-item-title {
+        font-size: 0.9em;
+      }
+      .cart-item-info {
+        font-size: 0.8em;
+      }
+      .cart-item-quantity {
+        top: 10px;
+        right: 35px;
+        width: 25px;
+        height: 25px;
+        font-size: 0.8em;
+      }
+      .remove-item {
+        top: 10px;
+        right: 10px;
+        width: 20px;
+        height: 20px;
+        font-size: 0.7em;
+      }
+      .cart-summary {
+        padding-top: 20px;
+      }
+      .cart-total {
+        font-size: 1.2em;
+        margin-bottom: 20px;
+      }
+
+      /* PANTALLA 3 - RESUMEN */
+      .summary-screen {
+        max-width: 800px; /* Restaurar max-width */
+        padding: 20px;
+        margin: 0 auto;
+        max-height: calc(100vh - 40px);
+      }
+      .summary-fixed-header {
+          grid-template-columns: 1fr 1fr; /* Volver a dos columnas */
+          gap: 15px;
+          padding-bottom: 15px;
+          margin-bottom: 15px;
+      }
+      .summary-fixed-header .summary-header {
+          grid-column: 1 / span 2; /* Ocupa ambas columnas */
+          margin-bottom: 10px;
+      }
+      .summary-logo img {
+        height: 45px;
+      }
+      .summary-title {
+        font-size: 1.3em;
+      }
+      .summary-screen .persuasive-message {
+        font-size: 0.8em;
+        padding: 8px 12px;
+      }
+      .contact-info, .client-info {
+        padding: 10px;
+      }
+      .contact-info h3, .client-info h3 {
+        font-size: 0.85em;
+      }
+      .contact-item {
+        font-size: 0.7em;
+      }
+      .products-summary h3 {
+          font-size: 1.1em;
+      }
+      .summary-table th, .summary-table td {
+        font-size: 0.7em;
+        padding: 5px;
+      }
+      .summary-actions {
+        flex-direction: row; /* Vuelve a horizontal */
+        gap: 15px;
+      }
+      .summary-actions .btn {
+        width: auto; /* Restaurar ancho automático */
+      }
+      .navigation {
+        top: 20px;
+        left: 20px;
+        width: 50px;
+        height: 50px;
+      }
+      .nav-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2em;
       }
     }
+
+    /* ------------------------------------------- */
+    /* Media Query para Escritorios Grandes (min-width: 1201px) */
+    /* ------------------------------------------- */
     @media (min-width: 1201px) {
-        .products-grid {
-            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); /* Asegurar 4 columnas en pantallas grandes */
-        }
+      .catalog-screen {
+        grid-template-columns: 1fr 350px; /* Restaurar el ancho original del carrito */
+      }
+      .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); /* 4+ columnas en escritorios grandes */
+      }
+      .summary-screen {
+          max-width: 900px; /* Un poco más grande para escritorios muy grandes */
+      }
+      .summary-logo img {
+          height: 60px; /* Restaurar tamaño original */
+      }
+      .summary-title {
+          font-size: 1.5em; /* Restaurar tamaño original */
+      }
     }
   </style>
 </head>
@@ -732,15 +903,15 @@
       <div class="welcome-screen">
         <div class="welcome-card">
           <div class="logo">
-            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCI vdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMjc0OWI4Ii8+Cjx0ZXh0IHg9Ijc1IiB5PSI0NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9vcj0ibWlkZGxlIj5HbG9iYWxNZWRpVEg8L3RleHQ+Cjx0ZXh0IHg9Ijc1IiB5PSI2NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9vcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='" />
+            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHxmlnsPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zz4KPHJlY3Qgd2lkdGg9IjE1MCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
           </div>
-          
+
           <h1 class="welcome-title">Bienvenido</h1>
           <p class="welcome-subtitle">Sistema de Cotización Profesional</p>
-          
+
           <div class="persuasive-message">
             <i class="fas fa-star"></i>
-            ¡Solicita tu pedido ahora y recibe atención personalizada! Nuestros medicamentos de calidad están listas para ti.
+            ¡Solicita tu pedido ahora y recibe atención personalizada! Nuestros medicamentos de calidad están listos para ti.
           </div>
 
           <div class="medicine-types">
@@ -775,7 +946,7 @@
               <label for="correo"><i class="fas fa-envelope"></i> Correo Electrónico</label>
               <input type="email" id="correo" required />
             </div>
-            
+
             <button type="submit" class="btn">
               <i class="fas fa-arrow-right"></i>
               Continuar al Catálogo
@@ -811,9 +982,10 @@
               </div>
             </div>
           </div>
-          
+
           <div class="products-grid" id="productsGrid">
-            </div>
+            <p class="empty-message">Por favor, usa el buscador para encontrar productos.</p>
+          </div>
         </div>
 
         <div class="cart-sidebar">
@@ -821,13 +993,13 @@
             <i class="fas fa-shopping-cart"></i>
             Cotización
           </div>
-          
+
           <div class="cart-items" id="cartItems">
             <p style="text-align: center; color: #6c757d; font-style: italic;">
               No hay productos seleccionados
             </p>
           </div>
-          
+
           <div class="cart-summary">
             <div class="cart-total" id="cartTotal">
               Total: 0 productos
@@ -846,7 +1018,7 @@
         <div class="summary-fixed-header">
           <div class="summary-header">
             <div class="summary-logo">
-              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCI vdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMjc0OWI4Ii8+Cjx0ZXh0IHg9Ijc1IiB5PSI0NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9vcj0ibWlkZGxlIj5HbG9iYWxNZWRpVEg8L3RleHQ+Cjx0ZXh0IHg9Ijc1IiB5PSI2NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9vcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='" />
+              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHxmlnsPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zz4KPHJlY3Qgd2lkdGg9IjE1MCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWFsIHNhbnMtc2VyaXAiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
             </div>
             <h1 class="summary-title">Cotización - GlobalMediTH</h1>
             <div class="persuasive-message">
@@ -897,15 +1069,7 @@
         </div>
 
         <div class="summary-actions">
-          <button class="btn btn-secondary" onclick="goToScreen(2)">
-            <i class="fas fa-arrow-left"></i>
-            Regresar al Catálogo
-          </button>
-          <button class="btn" onclick="generarPDF()">
-            <i class="fas fa-file-pdf"></i>
-            Descargar PDF
-          </button>
-          <button class="btn btn-whatsapp" onclick="enviarWhatsApp()">
+          <button class="btn btn-whatsapp" onclick="generarPDFyEnviarWhatsApp()">
             <i class="fab fa-whatsapp"></i>
             Enviar por WhatsApp
           </button>
@@ -920,8 +1084,7 @@
     let selectedProducts = new Map();
     let currentScreen = 1;
     let clientData = {};
-
-    // --- Definición de Funciones (todas definidas antes de ser llamadas o asignadas) ---
+    const productsGrid = document.getElementById('productsGrid'); // Referencia al grid de productos
 
     // Función para generar un folio único de seguimiento
     function generateTrackingId() {
@@ -946,60 +1109,103 @@
             canvas.height = img.height;
             var ctx = canvas.getContext("2d");
             ctx.drawImage(img, 0, 0);
-            var dataURL = canvas.toDataURL("image/png");
+            var dataURL = canvas.toDataURL("image/png"); // Preferir PNG para logos con transparencia
             callback(dataURL);
         };
         img.onerror = function() {
             console.error("Error al cargar la imagen para Base64. Usando fallback SVG.");
-            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCI vdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHwiIHR5cGU9InVwbG9hZGVkIGZpbGUiCnN0eWxlPSJ3aWR0aDogMzM2cHg7IGhlaWdodDogMjM3cHgiOyIgZmlsPSIjMjc0OWI4Ii8+Cjx0ZXh0IHg9Ijc1IiB5PSI0NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9vcj0ibWlkZGxlIj5HbG9iYWxNZWRpVEg8L3RleHQ+Cjx0ZXh0IHg9Ijc1IiB5PSI2NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9vcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg==';
+            // Llama al callback con el SVG base64 de fallback
+            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHxmlnsPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zz4KPHJlY3Qgd2lkdGg9IjE1MCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmb250LWZpbGw9IndoaGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg==';
             callback(fallbackSvg);
         };
     }
 
-    // Función para navegar entre pantallas
+    // Navegación entre pantallas
     function goToScreen(screenNumber) {
       document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
       });
       document.getElementById(`screen${screenNumber}`).classList.add('active');
       currentScreen = screenNumber;
-      
-      const backBtn = document.getElementById('backBtn');
-      backBtn.style.display = screenNumber > 1 ? 'block' : 'none';
 
+      const backBtn = document.getElementById('backBtn');
+      // El botón de retroceso superior SIEMPRE debe estar visible si no es la primera pantalla.
+      // Si la pantalla actual es la 3 (resumen), al presionar "regresar" se va a la 2 (catálogo).
+      backBtn.style.display = (screenNumber > 1) ? 'block' : 'none';
+
+      // Si se va a la pantalla de resumen, poblar los datos
       if (screenNumber === 3) {
         populateSummary();
       }
     }
 
-    // Función para retroceder
     function goBack() {
       if (currentScreen > 1) {
-        goToScreen(currentScreen - 1);
+        // Lógica de retroceso. Si estamos en la pantalla de resumen, regresamos al catálogo.
+        if (currentScreen === 3) {
+            goToScreen(2); // De resumen a catálogo
+        } else {
+            goToScreen(currentScreen - 1);
+        }
       }
     }
 
-    // Función para renderizar productos en el catálogo
+    // Formulario de cliente
+    document.getElementById('clientForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      clientData = {
+        nombre: document.getElementById('nombre').value,
+        celular: document.getElementById('celular').value,
+        ciudad: document.getElementById('ciudad').value,
+        correo: document.getElementById('correo').value
+      };
+
+      goToScreen(2); // Avanza a la pantalla del catálogo
+    });
+
+    // Cargar medicamentos
+    window.onload = async () => {
+      try {
+        const res = await fetch('medicamentos.json');
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        medicamentos = await res.json();
+        // Asumiendo que la primera fila es una cabecera si tiene "Codigo de Barras"
+        if (medicamentos.length > 0 && medicamentos[0].codigoBarras === "Codigo de Barras") {
+          medicamentos.shift(); // Elimina la fila de cabecera
+        }
+        // NO LLAMAR renderProducts(medicamentos) AQUÍ para que no muestre todo al inicio
+      } catch (error) {
+        console.error("Error al cargar los medicamentos:", error);
+        productsGrid.innerHTML =
+          "<p style='text-align: center; color: #dc3545;'>Error al cargar el catálogo. Por favor, intente más tarde.</p>";
+      }
+    };
+
+    // Renderizar productos en el catálogo
     function renderProducts(productsToRender) {
-      const grid = document.getElementById('productsGrid');
-      grid.innerHTML = '';
-      
-      if (!productsToRender || productsToRender.length === 0) { // Comprobación adicional por si no hay datos o son nulos
-        grid.innerHTML = "<p style='text-align: center; color: #6c757d;'>No se encontraron medicamentos.</p>";
+      productsGrid.innerHTML = ''; // Limpia el grid antes de renderizar
+      productsGrid.classList.remove('empty-message'); // Elimina la clase si hay productos
+
+      if (productsToRender.length === 0) {
+        productsGrid.innerHTML = "<p class='empty-message'>No se encontraron resultados para tu búsqueda.</p>";
+        productsGrid.classList.add('empty-message'); // Agrega la clase para centrar el mensaje
         return;
       }
 
       productsToRender.forEach((product) => {
         const isSelected = selectedProducts.has(product.codigoBarras);
+        // Obtener la cantidad si ya está seleccionado, si no, por defecto 1
         const quantity = isSelected ? selectedProducts.get(product.codigoBarras).cantidad : 1;
-        
+
         const card = document.createElement('div');
-        // Usar un atributo de datos para almacenar el código de barras en el elemento DOM
-        card.dataset.codigoBarras = product.codigoBarras; 
         card.className = `product-card ${isSelected ? 'selected' : ''}`;
-        
+
+        // Al hacer click en la tarjeta, alterna la selección del producto
         card.onclick = () => toggleProduct(product);
-        
+
         card.innerHTML = `
           <div class="product-title">${product.descripcion || 'Sin descripción'}</div>
           <div class="product-info"><strong>Fórmula:</strong> ${product.formula || 'No especificada'}</div>
@@ -1007,106 +1213,69 @@
           <div class="product-info"><strong>Código:</strong> ${product.codigoBarras || 'No disponible'}</div>
           <div class="quantity-selector" onclick="event.stopPropagation()">
             <label>Cantidad:</label>
-            <input type="number" class="quantity-input" min="1" value="${quantity}" 
+            <input type="number" class="quantity-input" min="1" value="${quantity}"
                    onchange="updateQuantity('${product.codigoBarras}', this.value)" />
           </div>
         `;
-        
-        grid.appendChild(card);
+
+        productsGrid.appendChild(card);
       });
-      updateCart();
+      updateCart(); // Asegura que el carrito se actualice después de renderizar productos
     }
 
-    // Función para alternar selección de producto (Optimización de rendimiento)
+    // Alternar selección de producto (al hacer click en la tarjeta)
     function toggleProduct(product) {
-      const cardElement = document.querySelector(`.product-card[data-codigo-barras="${product.codigoBarras}"]`);
-      if (!cardElement) return; // Si la tarjeta no existe, salir.
-
       if (selectedProducts.has(product.codigoBarras)) {
         selectedProducts.delete(product.codigoBarras);
-        cardElement.classList.remove('selected'); // Quita la clase 'selected' directamente
       } else {
         selectedProducts.set(product.codigoBarras, { ...product, cantidad: 1 });
-        cardElement.classList.add('selected'); // Añade la clase 'selected' directamente
       }
-      // No se llama a renderProducts aquí, solo se actualiza el carrito.
-      updateCart();
+      // Re-renderiza los productos filtrados para actualizar su estado visual
+      const searchTerm = document.getElementById('busqueda').value.toLowerCase();
+      const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
+      renderProducts(filtered);
+      updateCart(); // Actualiza el carrito después de la selección
     }
 
-    // Función para actualizar cantidad de un producto seleccionado (Optimización de rendimiento)
+    // Actualizar cantidad de un producto seleccionado
     function updateQuantity(codigo, cantidad) {
       const qty = parseInt(cantidad) || 1;
-      if (qty < 1) return;
+      if (qty < 1) return; // Evita cantidades menores a 1
 
       if (selectedProducts.has(codigo)) {
         const product = selectedProducts.get(codigo);
         product.cantidad = qty;
         selectedProducts.set(codigo, product);
-        // Solo actualizar el contador visual en la tarjeta si es necesario, y luego el carrito
-        const cardElement = document.querySelector(`.product-card[data-codigo-barras="${codigo}"] .quantity-input`);
-        if(cardElement) {
-            cardElement.value = qty; // Asegura que el input refleje la cantidad
-        }
-        updateCart();
+        updateCart(); // Actualiza el carrito después de cambiar la cantidad
       }
     }
 
-    // Función para eliminar producto del carrito (Optimización de rendimiento)
+    // Eliminar producto del carrito (botón 'x' en el carrito)
     function removeItemFromCart(codigo) {
       selectedProducts.delete(codigo);
-      const cardElement = document.querySelector(`.product-card[data-codigo-barras="${codigo}"]`);
-      if (cardElement) {
-        cardElement.classList.remove('selected'); // Quita la clase 'selected'
-      }
-      updateCart();
+      // Re-renderiza los productos filtrados para desmarcar el elemento eliminado
+      const searchTerm = document.getElementById('busqueda').value.toLowerCase();
+      const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
+      renderProducts(filtered);
+      updateCart(); // Actualiza el carrito
     }
 
-    // Función para la búsqueda de productos en tiempo real (Optimización de rendimiento)
-    function handleSearchInput() { // Renombrada para mayor claridad
-      this.value = this.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
-      const searchTerm = this.value;
-      if (window.medicamentos) {
-        const filteredProducts = window.medicamentos.filter(product => {
-          return filterProduct(product, searchTerm);
-        });
-        renderProducts(filteredProducts); // renderProducts sí recrea la cuadrícula cuando el filtro cambia
-      } else {
-        console.warn("No se puede buscar: 'window.medicamentos' no está definido.");
-      }
-    }
-
-    // Función auxiliar para filtrar productos (accent-insensitive y uppercase)
-    function filterProduct(product, searchTerm) {
-      const normalizeAndUppercase = (text) => 
-        (text || '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
-
-      const desc = normalizeAndUppercase(product.descripcion);
-      const formula = normalizeAndUppercase(product.formula);
-      const laboratorio = normalizeAndUppercase(product.laboratorio);
-      const codigoBarras = normalizeAndUppercase(product.codigoBarras);
-
-      return desc.includes(searchTerm) ||
-             formula.includes(searchTerm) ||
-             laboratorio.includes(searchTerm) ||
-             codigoBarras.includes(searchTerm);
-    }
-
-    // Función para actualizar la vista del carrito lateral
+    // Actualizar la vista del carrito lateral
     function updateCart() {
       const cartItems = document.getElementById('cartItems');
       const cartTotal = document.getElementById('cartTotal');
       const quoteBtn = document.getElementById('quoteBtnMain');
-      
+
       if (selectedProducts.size === 0) {
         cartItems.innerHTML = "<p style='text-align: center; color: #6c757d; font-style: italic;'>No hay productos seleccionados</p>";
         cartTotal.textContent = "Total: 0 producto(s)";
-        quoteBtn.disabled = true;
+        quoteBtn.disabled = true; // Deshabilita el botón si no hay productos
         return;
       }
 
       let html = '';
       let totalItems = 0;
-      
+
       selectedProducts.forEach((product) => {
         totalItems += product.cantidad;
         html += `
@@ -1120,30 +1289,54 @@
           </div>
         `;
       });
-      
+
       cartItems.innerHTML = html;
       cartTotal.textContent = `Total: ${totalItems} producto(s)`;
-      quoteBtn.disabled = false;
+      quoteBtn.disabled = false; // Habilita el botón si hay productos
     }
 
-    // Función para ir a la pantalla de resumen
+    // Búsqueda de productos en tiempo real
+    document.getElementById('busqueda').addEventListener('keyup', function() {
+      const searchTerm = this.value.toLowerCase().trim(); // Elimina espacios en blanco
+      if (searchTerm.length > 0) { // Solo busca si hay al menos un carácter
+        const filteredProducts = medicamentos.filter(product => {
+          return filterProduct(product, searchTerm);
+        });
+        renderProducts(filteredProducts);
+      } else {
+        // Si el buscador está vacío, limpia el grid y muestra el mensaje inicial
+        productsGrid.innerHTML = '<p class="empty-message">Por favor, usa el buscador para encontrar productos.</p>';
+        productsGrid.classList.add('empty-message'); // Agrega la clase para centrar el mensaje
+      }
+    });
+
+    // Función auxiliar para filtrar productos
+    function filterProduct(product, searchTerm) {
+      const desc = (product.descripcion || '').toLowerCase();
+      const formula = (product.formula || '').toLowerCase();
+      const laboratorio = (product.laboratorio || '').toLowerCase();
+      const codigoBarras = (product.codigoBarras || '').toLowerCase();
+
+      return desc.includes(searchTerm) ||
+             formula.includes(searchTerm) ||
+             laboratorio.includes(searchTerm) ||
+             codigoBarras.includes(searchTerm);
+    }
+
+    // Ir a la pantalla de resumen
     function goToSummary() {
       if (selectedProducts.size === 0) {
         alert("Por favor, selecciona al menos un producto para generar la cotización.");
         return;
       }
-      populateSummary();
+      populateSummary(); // Llena los datos del resumen antes de cambiar de pantalla
       goToScreen(3);
     }
 
-    // Función para llenar datos en la pantalla de resumen (Screen 3)
+    // Llenar datos en la pantalla de resumen (Screen 3)
     function populateSummary() {
       const clientSummaryDiv = document.getElementById('clientSummary');
       clientSummaryDiv.innerHTML = `
-        <div class="contact-item">
-          <i class="fas fa-file-invoice"></i>
-          <span>Folio de Seguimiento: ${clientData.folio || 'N/A'}</span>
-        </div>
         <div class="contact-item">
           <i class="fas fa-user"></i>
           <span>Nombre: ${clientData.nombre || 'N/A'}</span>
@@ -1164,216 +1357,166 @@
 
       const summaryTableBody = document.querySelector('#summaryTable tbody');
       summaryTableBody.innerHTML = '';
-      selectedProducts.forEach(product => {
-        const row = summaryTableBody.insertRow();
-        row.insertCell().textContent = product.codigoBarras || 'N/A';
-        row.insertCell().textContent = product.descripcion || 'Sin descripción';
-        row.insertCell().textContent = product.formula || 'No especificada';
-        row.insertCell().textContent = product.laboratorio || 'No especificado';
-        row.insertCell().textContent = product.cantidad;
-      });
-    }
-
-    // Función para generar PDF
-    async function generarPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      getBase64Image('logo.png', function(logoBase64) {
-          const pageWidth = doc.internal.pageSize.getWidth();
-          const imgWidth = 50;
-          const imgHeight = (imgWidth * 420) / 1488;
-          const imgX = (pageWidth - imgWidth) / 2;
-
-          if (logoBase64) {
-              doc.addImage(logoBase64, 'PNG', imgX, 10, imgWidth, imgHeight);
-          } else {
-              doc.addImage(document.querySelector('.summary-logo img').src, 'JPEG', imgX, 10, imgWidth, imgHeight);
-          }
-          
-          let y = 10 + imgHeight + 5; // Más compacto el espacio debajo del logo
-
-          // Contenido de la cabecera del PDF
-          doc.setFontSize(16); // Título más pequeño
-          doc.setTextColor(44, 62, 80);
-          doc.text("Cotización GlobalMediTH", pageWidth / 2, y, { align: "center" });
-          y += 6; // Espacio
-          doc.setFontSize(7); // Mensaje persuasivo más pequeño
-          doc.setTextColor(50, 150, 70);
-          doc.text("¡Medicamentos de calidad con atención personalizada para tu tranquilidad!", pageWidth / 2, y, { align: "center" });
-          y += 10; // Más espacio
-
-          // **NUEVA ESTRUCTURA DE COLUMNAS PARA DATOS EN PDF**
-          const startX = 10; // Margen izquierdo
-          const columnWidth = (pageWidth - (startX * 2) - 5) / 2; // Ancho de columna, 5 es el espacio entre ellas
-          const lineHeight = 4; // Altura de línea para los datos
-
-          // Datos de Contacto de Ventas (compacto)
-          doc.setFontSize(8); // Título de sección más pequeño
-          doc.setTextColor(0, 0, 0);
-          doc.setFont(undefined, 'bold');
-          doc.text("Datos de Contacto de Ventas:", startX, y);
-          doc.setFont(undefined, 'normal');
-          doc.text(`Celular: 2381646718`, startX, y + lineHeight);
-          doc.text(`Correo: globalmedith@gmail.com`, startX, y + 2 * lineHeight);
-          doc.text(`Ubicación: Tehuacán, Puebla`, startX, y + 3 * lineHeight);
-          
-          // Datos del Cliente (compacto, en la segunda columna)
-          doc.setFont(undefined, 'bold');
-          doc.text("Datos del Cliente:", startX + columnWidth + 5, y);
-          doc.setFont(undefined, 'normal');
-          doc.text(`Folio de Seguimiento: ${clientData.folio || 'N/A'}`, startX + columnWidth + 5, y + lineHeight);
-          doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, startX + columnWidth + 5, y + 2 * lineHeight);
-          doc.text(`Celular: ${clientData.celular || 'N/A'}`, startX + columnWidth + 5, y + 3 * lineHeight);
-          doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, startX + columnWidth + 5, y + 4 * lineHeight);
-          doc.text(`Correo: ${clientData.correo || 'N/A'}`, startX + columnWidth + 5, y + 5 * lineHeight);
-
-          y += Math.max(4 * lineHeight, 6 * lineHeight) + 10; // Mover Y a la posición más baja de ambas columnas + un margen
-
-          doc.setFontSize(10); // Título de sección de productos
-          doc.setFont(undefined, 'bold');
-          doc.text("Productos Seleccionados:", 10, y);
-          y += 5; // Espacio
-          doc.setFont(undefined, 'normal');
-
-          // Celdas para la tabla PDF (excluyendo "Fórmula" y ajustando tamaños para un diseño más compacto)
-          const headers = [
-            { header: "Código de Barras", dataKey: "codigoBarras" },
-            { header: "Descripción", dataKey: "descripcion" },
-            { header: "Laboratorio", dataKey: "laboratorio" },
-            { header: "Cantidad", dataKey: "cantidad" }
-          ];
-
-          const data = Array.from(selectedProducts.values()).map(p => ({
-            codigoBarras: p.codigoBarras || 'N/A',
-            descripcion: p.descripcion || 'Sin descripción',
-            laboratorio: p.laboratorio || 'No especificado',
-            cantidad: p.cantidad
-          }));
-
-          doc.autoTable({
-            startY: y,
-            head: [headers.map(h => h.header)],
-            body: data.map(row => headers.map(h => row[h.dataKey])),
-            styles: { 
-                fontSize: 6, // Reducido tamaño de fuente para la tabla del PDF para mayor compactación
-                cellPadding: 0.7, // Reducido padding de celda para la tabla del PDF
-                overflow: 'linebreak',
-                lineColor: [220, 220, 220],
-                lineWidth: 0.1 
-            },
-            headStyles: { 
-                fillColor: [240, 240, 240], 
-                textColor: [50, 50, 50], 
-                fontStyle: 'bold' 
-            },
-            alternateRowStyles: { 
-                fillColor: [250, 250, 250] 
-            },
-            margin: { left: 10, right: 10 },
-            columnStyles: { // Ajuste de anchos de columna para optimizar espacio
-                0: { cellWidth: 35 }, // Código de Barras (más estrecho)
-                1: { cellWidth: 'auto' }, // Descripción (automático, ocupará el resto)
-                2: { cellWidth: 30 }, // Laboratorio (más estrecho)
-                3: { cellWidth: 15 }  // Cantidad (más estrecho)
-            },
-            didParseCell: function(data) { // Centrar Cantidad
-                if (data.column.dataKey === 'cantidad') {
-                    data.cell.styles.halign = 'center';
-                }
-            },
-            didDrawPage: function(data) {
-              doc.setFontSize(8);
-              const pageCount = doc.internal.getNumberOfPages();
-              doc.text(`Página ${data.pageNumber} de ${pageCount}`, data.settings.margin.left, doc.internal.pageSize.height - 10);
-            }
-          });
-          
-          const filename = `Cotizacion_GlobalMediTH_${(clientData.nombre || 'cliente').replace(/\s/g, '_')}_${clientData.folio || ''}.pdf`;
-          doc.save(filename);
-      });
-    }
-
-    // Función para enviar por WhatsApp
-    function enviarWhatsApp() {
-      const nombre = clientData.nombre || 'N/A';
-      const celular = clientData.celular || 'N/A';
-      const ciudad = clientData.ciudad || 'N/A';
-      const correo = clientData.correo || 'N/A';
-      const folio = clientData.folio || 'N/A';
-
-      let message = `¡Hola GlobalMediTH!%0A%0AMe gustaría solicitar una cotización con la siguiente información:%0A%0A`;
-      
-      message += `*Datos del Cliente:*%0A`;
-      message += `📝 Folio de Seguimiento: ${folio}%0A`;
-      message += `🧑‍💻 Nombre: ${nombre}%0A`;
-      message += `📱 Celular: ${celular}%0A`;
-      message += `🏙️ Ciudad: ${ciudad}%0A`;
-      message += `📧 Correo: ${correo}%0A%0A`;
-
-      message += `*Productos Solicitados:*%0A`;
       if (selectedProducts.size === 0) {
-        message += "No se seleccionaron productos.";
+        summaryTableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; font-style: italic;">No hay productos seleccionados para la cotización.</td></tr>`;
       } else {
         selectedProducts.forEach(product => {
-          message += `💊 ${product.descripcion} (Cód: ${product.codigoBarras || 'N/A'}) - Cantidad: ${product.cantidad}%0A`;
+          const row = summaryTableBody.insertRow();
+          row.insertCell().textContent = product.codigoBarras || 'N/A';
+          row.insertCell().textContent = product.descripcion || 'Sin descripción';
+          row.insertCell().textContent = product.laboratorio || 'No especificado';
+          row.insertCell().textContent = product.cantidad;
         });
       }
-
-      message += `%0A¡Espero su pronta respuesta!%0A%0AGracias.`;
-
-      const whatsappUrl = `https://wa.me/522381646718?text=${encodeURIComponent(message)}`;
-      window.open(whatsappUrl, '_blank');
     }
 
-    // --- Lógica principal y eventos ---
+    // Generar PDF (misma función, ahora llamada por generarPDFyEnviarWhatsApp)
+    async function generarPDF() {
+      return new Promise((resolve) => { // Envuelve la función en una promesa
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
 
-    // Manejador del formulario de cliente
-    document.getElementById('clientForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      clientData = {
-        nombre: document.getElementById('nombre').value,
-        celular: document.getElementById('celular').value,
-        ciudad: document.getElementById('ciudad').value,
-        correo: document.getElementById('correo').value,
-        folio: generateTrackingId() // Asignar folio único
-      };
-      
-      goToScreen(2); // Avanza a la pantalla del catálogo
-    });
+        // Obtener el logo en Base64 para incrustarlo en el PDF
+        getBase64Image('logo.png', function(logoBase64) {
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const imgWidth = 50; // Ancho deseado para el logo en el PDF
+            const imgHeight = (imgWidth * 420) / 1488; // Proporción original de tu logo (1488x420px)
+            const imgX = (pageWidth - imgWidth) / 2; // Centrar el logo
 
-    // Cargar medicamentos al iniciar la ventana
-    window.onload = async () => {
-      try {
-        console.log("Iniciando carga de medicamentos.json...");
-        const res = await fetch('medicamentos.json');
-        
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status} - ${res.statusText}`);
+            if (logoBase64) {
+                doc.addImage(logoBase64, 'PNG', imgX, 10, imgWidth, imgHeight);
+            } else {
+                doc.addImage(document.querySelector('.summary-logo img').src, 'JPEG', imgX, 10, imgWidth, imgHeight);
+            }
+
+            let y = 10 + imgHeight + 10; // Espacio después del logo
+
+            doc.setFontSize(22);
+            doc.setTextColor(44, 62, 80);
+            doc.text("Cotización GlobalMediTH", pageWidth / 2, y, { align: "center" });
+            y += 10;
+            doc.setFontSize(10);
+            doc.setTextColor(50, 150, 70);
+            doc.text("¡Medicamentos de calidad con atención personalizada para tu tranquilidad!", pageWidth / 2, y, { align: "center" });
+            y += 20;
+
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+
+            // Datos de Contacto de Ventas
+            doc.setFont(undefined, 'bold');
+            doc.text("Datos de Contacto de Ventas:", 10, y);
+            y += 7;
+            doc.setFont(undefined, 'normal');
+            doc.text(`Celular: 2381646718`, 10, y);
+            y += 7;
+            doc.text(`Correo: globalmedith@gmail.com`, 10, y);
+            y += 7;
+            doc.text(`Ubicación: Tehuacán, Puebla`, 10, y);
+            y += 15;
+
+            // Datos del Cliente
+            doc.setFont(undefined, 'bold');
+            doc.text("Datos del Cliente:", 10, y);
+            y += 7;
+            doc.setFont(undefined, 'normal');
+            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, 10, y);
+            y += 7;
+            doc.text(`Celular: ${clientData.celular || 'N/A'}`, 10, y);
+            y += 7;
+            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, 10, y);
+            y += 7;
+            doc.text(`Correo: ${clientData.correo || 'N/A'}`, 10, y);
+            y += 15;
+
+            // Productos seleccionados (usando autoTable)
+            doc.setFont(undefined, 'bold');
+            doc.text("Productos Seleccionados:", 10, y);
+            y += 10;
+            doc.setFont(undefined, 'normal');
+
+            const headers = [["Código de Barras", "Descripción", "Laboratorio", "Cantidad"]];
+            const data = Array.from(selectedProducts.values()).map(p => [
+              p.codigoBarras || 'N/A',
+              p.descripcion || 'Sin descripción',
+              p.laboratorio || 'No especificado',
+              p.cantidad
+            ]);
+
+            doc.autoTable({
+              startY: y,
+              head: headers,
+              body: data,
+              styles: { fontSize: 9, cellPadding: 2, overflow: 'linebreak' },
+              headStyles: { fillColor: [248, 249, 250], textColor: [44, 62, 80], fontStyle: 'bold' },
+              alternateRowStyles: { fillColor: [248, 249, 250] },
+              margin: { left: 10, right: 10 },
+              didDrawPage: function(data) {
+                // Footer
+                doc.setFontSize(8);
+                const pageCount = doc.internal.getNumberOfPages();
+                doc.text(`Página ${data.pageNumber} de ${pageCount}`, data.settings.margin.left, doc.internal.pageSize.height - 10);
+              }
+            });
+
+            // Retorna el PDF como un blob o un data URI
+            resolve(doc.output('blob')); // O 'datauristring' si prefieres
+        });
+      });
+    }
+
+    // Nueva función para generar PDF y luego enviar por WhatsApp
+    async function generarPDFyEnviarWhatsApp() {
+        try {
+            const pdfBlob = await generarPDF(); // Espera a que el PDF se genere
+            const filename = `Cotizacion_GlobalMediTH_${(clientData.nombre || 'cliente').replace(/\s/g, '_')}.pdf`;
+
+            // Descarga el PDF al dispositivo del usuario
+            const url = URL.createObjectURL(pdfBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url); // Libera la URL del objeto
+
+            // Envía el mensaje de WhatsApp (explicando que el PDF se descargó)
+            const nombre = clientData.nombre || 'N/A';
+            const celular = clientData.celular || 'N/A';
+            const ciudad = clientData.ciudad || 'N/A';
+            const correo = clientData.correo || 'N/A';
+
+            let message = `¡Hola GlobalMediTH!%0A%0ATu cotización ha sido generada y descargada. Te comparto la información de tu pedido:%0A%0A`;
+
+            message += `*Datos del Cliente:*%0A`;
+            message += `🧑‍💻 Nombre: ${nombre}%0A`;
+            message += `📱 Celular: ${celular}%0A`;
+            message += `🏙️ Ciudad: ${ciudad}%0A`;
+            message += `📧 Correo: ${correo}%0A%0A`;
+
+            message += `*Productos Solicitados:*%0A`;
+            if (selectedProducts.size === 0) {
+                message += "No se seleccionaron productos.";
+            } else {
+                selectedProducts.forEach(product => {
+                    message += `💊 ${product.descripcion} (Cód: ${product.codigoBarras || 'N/A'}) - Cantidad: ${product.cantidad}%0A`;
+                });
+            }
+
+            message += `%0A*Por favor, adjunta el archivo PDF que acabas de descargar.*%0A%0A¡Espero tu pronta respuesta!%0A%0AGracias.`;
+
+            const whatsappUrl = `https://wa.me/522381646718?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+
+        } catch (error) {
+            console.error("Error al generar PDF o enviar WhatsApp:", error);
+            alert("Hubo un error al generar la cotización o abrir WhatsApp. Por favor, inténtalo de nuevo.");
         }
-        
-        window.medicamentos = await res.json(); // Asignar a window.medicamentos (variable global)
-        console.log("Medicamentos cargados exitosamente:", window.medicamentos); 
+    }
 
-        // Asumiendo que la primera fila es una cabecera si tiene "Codigo de Barras"
-        if (window.medicamentos.length > 0 && window.medicamentos[0].codigoBarras === "Codigo de Barras") {
-          console.log("Detectada fila de cabecera, eliminando...");
-          window.medicamentos.shift();
-        }
-
-        renderProducts(window.medicamentos); // Renderizar productos después de la carga exitosa
-        console.log("Productos renderizados y carrito actualizado.");
-
-        // ASIGNAR EL EVENT LISTENER DEL BUSCADOR AQUÍ DESPUÉS DE QUE TODO ESTÉ LISTO Y EL DOM DE productsGrid exista
-        document.getElementById('busqueda').addEventListener('keyup', handleSearchInput);
-
-      } catch (error) {
-        console.error("Error crítico al cargar o parsear medicamentos.json:", error);
-        document.getElementById('productsGrid').innerHTML = 
-          `<p style='text-align: center; color: #dc3545;'>Error al cargar el catálogo: ${error.message}. Por favor, asegúrese de que el archivo 'medicamentos.json' existe, está accesible y tiene un formato JSON válido.</p>`;
-      }
-    };
+    // Eliminar la función enviarWhatsApp() anterior, ya no se usa directamente
+    // function enviarWhatsApp() { /* ... */ }
   </script>
 </body>
 </html>
