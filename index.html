@@ -19,8 +19,10 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #333;
-      min-height: 100vh; /* Asegura que el body siempre tenga al menos la altura de la vista */
-      overflow-x: hidden; /* Evita scroll horizontal */
+      height: 100%; /* Asegura que el body ocupe el 100% de la altura del viewport */
+      width: 100%;
+      overflow: hidden; /* Oculta el scroll global del body, el .container lo manejará en desktop, las pantallas en móvil */
+      position: relative; /* Para que el fondo cubra todo */
     }
 
     .container {
@@ -629,8 +631,8 @@
       .container {
         padding: 20px;
       }
-      .screen {
-          padding-bottom: 0;
+      .screen.active {
+          justify-content: flex-start; /* Mantener alineación al inicio, para no forzar en pantallas grandes */
       }
 
       /* PANTALLA 1 - REGISTRO */
@@ -782,8 +784,8 @@
         padding: 30px; /* Padding general más amplio para desktop */
         overflow-y: hidden; /* El contenedor principal en desktop NO SCROLLEA */
         display: flex; /* Añadir flex para que las pantallas internas puedan distribuirse */
-        justify-content: center; /* Centrar las pantallas dentro del container */
-        align-items: center; /* Centrar las pantallas dentro del container */
+        justify-content: center; /* Centrar las pantallas */
+        align-items: center; /* Centrar las pantallas */
       }
 
       /* Asegurarse que las pantallas internas se adapten bien al .container */
@@ -910,7 +912,7 @@
       <div class="welcome-screen">
         <div class="welcome-card">
           <div class="logo">
-            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
+            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWlsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdoQpib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RleHQ+Cjwvc3ZnPg=='"/>
           </div>
 
           <h1 class="welcome-title">Bienvenido</h1>
@@ -1025,7 +1027,7 @@
         <div class="summary-fixed-header">
           <div class="summary-header">
             <div class="summary-logo">
-              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L3RleHQ+Cjwvc3ZnPg=='"/>
+              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RleHQ+Cjwvc3ZnPg=='"/>
             </div>
             <h1 class="summary-title">Cotización - GlobalMediTH</h1>
             <div class="persuasive-message">
@@ -1118,7 +1120,7 @@
         };
         img.onerror = function() {
             console.error("Error al cargar la imagen para Base64. Usando fallback SVG.");
-            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWlsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdoQpib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RleHQ+Cjwvc3ZnPg==';
+            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fuc2ktc2VyaWYiIGZvbnQtc2l6ZT0iMTAiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TGVkZW5kb3M8L3RleHQ+Cjwvc3ZnPg==';
             callback(fallbackSvg);
         };
     }
@@ -1186,13 +1188,16 @@
       productsToRender.forEach((product) => {
         const isSelected = selectedProducts.has(product.codigoBarras);
         // Cantidad inicial 0 si no está seleccionado, sino la cantidad actual
-        const quantity = isSelected ? selectedProducts.get(product.codigoBarras).cantidad : 0; // Cambiado a 0
+        const quantity = isSelected ? selectedProducts.get(product.codigoBarras).cantidad : 0;
         
         const card = document.createElement('div');
         card.className = `product-card ${isSelected ? 'selected' : ''}`;
-        card.onclick = () => toggleProduct(product); // El click en la tarjeta lo selecciona
         
-        // CORRECCIÓN: Asegurar que product.codigoBarras se lea correctamente.
+        // CORRECCIÓN para cantidad inicial en 0 y lógica de selección
+        // Eliminar card.onclick = () => toggleProduct(product); para que la tarjeta no alterne la selección
+        // La selección/deselección ahora solo ocurre al interactuar con el input de cantidad
+
+        // Asegurar que product.codigoBarras se lea correctamente.
         const displayCodigoBarras = product.codigoBarras || 'No disponible';
 
         card.innerHTML = `
@@ -1203,7 +1208,8 @@
           <div class="quantity-selector" onclick="event.stopPropagation()">
             <label>Cantidad:</label>
             <input type="number" class="quantity-input" min="0" value="${quantity}" 
-                   onchange="updateQuantity('${product.codigoBarras}', this.value)" />
+                   onchange="updateQuantity('${product.codigoBarras}', this.value)" 
+                   onfocus="if(this.value=='0')this.value='';" onblur="if(this.value=='')this.value='0';" />
           </div>
         `;
         productsGrid.appendChild(card);
@@ -1211,59 +1217,69 @@
       updateCart();
     }
 
-    // Modificado para cambiar cantidad a 1 al seleccionar, o eliminar si ya estaba y cantidad es 0
+    // Ya no se usa toggleProduct porque la selección se maneja por el input de cantidad
+    /*
     function toggleProduct(product) {
       if (selectedProducts.has(product.codigoBarras)) {
-        // Si ya está seleccionado y se hace clic, lo deselecciona/elimina
         selectedProducts.delete(product.codigoBarras);
       } else {
-        // Si no está seleccionado, lo agrega con cantidad 1 (o la cantidad que el input ya tenga, si no está en 0)
-        // Ojo: Si el input está en 0 y se selecciona, lo agregará con 1 para que tenga sentido.
         const inputElement = document.querySelector(`.product-card[onclick*="${product.codigoBarras}"] .quantity-input`);
-        const currentInputValue = parseInt(inputElement ? inputElement.value : '0');
-        const quantityToAdd = currentInputValue > 0 ? currentInputValue : 1; // Si el usuario ya puso algo, se mantiene. Si no, 1.
-        selectedProducts.set(product.codigoBarras, { ...product, cantidad: quantityToAdd });
+        const quantityToAdd = parseInt(inputElement ? inputElement.value : '0'); // Leer el valor actual
+        selectedProducts.set(product.codigoBarras, { ...product, cantidad: quantityToAdd > 0 ? quantityToAdd : 1 }); // Si 0, poner 1
       }
       const searchTerm = document.getElementById('busqueda').value.toLowerCase();
       const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
       renderProducts(filtered);
       updateCart();
     }
+    */
 
 
-    function updateQuantity(codigo, cantidad) {
-      const qty = parseInt(cantidad) || 0; // Cantidad puede ser 0
-      
+    let searchTimeout; // Para el debounce del buscador
+
+    function updateQuantity(codigo, cantidadStr) {
+      const qty = parseInt(cantidadStr) || 0; // Si es NaN o "", será 0
+
+      if (qty < 0) return; // No permitir cantidades negativas
+
       if (selectedProducts.has(codigo)) {
         if (qty > 0) {
           const product = selectedProducts.get(codigo);
           product.cantidad = qty;
           selectedProducts.set(codigo, product);
         } else {
-          // Si la cantidad es 0, lo eliminamos de la selección
+          // Si la cantidad es 0, eliminar de la selección
           selectedProducts.delete(codigo);
         }
       } else if (qty > 0) {
-        // Si no estaba seleccionado y el usuario pone > 0, lo agrega
+        // Si no estaba seleccionado y el usuario pone una cantidad > 0, lo agrega
         const product = medicamentos.find(p => p.codigoBarras === codigo);
         if (product) {
           selectedProducts.set(codigo, { ...product, cantidad: qty });
         }
       }
-      // Re-renderiza para actualizar el estado visual de la tarjeta (selected/not selected)
-      const searchTerm = document.getElementById('busqueda').value.toLowerCase();
-      const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
-      renderProducts(filtered);
+      // Re-renderizar solo la tarjeta afectada para no redibujar todo
+      // Opcional: Para el estado 'selected', podrías añadir o remover la clase.
+      const cardElement = document.querySelector(`.product-card .quantity-input[onchange*="${codigo}"]`).closest('.product-card');
+      if (cardElement) {
+          if (selectedProducts.has(codigo)) {
+              cardElement.classList.add('selected');
+          } else {
+              cardElement.classList.remove('selected');
+          }
+      }
       updateCart();
     }
 
     function removeItemFromCart(codigo) {
       selectedProducts.delete(codigo);
       // Actualiza el input de cantidad en la tarjeta del catálogo a 0 si existe
-      const inputElement = document.querySelector(`.product-card[onclick*="${codigo}"] .quantity-input`);
+      const inputElement = document.querySelector(`.product-card .quantity-input[onchange*="${codigo}"]`);
       if (inputElement) {
         inputElement.value = 0;
+        inputElement.closest('.product-card').classList.remove('selected'); // Quita el estilo de seleccionado
       }
+      // Re-renderiza solo los productos filtrados para mantener la vista consistente
       const searchTerm = document.getElementById('busqueda').value.toLowerCase();
       const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
       renderProducts(filtered);
@@ -1305,17 +1321,20 @@
     }
 
     document.getElementById('busqueda').addEventListener('keyup', function() {
-      const searchTerm = this.value.toLowerCase().trim();
-      if (searchTerm.length > 0) {
-        const filteredProducts = medicamentos.filter(product => {
-          return filterProduct(product, searchTerm);
-        });
-        renderProducts(filteredProducts);
-      } else {
-        const productsGrid = document.getElementById('productsGrid');
-        productsGrid.innerHTML = '<p class="empty-message">Por favor, usa el buscador para encontrar productos.</p>';
-        productsGrid.classList.add('empty-message');
-      }
+      clearTimeout(searchTimeout); // Limpiar cualquier timeout anterior
+      searchTimeout = setTimeout(() => { // Establecer un nuevo timeout
+        const searchTerm = this.value.toLowerCase().trim();
+        if (searchTerm.length > 0) {
+          const filteredProducts = medicamentos.filter(product => {
+            return filterProduct(product, searchTerm);
+          });
+          renderProducts(filteredProducts);
+        } else {
+          const productsGrid = document.getElementById('productsGrid');
+          productsGrid.innerHTML = '<p class="empty-message">Por favor, usa el buscador para encontrar productos.</p>';
+          productsGrid.classList.add('empty-message');
+        }
+      }, 300); // Espera 300ms antes de ejecutar la búsqueda
     });
 
     function filterProduct(product, searchTerm) {
@@ -1375,7 +1394,6 @@
       }
     }
 
-    // Generar PDF (misma función, ahora envuelve en una promesa para esperar su resolución)
     async function generarPDF() {
       return new Promise((resolve) => {
         const { jsPDF } = window.jspdf;
@@ -1386,57 +1404,82 @@
             const imgWidth = 50;
             const imgHeight = (imgWidth * 420) / 1488;
             const imgX = (pageWidth - imgWidth) / 2;
+            let y = 10; // Inicio Y para el contenido
 
             if (logoBase64) {
-                doc.addImage(logoBase64, 'PNG', imgX, 10, imgWidth, imgHeight);
+                doc.addImage(logoBase64, 'PNG', imgX, y, imgWidth, imgHeight);
             } else {
-                doc.addImage(document.querySelector('.summary-logo img').src, 'JPEG', imgX, 10, imgWidth, imgHeight);
+                // Fallback a un SVG genérico si la imagen no carga
+                const fallbackSvgBase64 = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zz4KPHJlY3Qgd2lkdGg9IjE1MCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9vcj0ibWlkZGxlIj5HbG9iYWxNZWRpVEg8L3RleHQ+Cjx0ZXh0IHg9Ijc1IiB5PSI2NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9vcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHGOwoPC9zdmc+';
+                doc.addImage(fallbackSvgBase64, 'PNG', imgX, y, imgWidth, imgHeight);
             }
+            y += imgHeight + 10; /* Espacio después del logo */
 
-            let y = 10 + imgHeight + 10;
 
-            doc.setFontSize(22);
+            // Encabezado principal
+            doc.setFontSize(20);
             doc.setTextColor(44, 62, 80);
-            doc.text("Cotización GlobalMediTH", pageWidth / 2, y, { align: "center" });
-            y += 10;
-            doc.setFontSize(10);
+            doc.text("Cotización - GlobalMediTH", pageWidth / 2, y, { align: "center" });
+            y += 8;
+            doc.setFontSize(9);
             doc.setTextColor(50, 150, 70);
             doc.text("¡Medicamentos de calidad con atención personalizada para tu tranquilidad!", pageWidth / 2, y, { align: "center" });
-            y += 20;
+            y += 15; /* Espacio después del mensaje persuasivo */
 
-            doc.setFontSize(12);
-            doc.setTextColor(0, 0, 0);
+            // Datos de Contacto de Ventas y Datos del Cliente (diseño en columnas simulado)
+            const lineHeight = 5;
+            const startX_col1 = 10;
+            const startX_col2 = pageWidth / 2 + 5; // Inicia la segunda columna un poco a la derecha del centro
 
+            doc.setFontSize(9);
+
+            // Datos de Contacto de Ventas
+            doc.setDrawColor(233, 236, 239); /* Color de borde */
+            doc.setFillColor(248, 249, 250); /* Fondo #f8f9fa */
+            doc.rect(startX_col1 - 3, y - 3, (pageWidth / 2) - startX_col1 - 2, 4 * lineHeight + 15, 'FD'); /* Fondo para la caja 1 */
+            doc.setTextColor(44, 62, 80);
             doc.setFont(undefined, 'bold');
-            doc.text("Datos de Contacto de Ventas:", 10, y);
-            y += 7;
+            doc.text("Datos de Contacto de Ventas:", startX_col1, y);
+            y += lineHeight + 3;
             doc.setFont(undefined, 'normal');
-            doc.text(`Celular: 2381646718`, 10, y);
-            y += 7;
-            doc.text(`Correo: globalmedith@gmail.com`, 10, y);
-            y += 7;
-            doc.text(`Ubicación: Tehuacán, Puebla`, 10, y);
-            y += 15;
+            doc.setTextColor(73, 80, 87); /* Color de texto #495057 */
+            doc.text(`Celular: 2381646718`, startX_col1, y);
+            y += lineHeight;
+            doc.text(`Correo: globalmedith@gmail.com`, startX_col1, y);
+            y += lineHeight;
+            doc.text(`Ubicación: Tehuacán, Puebla`, startX_col1, y);
+            y_col1_end = y; // Guarda la altura final de la columna 1
 
+            // Datos del Cliente (posicionado a la derecha de la columna 1)
+            let y_client = y_contact_start = y_contact_start_logo = y - (3 * lineHeight + 13); /* Reusa el inicio Y de la caja de contacto */
+            doc.setFillColor(227, 242, 253); /* Fondo #e3f2fd */
+            doc.rect(startX_col2 - 3, y_client - 3, (pageWidth / 2) - startX_col1 - 2, 4 * lineHeight + 15, 'FD'); /* Fondo para la caja 2 */
+            doc.setTextColor(44, 62, 80);
             doc.setFont(undefined, 'bold');
-            doc.text("Datos del Cliente:", 10, y);
-            y += 7;
+            doc.text("Datos del Cliente:", startX_col2, y_client);
+            y_client += lineHeight + 3;
             doc.setFont(undefined, 'normal');
-            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, 10, y);
-            y += 7;
-            doc.text(`Celular: ${clientData.celular || 'N/A'}`, 10, y);
-            y += 7;
-            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, 10, y);
-            y += 7;
-            doc.text(`Correo: ${clientData.correo || 'N/A'}`, 10, y);
-            y += 15;
+            doc.setTextColor(73, 80, 87);
+            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, startX_col2, y_client);
+            y_client += lineHeight;
+            doc.text(`Celular: ${clientData.celular || 'N/A'}`, startX_col2, y_client);
+            y_client += lineHeight;
+            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, startX_col2, y_client);
+            y_client += lineHeight;
+            doc.text(`Correo: ${clientData.correo || 'N/A'}`, startX_col2, y_client);
+            y_col2_end = y_client;
 
+            // Ajustar el Y para el contenido siguiente (productos)
+            y = Math.max(y_col1_end, y_col2_end) + 15; /* El mayor de los dos finales + espacio */
+
+            // Productos seleccionados (usando autoTable)
+            doc.setFontSize(10);
+            doc.setTextColor(44, 62, 80);
             doc.setFont(undefined, 'bold');
             doc.text("Productos Seleccionados:", 10, y);
-            y += 10;
+            y += 7;
             doc.setFont(undefined, 'normal');
 
-            // Preparar datos para autoTable
             const headers = [["Código de Barras", "Descripción", "Laboratorio", "Cantidad"]];
             const data = Array.from(selectedProducts.values()).map(p => [
               p.codigoBarras || 'N/A',
@@ -1445,36 +1488,54 @@
               p.cantidad
             ]);
 
-            // ESTILOS DE LA TABLA PDF para coincidir con la pantalla de resumen
+            // ESTILOS DE LA TABLA PDF para coincidir con la pantalla de resumen (imagen "SI")
             doc.autoTable({
               startY: y,
               head: headers,
               body: data,
-              theme: 'striped', // Un tema rayado similar al de tu pantalla
+              theme: 'plain', /* Usar tema 'plain' para control total de estilos */
               styles: {
                 fontSize: 8,
                 cellPadding: 2,
                 overflow: 'linebreak',
-                textColor: [51, 51, 51] // Color de texto general
+                textColor: [51, 51, 51], /* Color de texto general */
+                lineColor: [229, 229, 229], /* Color de líneas, similar a #ddd */
+                lineWidth: 0.1 /* Grosor de líneas */
               },
               headStyles: {
-                fillColor: [248, 249, 250], // Fondo blanco grisáceo para encabezado
-                textColor: [44, 62, 80], // Color de texto oscuro
+                fillColor: [248, 249, 250], /* Fondo gris claro para encabezado #f8f9fa */
+                textColor: [44, 62, 80], /* Color de texto oscuro #2c3e50 */
                 fontStyle: 'bold',
-                halign: 'left' // Alineación de texto en encabezados
+                halign: 'left',
+                lineColor: [229, 229, 229],
+                lineWidth: 0.1
               },
               bodyStyles: {
-                fillColor: [241, 248, 233], // Color de fondo para filas impares (similar al #f1f8e9)
-                alternateFillColor: [255, 255, 255] // Color de fondo para filas pares (blanco)
+                fillColor: [241, 248, 233], /* Color de fondo para filas impares #f1f8e9 */
+                alternateFillColor: [255, 255, 255], /* Color de fondo para filas pares (blanco) */
+                textColor: [51, 51, 51],
+                lineColor: [229, 229, 229],
+                lineWidth: 0.1
               },
               columnStyles: {
-                0: { cellWidth: 30 }, // Código de Barras
-                1: { cellWidth: 'auto' }, // Descripción
-                2: { cellWidth: 30 }, // Laboratorio
-                3: { cellWidth: 15, halign: 'center' } // Cantidad
+                0: { cellWidth: 25 }, /* Código de Barras */
+                1: { cellWidth: 'auto' }, /* Descripción (auto para ajustar) */
+                2: { cellWidth: 25 }, /* Laboratorio */
+                3: { cellWidth: 15, halign: 'center' } /* Cantidad (centrado) */
               },
               margin: { left: 10, right: 10 },
               didDrawPage: function(data) {
+                // Dibujar un rectángulo alrededor de la tabla para simular el borde de la caja
+                doc.setDrawColor(229, 229, 229); /* Color de borde */
+                doc.setLineWidth(0.5); /* Grosor del borde */
+                doc.rect(
+                  data.settings.margin.left,
+                  data.startY - 3, /* Ajuste para que quede un poco arriba de la tabla */
+                  pageWidth - data.settings.margin.left * 2,
+                  data.table.height + 6, /* Ajuste para que quede un poco abajo de la tabla */
+                );
+
+                // Footer
                 doc.setFontSize(8);
                 const pageCount = doc.internal.getNumberOfPages();
                 doc.text(`Página ${data.pageNumber} de ${pageCount}`, data.settings.margin.left, doc.internal.pageSize.height - 10);
