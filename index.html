@@ -19,18 +19,16 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #333;
-      height: 100%; /* Asegura que el body ocupe el 100% de la altura del viewport */
-      width: 100%;
-      overflow: hidden; /* Oculta el scroll global del body, el .container lo manejará en desktop, las pantallas en móvil */
-      position: relative; /* Para que el fondo cubra todo */
+      min-height: 100vh; /* Asegura que el body siempre tenga al menos la altura de la vista */
+      overflow-x: hidden; /* Evita scroll horizontal */
     }
 
     .container {
       width: 100%;
       max-width: 100%; /* Ocupa el 100% del ancho del viewport en móvil */
-      height: 100%; /* Ocupa el 100% de la altura del viewport en móvil */
+      min-height: 100vh; /* Ocupa el 100% de la altura del viewport en móvil */
       position: relative; /* Para que las .screen se posicionen absolutamente dentro */
-      overflow-y: auto; /* Permite scroll vertical en el contenedor principal en móvil */
+      overflow-y: auto; /* Permite scroll vertical en el contenedor principal en móvil si el contenido es largo */
       -webkit-overflow-scrolling: touch;
       padding: 15px; /* Padding general para móvil */
       background: transparent; /* Por defecto, no tiene fondo, el fondo del body es el degradado */
@@ -55,11 +53,12 @@
       flex-direction: column; /* Contenido apilado verticalmente */
       justify-content: flex-start; /* Alinear arriba */
       align-items: center; /* Centrar horizontalmente */
+      height: 100%; /* Asegura que la pantalla ocupe su altura para el centrado */
     }
 
     /* PANTALLA 1 - REGISTRO */
     .welcome-screen {
-      padding: 10px;
+      padding: 10px; /* Padding para la pantalla de bienvenida */
       min-height: 100%; /* Para que el welcome-card se centre verticalmente */
       justify-content: center; /* Centrar welcome-card */
       align-items: center; /* Centrar welcome-card */
@@ -76,11 +75,12 @@
       display: flex;
       flex-direction: column;
       gap: 15px;
-      height: auto;
+      height: auto; /* Permite que la altura se ajuste al contenido */
+      flex-shrink: 0; /* Evitar que se encoja si el contenedor es más pequeño */
     }
 
     .logo img {
-      height: 60px;
+      height: 60px; /* Tamaño móvil */
       max-width: 100%;
       border-radius: 10px;
     }
@@ -231,12 +231,12 @@
 
     /* PANTALLA 2 - CATÁLOGO */
     .catalog-screen {
-      display: flex; /* Base flex para móvil */
-      flex-direction: column; /* Apilados verticalmente en móvil */
+      display: flex;
+      flex-direction: column;
       gap: 15px;
       width: 100%;
-      height: auto; /* Se ajusta a su contenido */
-      align-items: center; /* Centrar horizontalmente */
+      height: 100%; /* Ocupa la altura de su padre (.screen) */
+      align-items: center; /* Centrar horizontalmente los elementos */
       padding: 10px;
     }
 
@@ -769,13 +769,12 @@
     /* ------------------------------------------- */
     @media (min-width: 1024px) {
       body {
-        /* No display: flex; aquí, el body solo es el fondo */
-        overflow: hidden; /* Ocultar scroll del body, el contenedor principal lo manejará */
+        overflow: hidden; /* Oculta el scroll global del body, el .container lo manejará */
       }
       .container {
         max-width: 1200px; /* Ancho más controlado para contenido principal */
-        height: calc(100vh - 60px); /* Usa height en desktop para que se adapte al viewport, deja margen */
-        min-height: calc(100vh - 60px); /* Altura mínima igual a la altura */
+        height: calc(100vh - 60px); /* Altura de la "ventana de aplicación" en desktop */
+        min-height: calc(100vh - 60px); /* Asegura que no se colapse */
         margin: 30px auto; /* Centra y da espacio alrededor */
         background: white; /* Fondo blanco visible para el contenedor principal */
         box-shadow: 0 0 40px rgba(0,0,0,0.3); /* Sombra más pronunciada */
@@ -783,8 +782,8 @@
         padding: 30px; /* Padding general más amplio para desktop */
         overflow-y: hidden; /* El contenedor principal en desktop NO SCROLLEA */
         display: flex; /* Añadir flex para que las pantallas internas puedan distribuirse */
-        justify-content: center; /* Centrar las pantallas */
-        align-items: center; /* Centrar las pantallas */
+        justify-content: center; /* Centrar las pantallas dentro del container */
+        align-items: center; /* Centrar las pantallas dentro del container */
       }
 
       /* Asegurarse que las pantallas internas se adapten bien al .container */
@@ -797,12 +796,13 @@
           min-height: 100%; /* Asegura que no se colapse */
           padding-bottom: 0; /* Sin padding extra aquí */
           overflow-y: auto; /* IMPORTANTE: Las pantallas SÍ manejan su propio scroll en desktop */
-          flex-shrink: 0; /* No se encoge en diseños flex */
-          flex-grow: 1; /* Ocupa el espacio disponible */
+          flex-shrink: 0;
+          flex-grow: 1;
       }
       .screen.active {
-          flex-direction: column; /* Generalmente los layouts de pantalla serán columna en desktop */
+          flex-direction: column; /* Contenido de la pantalla apilado verticalmente */
           justify-content: flex-start; /* Alinear arriba, el scroll controlará el resto */
+          /* align-items ya está en screen general */
       }
 
       /* PANTALLA 1 - REGISTRO */
@@ -810,10 +810,10 @@
         justify-content: center;
         align-items: center;
         height: 100%; /* Para que el contenido se centre verticalmente si hay espacio */
-        padding: 0; /* Padding ya en el container */
+        padding: 0;
       }
       .welcome-card {
-        padding: 40px; /* Aumentar padding en escritorio */
+        padding: 40px;
         max-width: 600px;
         gap: 30px;
       }
@@ -846,14 +846,14 @@
       .catalog-screen {
         grid-template-columns: 1fr 350px;
         gap: 30px;
-        padding: 0; /* Padding ya en el container */
-        height: 100%; /* Ocupa el 100% de la altura de .screen */
+        padding: 0;
+        height: 100%;
       }
 
       .catalog-main {
         padding: 30px;
         height: 100%;
-        max-height: unset; /* El scroll lo controla el products-grid */
+        max-height: unset;
       }
       .products-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -863,14 +863,14 @@
       .cart-sidebar {
         top: 30px;
         padding: 30px;
-        height: fit-content; /* Esencial para sticky, se ajusta a su contenido */
+        height: fit-content;
       }
 
       /* PANTALLA 3 - RESUMEN */
       .summary-screen {
         max-width: 900px;
         padding: 30px;
-        height: 100%; /* Ocupa 100% de la altura de .screen */
+        height: 100%;
       }
       .summary-logo img {
         height: 60px;
@@ -1185,16 +1185,14 @@
 
       productsToRender.forEach((product) => {
         const isSelected = selectedProducts.has(product.codigoBarras);
-        const quantity = isSelected ? selectedProducts.get(product.codigoBarras).cantidad : 1;
+        // Cantidad inicial 0 si no está seleccionado, sino la cantidad actual
+        const quantity = isSelected ? selectedProducts.get(product.codigoBarras).cantidad : 0; // Cambiado a 0
         
         const card = document.createElement('div');
         card.className = `product-card ${isSelected ? 'selected' : ''}`;
-        card.onclick = () => toggleProduct(product);
+        card.onclick = () => toggleProduct(product); // El click en la tarjeta lo selecciona
         
         // CORRECCIÓN: Asegurar que product.codigoBarras se lea correctamente.
-        // Se cambió el texto del label a "Código:" para mayor claridad si venía mal
-        // y se eliminó una posible inconsistencia de mayúsculas/minúsculas.
-        // La variable `displayCodigoBarras` asegura que siempre haya un valor para mostrar.
         const displayCodigoBarras = product.codigoBarras || 'No disponible';
 
         card.innerHTML = `
@@ -1204,7 +1202,7 @@
           <div class="product-info"><strong>Código:</strong> ${displayCodigoBarras}</div>
           <div class="quantity-selector" onclick="event.stopPropagation()">
             <label>Cantidad:</label>
-            <input type="number" class="quantity-input" min="1" value="${quantity}" 
+            <input type="number" class="quantity-input" min="0" value="${quantity}" 
                    onchange="updateQuantity('${product.codigoBarras}', this.value)" />
           </div>
         `;
@@ -1213,11 +1211,18 @@
       updateCart();
     }
 
+    // Modificado para cambiar cantidad a 1 al seleccionar, o eliminar si ya estaba y cantidad es 0
     function toggleProduct(product) {
       if (selectedProducts.has(product.codigoBarras)) {
+        // Si ya está seleccionado y se hace clic, lo deselecciona/elimina
         selectedProducts.delete(product.codigoBarras);
       } else {
-        selectedProducts.set(product.codigoBarras, { ...product, cantidad: 1 });
+        // Si no está seleccionado, lo agrega con cantidad 1 (o la cantidad que el input ya tenga, si no está en 0)
+        // Ojo: Si el input está en 0 y se selecciona, lo agregará con 1 para que tenga sentido.
+        const inputElement = document.querySelector(`.product-card[onclick*="${product.codigoBarras}"] .quantity-input`);
+        const currentInputValue = parseInt(inputElement ? inputElement.value : '0');
+        const quantityToAdd = currentInputValue > 0 ? currentInputValue : 1; // Si el usuario ya puso algo, se mantiene. Si no, 1.
+        selectedProducts.set(product.codigoBarras, { ...product, cantidad: quantityToAdd });
       }
       const searchTerm = document.getElementById('busqueda').value.toLowerCase();
       const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
@@ -1225,20 +1230,40 @@
       updateCart();
     }
 
-    function updateQuantity(codigo, cantidad) {
-      const qty = parseInt(cantidad) || 1;
-      if (qty < 1) return;
 
+    function updateQuantity(codigo, cantidad) {
+      const qty = parseInt(cantidad) || 0; // Cantidad puede ser 0
+      
       if (selectedProducts.has(codigo)) {
-        const product = selectedProducts.get(codigo);
-        product.cantidad = qty;
-        selectedProducts.set(codigo, product);
-        updateCart();
+        if (qty > 0) {
+          const product = selectedProducts.get(codigo);
+          product.cantidad = qty;
+          selectedProducts.set(codigo, product);
+        } else {
+          // Si la cantidad es 0, lo eliminamos de la selección
+          selectedProducts.delete(codigo);
+        }
+      } else if (qty > 0) {
+        // Si no estaba seleccionado y el usuario pone > 0, lo agrega
+        const product = medicamentos.find(p => p.codigoBarras === codigo);
+        if (product) {
+          selectedProducts.set(codigo, { ...product, cantidad: qty });
+        }
       }
+      // Re-renderiza para actualizar el estado visual de la tarjeta (selected/not selected)
+      const searchTerm = document.getElementById('busqueda').value.toLowerCase();
+      const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
+      renderProducts(filtered);
+      updateCart();
     }
 
     function removeItemFromCart(codigo) {
       selectedProducts.delete(codigo);
+      // Actualiza el input de cantidad en la tarjeta del catálogo a 0 si existe
+      const inputElement = document.querySelector(`.product-card[onclick*="${codigo}"] .quantity-input`);
+      if (inputElement) {
+        inputElement.value = 0;
+      }
       const searchTerm = document.getElementById('busqueda').value.toLowerCase();
       const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
       renderProducts(filtered);
@@ -1350,6 +1375,7 @@
       }
     }
 
+    // Generar PDF (misma función, ahora envuelve en una promesa para esperar su resolución)
     async function generarPDF() {
       return new Promise((resolve) => {
         const { jsPDF } = window.jspdf;
@@ -1410,6 +1436,7 @@
             y += 10;
             doc.setFont(undefined, 'normal');
 
+            // Preparar datos para autoTable
             const headers = [["Código de Barras", "Descripción", "Laboratorio", "Cantidad"]];
             const data = Array.from(selectedProducts.values()).map(p => [
               p.codigoBarras || 'N/A',
@@ -1418,13 +1445,34 @@
               p.cantidad
             ]);
 
+            // ESTILOS DE LA TABLA PDF para coincidir con la pantalla de resumen
             doc.autoTable({
               startY: y,
               head: headers,
               body: data,
-              styles: { fontSize: 9, cellPadding: 2, overflow: 'linebreak' },
-              headStyles: { fillColor: [248, 249, 250], textColor: [44, 62, 80], fontStyle: 'bold' },
-              alternateRowStyles: { fillColor: [248, 249, 250] },
+              theme: 'striped', // Un tema rayado similar al de tu pantalla
+              styles: {
+                fontSize: 8,
+                cellPadding: 2,
+                overflow: 'linebreak',
+                textColor: [51, 51, 51] // Color de texto general
+              },
+              headStyles: {
+                fillColor: [248, 249, 250], // Fondo blanco grisáceo para encabezado
+                textColor: [44, 62, 80], // Color de texto oscuro
+                fontStyle: 'bold',
+                halign: 'left' // Alineación de texto en encabezados
+              },
+              bodyStyles: {
+                fillColor: [241, 248, 233], // Color de fondo para filas impares (similar al #f1f8e9)
+                alternateFillColor: [255, 255, 255] // Color de fondo para filas pares (blanco)
+              },
+              columnStyles: {
+                0: { cellWidth: 30 }, // Código de Barras
+                1: { cellWidth: 'auto' }, // Descripción
+                2: { cellWidth: 30 }, // Laboratorio
+                3: { cellWidth: 15, halign: 'center' } // Cantidad
+              },
               margin: { left: 10, right: 10 },
               didDrawPage: function(data) {
                 doc.setFontSize(8);
