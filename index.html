@@ -47,7 +47,7 @@
       top: 0;
       left: 0;
       overflow-y: auto; /* IMPORTANTE: Cada pantalla maneja su propio scroll si el contenido desborda */
-      -webkit-overflow-scrolling: touch;
+      -webkit-overflow-scrolling: touch; /* Suaviza el scroll en iOS */
       padding-bottom: 20px; /* Espacio para scroll al final en móvil */
       flex-direction: column;
       align-items: center;
@@ -392,8 +392,8 @@
       border-radius: 15px;
       padding: 15px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      height: auto; /* Permite que la altura se ajuste al contenido del carrito */
-      width: 100%; /* Ocupa todo el ancho en móvil */
+      height: auto;
+      width: 100%;
       max-height: 35vh; /* CLAVE: Reduce la altura máxima del carrito en móvil */
       overflow-y: auto; /* Permite scroll interno del carrito si hay muchos items */
       margin-top: 15px;
@@ -638,6 +638,67 @@
       transform: scale(1.1);
     }
 
+    /* Estilos para el Modal Personalizado */
+    .custom-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000; /* Mayor que la navegación */
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .custom-modal-overlay.visible {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .custom-modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        max-width: 350px;
+        width: 90%;
+        transform: translateY(-20px);
+        transition: transform 0.3s ease;
+    }
+
+    .custom-modal-overlay.visible .custom-modal-content {
+        transform: translateY(0);
+    }
+
+    .custom-modal-header {
+        font-size: 1.5em;
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+
+    .custom-modal-body {
+        font-size: 1em;
+        color: #555;
+        line-height: 1.5;
+        margin-bottom: 25px;
+        white-space: pre-line; /* Para que \n funcione como salto de línea */
+    }
+
+    .custom-modal-footer .btn {
+        width: auto;
+        padding: 10px 30px;
+        font-size: 1em;
+        border-radius: 50px;
+        margin-top: 0; /* Anula el margin-top del .btn general */
+    }
+
     /* ------------------------------------------- */
     /* Media Query para Tablets (min-width: 768px) */
     /* ------------------------------------------- */
@@ -880,7 +941,7 @@
         max-height: unset;
       }
       .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Mantengo 180px para una buena densidad */
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
         gap: 20px;
         padding-right: 15px;
       }
@@ -935,7 +996,7 @@
       <div class="welcome-screen">
         <div class="welcome-card">
           <div class="logo">
-            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
+            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
           </div>
 
           <h1 class="welcome-title">Bienvenido</h1>
@@ -1050,7 +1111,7 @@
         <div class="summary-fixed-header">
           <div class="summary-header">
             <div class="summary-logo">
-              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
+              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
             </div>
             <h1 class="summary-title">Cotización - GlobalMediTH</h1>
             <div class="persuasive-message">
@@ -1110,12 +1171,23 @@
     </div>
   </div>
 
+  <div id="customAlertModal" class="custom-modal-overlay">
+    <div class="custom-modal-content">
+      <div class="custom-modal-header" id="customAlertTitle"></div>
+      <div class="custom-modal-body" id="customAlertMessage"></div>
+      <div class="custom-modal-footer">
+        <button class="btn" onclick="closeCustomAlert()">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Variables globales
     let medicamentos = [];
     let selectedProducts = new Map();
     let currentScreen = 1;
     let clientData = {};
+    let searchTimeout; // Variable para el debouncing
 
     function generateTrackingId() {
         const date = new Date();
@@ -1143,7 +1215,7 @@
         };
         img.onerror = function() {
             console.error("Error al cargar la imagen para Base64. Usando fallback SVG.");
-            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
+            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
             callback(fallbackSvg);
         };
     }
@@ -1193,102 +1265,130 @@
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         medicamentos = await res.json();
+        // Eliminar la primera fila si es el encabezado
         if (medicamentos.length > 0 && medicamentos[0].codigoBarras === "Codigo de Barras") {
           medicamentos.shift();
         }
+        // Llamar a renderProducts sin filtro al cargar para mostrar mensaje inicial
+        renderProducts([]); // Mostrar mensaje "usa el buscador" al inicio
       } catch (error) {
         console.error("Error al cargar los medicamentos:", error);
-        document.getElementById('productsGrid').innerHTML =
-          "<p class='empty-message'>Error al cargar el catálogo. Por favor, intente más tarde.</p>";
-        document.getElementById('productsGrid').classList.add('empty-message');
+        const productsGrid = document.getElementById('productsGrid');
+        productsGrid.innerHTML = "<p class='empty-message'>Error al cargar el catálogo. Por favor, intente más tarde.</p>";
+        productsGrid.classList.add('empty-message');
       }
+
+      // Delegación de eventos para productsGrid
+      const productsGrid = document.getElementById('productsGrid');
+      productsGrid.addEventListener('click', function(event) {
+          const cardElement = event.target.closest('.product-card');
+          if (cardElement) {
+              const codigo = cardElement.dataset.codigo;
+              const product = medicamentos.find(p => p.codigoBarras === codigo);
+              if (product) {
+                // Si el clic no fue directamente en el input, o fue en la tarjeta, toggle product
+                if (!event.target.classList.contains('quantity-input')) {
+                    toggleProduct(product);
+                }
+              }
+          }
+      });
+      // Delegación de eventos para los inputs de cantidad
+      productsGrid.addEventListener('change', function(event) {
+          if (event.target.classList.contains('quantity-input')) {
+              const codigo = event.target.dataset.codigo;
+              updateQuantity(codigo, event.target.value);
+          }
+      });
     };
 
     function renderProducts(productsToRender) {
       const productsGrid = document.getElementById('productsGrid');
-      productsGrid.innerHTML = '';
-      productsGrid.classList.remove('empty-message');
+      let htmlContent = '';
 
       if (productsToRender.length === 0) {
-        productsGrid.innerHTML = "<p class='empty-message'>No se encontraron resultados para tu búsqueda.</p>";
+        const searchTerm = document.getElementById('busqueda').value.toLowerCase().trim();
+        if (searchTerm.length === 0) {
+            htmlContent = "<p class='empty-message'>Por favor, usa el buscador para encontrar productos.</p>";
+        } else {
+            htmlContent = "<p class='empty-message'>No se encontraron resultados para tu búsqueda.</p>";
+        }
+        productsGrid.innerHTML = htmlContent;
         productsGrid.classList.add('empty-message');
+        updateCart();
         return;
       }
 
+      productsGrid.classList.remove('empty-message');
+      
       productsToRender.forEach((product) => {
         const isSelected = selectedProducts.has(product.codigoBarras);
         const quantity = isSelected ? selectedProducts.get(product.codigoBarras).cantidad : 0;
-        
-        const card = document.createElement('div');
-        card.className = `product-card ${isSelected ? 'selected' : ''}`;
-        card.onclick = () => toggleProduct(product);
-        
         const displayCodigoBarras = product.codigoBarras || 'No disponible';
 
-        card.innerHTML = `
-          <div class="product-title">${product.descripcion || 'Sin descripción'}</div>
-          <div class="product-info"><strong>Fórmula:</strong> ${product.formula || 'No especificada'}</div>
-          <div class="product-info"><strong>Laboratorio:</strong> ${product.laboratorio || 'No especificado'}</div>
-          <div class="product-info"><strong>Código:</strong> ${displayCodigoBarras}</div>
-          <div class="quantity-selector" onclick="event.stopPropagation()">
-            <label>Cantidad:</label>
-            <input type="number" class="quantity-input" min="0" value="${quantity}" 
-                   onchange="updateQuantity('${product.codigoBarras}', this.value)" />
+        htmlContent += `
+          <div class="product-card ${isSelected ? 'selected' : ''}" data-codigo="${product.codigoBarras}">
+            <div class="product-title">${product.descripcion || 'Sin descripción'}</div>
+            <div class="product-info"><strong>Fórmula:</strong> ${product.formula || 'No especificada'}</div>
+            <div class="product-info"><strong>Laboratorio:</strong> ${product.laboratorio || 'No especificado'}</div>
+            <div class="product-info"><strong>Código:</strong> ${displayCodigoBarras}</div>
+            <div class="quantity-selector">
+              <label>Cantidad:</label>
+              <input type="number" class="quantity-input" min="0" value="${quantity}" 
+                     data-codigo="${product.codigoBarras}" />
+            </div>
           </div>
         `;
-        productsGrid.appendChild(card);
       });
+      productsGrid.innerHTML = htmlContent;
+
       updateCart();
     }
 
     function toggleProduct(product) {
-      if (selectedProducts.has(product.codigoBarras)) {
-        selectedProducts.delete(product.codigoBarras);
-      } else {
-        const inputElement = document.querySelector(`.product-card[onclick*="${product.codigoBarras}"] .quantity-input`);
-        const currentInputValue = parseInt(inputElement ? inputElement.value : '0');
-        const quantityToAdd = currentInputValue > 0 ? currentInputValue : 1;
-        selectedProducts.set(product.codigoBarras, { ...product, cantidad: quantityToAdd });
-      }
-      const searchTerm = document.getElementById('busqueda').value.toLowerCase();
-      const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
-      renderProducts(filtered);
-      updateCart();
+        const cardElement = document.querySelector(`.product-card[data-codigo="${product.codigoBarras}"]`);
+        const inputElement = cardElement ? cardElement.querySelector('.quantity-input') : null;
+        
+        if (selectedProducts.has(product.codigoBarras)) {
+            selectedProducts.delete(product.codigoBarras);
+            if (cardElement) cardElement.classList.remove('selected');
+            if (inputElement) inputElement.value = 0;
+        } else {
+            const quantityToAdd = (inputElement && parseInt(inputElement.value) > 0) ? parseInt(inputElement.value) : 1;
+            selectedProducts.set(product.codigoBarras, { ...product, cantidad: quantityToAdd });
+            if (cardElement) cardElement.classList.add('selected');
+            if (inputElement) inputElement.value = quantityToAdd;
+        }
+        updateCart();
     }
 
-
     function updateQuantity(codigo, cantidad) {
-      const qty = parseInt(cantidad) || 0;
-      
-      if (selectedProducts.has(codigo)) {
+        const qty = parseInt(cantidad) || 0;
+        const cardElement = document.querySelector(`.product-card[data-codigo="${codigo}"]`);
+        const productData = medicamentos.find(p => p.codigoBarras === codigo);
+
+        if (!productData) return;
+
         if (qty > 0) {
-          const product = selectedProducts.get(codigo);
-          product.cantidad = qty;
-          selectedProducts.set(codigo, product);
+            selectedProducts.set(codigo, { ...productData, cantidad: qty });
+            if (cardElement) cardElement.classList.add('selected');
         } else {
-          selectedProducts.delete(codigo);
+            selectedProducts.delete(codigo);
+            if (cardElement) cardElement.classList.remove('selected');
         }
-      } else if (qty > 0) {
-        const product = medicamentos.find(p => p.codigoBarras === codigo);
-        if (product) {
-          selectedProducts.set(codigo, { ...product, cantidad: qty });
-        }
-      }
-      const searchTerm = document.getElementById('busqueda').value.toLowerCase();
-      const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
-      renderProducts(filtered);
-      updateCart();
+        updateCart();
     }
 
     function removeItemFromCart(codigo) {
       selectedProducts.delete(codigo);
-      const inputElement = document.querySelector(`.product-card[onclick*="${codigo}"] .quantity-input`);
-      if (inputElement) {
-        inputElement.value = 0;
+      const cardElement = document.querySelector(`.product-card[data-codigo="${codigo}"]`);
+      if (cardElement) {
+        cardElement.classList.remove('selected');
+        const inputElement = cardElement.querySelector('.quantity-input');
+        if (inputElement) {
+          inputElement.value = 0;
+        }
       }
-      const searchTerm = document.getElementById('busqueda').value.toLowerCase();
-      const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
-      renderProducts(filtered);
       updateCart();
     }
 
@@ -1327,18 +1427,20 @@
     }
 
     document.getElementById('busqueda').addEventListener('keyup', function() {
-      const searchTerm = this.value.toLowerCase().trim();
-      if (searchTerm.length > 0) {
-        const filteredProducts = medicamentos.filter(product => {
-          return filterProduct(product, searchTerm);
-        });
-        renderProducts(filteredProducts);
-      } else {
-        const productsGrid = document.getElementById('productsGrid');
-        productsGrid.innerHTML = '<p class="empty-message">Por favor, usa el buscador para encontrar productos.</p>';
-        productsGrid.classList.add('empty-message');
-      }
+        clearTimeout(searchTimeout);
+        const searchTerm = this.value.toLowerCase().trim();
+        searchTimeout = setTimeout(() => {
+            if (searchTerm.length > 0) {
+                const filteredProducts = medicamentos.filter(product => {
+                    return filterProduct(product, searchTerm);
+                });
+                renderProducts(filteredProducts);
+            } else {
+                renderProducts([]);
+            }
+        }, 300);
     });
+
 
     function filterProduct(product, searchTerm) {
       const desc = (product.descripcion || '').toLowerCase();
@@ -1354,7 +1456,7 @@
 
     function goToSummary() {
       if (selectedProducts.size === 0) {
-        alert("Por favor, selecciona al menos un producto para generar la cotización.");
+        showCustomAlert('Error de Cotización', 'Por favor, selecciona al menos un producto para generar la cotización.');
         return;
       }
       populateSummary();
@@ -1402,61 +1504,102 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
+        // Obtener logo en Base64
         getBase64Image('logo.png', function(logoBase64) {
             const pageWidth = doc.internal.pageSize.getWidth();
-            const imgWidth = 50;
-            const imgHeight = (imgWidth * 420) / 1488;
-            const imgX = (pageWidth - imgWidth) / 2;
+            const marginX = 15; // Margen izquierdo y derecho para el contenido
+            const colGap = 10; // Espacio entre las dos columnas de datos
 
-            if (logoBase64) {
-                doc.addImage(logoBase64, 'PNG', imgX, 10, imgWidth, imgHeight);
-            } else {
-                const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQgeD0iNzUiIHk9IjY1IiBmb250LWZhbWlseT0iYXJpYWwsIGFucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
-                doc.addImage(fallbackSvg, 'PNG', imgX, 10, imgWidth, imgHeight);
-            }
+            let currentY = 15; // Posición Y inicial de la página
 
-            let y = 10 + imgHeight + 10;
+            // --- SECCIÓN SUPERIOR IZQUIERDA (Logo y Global MediTH) ---
+            const logoWidth = 30; // Aumentar tamaño del logo
+            const logoHeight = (logoWidth * 420) / 1488; 
+            const logoXCentered = (pageWidth / 2) - (logoWidth / 2); // Centrar el logo
 
-            doc.setFontSize(22);
+            doc.addImage(logoBase64 || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCB4PSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=', 'PNG', logoXCentered, currentY, logoWidth, logoHeight);
+            
+            doc.setFontSize(11); // Tamaño de fuente para "Global MediTH"
             doc.setTextColor(44, 62, 80);
-            doc.text("Cotización GlobalMediTH", pageWidth / 2, y, { align: "center" });
-            y += 10;
-            doc.setFontSize(10);
+            doc.setFont(undefined, 'bold');
+            doc.text("Global MediTH", pageWidth / 2, currentY + logoHeight + 5, { align: "center" }); // Centrado debajo del logo
+            
+            currentY = currentY + logoHeight + 10; // Mover Y debajo del logo y su texto, con un poco más de espacio
+
+            // Título "Cotización - GlobalMediTH" (alinado a la izquierda)
+            doc.setFontSize(16);
+            doc.setTextColor(44, 62, 80);
+            doc.setFont(undefined, 'bold');
+            doc.text("Cotización - GlobalMediTH", marginX, currentY);
+            currentY += 8; // Espacio
+
+            // Mensaje persuasivo (alineado a la izquierda)
+            doc.setFontSize(7); // Tamaño más pequeño para el mensaje
             doc.setTextColor(50, 150, 70);
-            doc.text("¡Medicamentos de calidad con atención personalizada para tu tranquilidad!", pageWidth / 2, y, { align: "center" });
-            y += 20;
+            doc.setFont(undefined, 'normal');
+            doc.text("¡Medicamentos de calidad con atención personalizada para tu tranquilidad!", marginX, currentY);
+            currentY += 10; // Espacio
 
-            doc.setFontSize(12);
+            // --- SECCIÓN DE DOS COLUMNAS DE DATOS ---
+            const dataColWidth = (pageWidth / 2) - marginX - (colGap / 2); // Ancho para cada columna de datos (ajustado para que quepan bien)
+            
+            // Posición inicial Y para las dos columnas de datos (alineadas verticalmente con el título de la cotización)
+            let startDataColY = topY; // Alineado arriba para optimizar espacio
+
+            // --- Columna Izquierda de Datos (Datos de Contacto de Ventas) ---
+            let yCol1Data = startDataColY; 
+            doc.setFontSize(8); // Título de sección
             doc.setTextColor(0, 0, 0);
-
             doc.setFont(undefined, 'bold');
-            doc.text("Datos de Contacto de Ventas:", 10, y);
-            y += 7;
+            doc.text("Datos de Contacto de Ventas:", marginX + dataColWidth + colGap, yCol1Data); // Posicionado en la columna derecha
+            yCol1Data += 4;
             doc.setFont(undefined, 'normal');
-            doc.text(`Celular: 2381646718`, 10, y);
-            y += 7;
-            doc.text(`Correo: globalmedith@gmail.com`, 10, y);
-            y += 7;
-            doc.text(`Ubicación: Tehuacán, Puebla`, 10, y);
-            y += 15;
+            doc.setFontSize(6.5); // Detalles de contacto
+            doc.text(`Celular: 2381646718`, marginX + dataColWidth + colGap, yCol1Data);
+            yCol1Data += 3.5;
+            doc.text(`Correo: globalmedith@gmail.com`, marginX + dataColWidth + colGap, yCol1Data);
+            yCol1Data += 3.5;
+            doc.text(`Ubicación: Tehuacán, Puebla`, marginX + dataColWidth + colGap, yCol1Data);
+            yCol1Data += 3.5;
 
+            // --- Columna Derecha de Datos (Datos del Cliente y Folio) ---
+            let yCol2Data = yCol1Data + 4; // Comienza debajo de los datos de contacto, en la misma columna derecha
+            
+            doc.setFontSize(8); // Título "Datos del Cliente"
             doc.setFont(undefined, 'bold');
-            doc.text("Datos del Cliente:", 10, y);
-            y += 7;
-            doc.setFont(undefined, 'normal');
-            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, 10, y);
-            y += 7;
-            doc.text(`Celular: ${clientData.celular || 'N/A'}`, 10, y);
-            y += 7;
-            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, 10, y);
-            y += 7;
-            doc.text(`Correo: ${clientData.correo || 'N/A'}`, 10, y);
-            y += 15;
+            doc.text("Datos del Cliente:", marginX + dataColWidth + colGap, yCol2Data);
+            yCol2Data += 4;
 
+            doc.setFontSize(7.5); // Nombre del Cliente (un poco más grande y en negrita)
             doc.setFont(undefined, 'bold');
-            doc.text("Productos Seleccionados:", 10, y);
-            y += 10;
+            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, marginX + dataColWidth + colGap, yCol2Data);
+            yCol2Data += 4.5;
+
             doc.setFont(undefined, 'normal');
+            doc.setFontSize(6.5); // Otros datos del cliente
+            doc.text(`Celular: ${clientData.celular || 'N/A'}`, marginX + dataColWidth + colGap, yCol2Data);
+            yCol2Data += 3.5;
+            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, marginX + dataColWidth + colGap, yCol2Data);
+            yCol2Data += 3.5;
+            doc.text(`Correo: ${clientData.correo || 'N/A'}`, marginX + dataColWidth + colGap, yCol2Data);
+            yCol2Data += 3.5;
+
+            // Folio de Cotización (debajo de los datos del cliente, en la misma columna)
+            doc.setFontSize(8);
+            doc.setTextColor(0, 0, 0);
+            doc.setFont(undefined, 'bold');
+            doc.text(`Folio de Cotización: ${clientData.folio || 'N/A'}`, marginX + dataColWidth + colGap, yCol2Data + 2);
+            yCol2Data += 10;
+
+            // Determinar la posición Y para la tabla de productos
+            // Debe comenzar justo debajo del final del bloque de encabezado (el más bajo entre la izquierda y la derecha).
+            let startYForTable = Math.max(currentY + 5, yCol2Data) + 8; // currentY + 5 es un proxy para el final de la sección izquierda
+
+            // Título "Productos Seleccionados"
+            doc.setFontSize(9);
+            doc.setFont(undefined, 'bold');
+            doc.text("Productos Seleccionados:", marginX, startYForTable);
+            startYForTable += 5;
 
             const headers = [["Código de Barras", "Descripción", "Laboratorio", "Cantidad"]];
             const data = Array.from(selectedProducts.values()).map(p => [
@@ -1467,13 +1610,13 @@
             ]);
 
             doc.autoTable({
-              startY: y,
+              startY: startYForTable,
               head: headers,
               body: data,
               theme: 'striped',
               styles: {
-                fontSize: 8,
-                cellPadding: 2,
+                fontSize: 6.5,
+                cellPadding: 1.2,
                 overflow: 'linebreak',
                 textColor: [51, 51, 51]
               },
@@ -1488,12 +1631,12 @@
                 alternateFillColor: [255, 255, 255]
               },
               columnStyles: {
-                0: { cellWidth: 30 },
-                1: { cellWidth: 'auto' },
-                2: { cellWidth: 30 },
-                3: { cellWidth: 15, halign: 'center' }
+                0: { cellWidth: 20 },
+                1: { cellWidth: 'auto' }, // Permite que la descripción ocupe el espacio
+                2: { cellWidth: 20 },
+                3: { cellWidth: 10, halign: 'center' }
               },
-              margin: { left: 10, right: 10 },
+              margin: { left: marginX, right: marginX },
               didDrawPage: function(data) {
                 doc.setFontSize(8);
                 const pageCount = doc.internal.getNumberOfPages();
@@ -1539,15 +1682,15 @@
 
     async function generarPDFyEnviarWhatsApp() {
         if (selectedProducts.size === 0) {
-            alert("Por favor, selecciona al menos un producto para generar la cotización.");
+            showCustomAlert('Error de Cotización', 'Por favor, selecciona al menos un producto para generar la cotización.');
             return;
         }
 
-        try {
-            const whatsappBtn = document.querySelector('.btn-whatsapp');
-            whatsappBtn.disabled = true;
-            whatsappBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando Cotización...';
+        const whatsappBtn = document.querySelector('.btn-whatsapp');
+        whatsappBtn.disabled = true;
+        whatsappBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando Cotización...';
 
+        try {
             const pdfBlob = await generarPDF();
             const filename = `Cotizacion_GlobalMediTH_${(clientData.nombre || 'cliente').replace(/\s/g, '_')}.pdf`;
 
@@ -1560,30 +1703,69 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
 
-            whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar por WhatsApp';
-            whatsappBtn.disabled = false;
+            // Usar el modal personalizado en lugar de alert
+            showCustomAlert(
+                '¡Cotización Lista! ✅',
+                "Tu cotización en PDF (`" + filename + "`) se ha descargado a tu dispositivo.\n\n" +
+                "Ahora, se abrirá WhatsApp. Por favor, realiza estos 2 pasos:\n" +
+                "1️⃣ Busca y adjunta el archivo PDF que acabas de descargar.\n" +
+                "2️⃣ Envía el mensaje (el texto de la cotización ya está listo).\n\n" +
+                "¡Gracias por tu paciencia! 😉"
+            );
 
-            setTimeout(() => {
-                alert(
-                    "¡Listo! ✅ Tu cotización en PDF (`" + filename + "`) se ha descargado a tu dispositivo.\\n\\n" +
-                    "Ahora, se abrirá WhatsApp. Por favor, realiza estos 2 pasos:\\n" +
-                    "1️⃣ Busca y adjunta el archivo PDF que acabas de descargar.\\n" +
-                    "2️⃣ Envía el mensaje (el texto de la cotización ya está listo).\\n\\n" +
-                    "¡Gracias por tu paciencia! 😉"
-                );
-
-                const whatsappMessage = generateWhatsAppMessage();
-                const whatsappUrl = `https://wa.me/522381646718?text=${encodeURIComponent(whatsappMessage)}`;
-                window.open(whatsappUrl, '_blank');
-            }, 700);
-
+            // Abrir WhatsApp de inmediato
+            const whatsappMessage = generateWhatsAppMessage();
+            const whatsappUrl = `https://wa.me/522381646718?text=${encodeURIComponent(whatsappMessage)}`;
+            window.open(whatsappUrl, '_blank');
+            
         } catch (error) {
             console.error("Error al generar PDF o enviar WhatsApp:", error);
-            alert("Hubo un error al generar la cotización o abrir WhatsApp. Por favor, inténtalo de nuevo.");
-            const whatsappBtn = document.querySelector('.btn-whatsapp');
+            showCustomAlert('Error', 'Hubo un error al generar la cotización o abrir WhatsApp. Por favor, inténtalo de nuevo.');
+        } finally {
+            // Asegurar que el botón siempre se habilite y el spinner se quite
             whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar por WhatsApp';
             whatsappBtn.disabled = false;
         }
+    }
+
+    // Funciones del Modal Personalizado
+    function showCustomAlert(title, message) {
+        document.getElementById('customAlertTitle').innerText = title;
+        document.getElementById('customAlertMessage').innerText = message;
+        document.getElementById('customAlertModal').classList.add('visible');
+    }
+
+    function closeCustomAlert() {
+        document.getElementById('customAlertModal').classList.remove('visible');
+        resetApplication(); // Llama a la función de reset al cerrar el modal
+    }
+
+    // Nueva función para resetear la aplicación
+    function resetApplication() {
+        // 1. Resetear datos del cliente y formulario
+        clientData = {};
+        document.getElementById('nombre').value = '';
+        document.getElementById('celular').value = '';
+        document.getElementById('ciudad').value = '';
+        document.getElementById('correo').value = '';
+        const clientForm = document.getElementById('clientForm');
+        if (clientForm) clientForm.reset();
+
+        // 2. Limpiar productos seleccionados
+        selectedProducts.clear();
+
+        // 3. Limpiar campo de búsqueda y renderizar estado inicial del catálogo
+        const busquedaInput = document.getElementById('busqueda');
+        if (busquedaInput) {
+            busquedaInput.value = '';
+            renderProducts([]); // Esto mostrará el mensaje "usa el buscador..."
+        }
+        
+        // 4. Actualizar el carrito
+        updateCart();
+        
+        // 5. Regresar a la pantalla de registro
+        goToScreen(1);
     }
   </script>
 </body>
