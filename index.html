@@ -21,7 +21,7 @@
       color: #333;
       height: 100%; /* Asegura que el body ocupe el 100% de la altura del viewport */
       width: 100%;
-      overflow: hidden; /* Oculta el scroll global del body, el .container lo manejará en desktop, las pantallas en móvil */
+      overflow: hidden; /* Oculta el scroll global del body; el .container lo manejará en desktop, las pantallas en móvil */
       position: relative; /* Para que el fondo cubra todo */
     }
 
@@ -237,7 +237,7 @@
       flex-direction: column;
       gap: 15px;
       width: 100%;
-      height: 100%; /* Ocupa la altura de su padre (.screen) */
+      height: auto; /* Se ajusta a su contenido */
       align-items: center; /* Centrar horizontalmente los elementos */
       padding: 10px;
     }
@@ -330,7 +330,7 @@
       border-radius: 15px;
       padding: 12px;
       transition: all 0.1s ease-out;
-      cursor: pointer;
+      cursor: default; /* Ya no es clicable para seleccionar, solo el input */
     }
 
     .product-card:hover {
@@ -632,7 +632,7 @@
         padding: 20px;
       }
       .screen.active {
-          justify-content: flex-start; /* Mantener alineación al inicio, para no forzar en pantallas grandes */
+          justify-content: flex-start;
       }
 
       /* PANTALLA 1 - REGISTRO */
@@ -771,7 +771,7 @@
     /* ------------------------------------------- */
     @media (min-width: 1024px) {
       body {
-        overflow: hidden; /* Oculta el scroll global del body, el .container lo manejará */
+        overflow: hidden; /* Oculta el scroll global del body; el .container lo manejará */
       }
       .container {
         max-width: 1200px; /* Ancho más controlado para contenido principal */
@@ -816,7 +816,7 @@
       }
       .welcome-card {
         padding: 40px;
-        max-width: 600px;
+        max-width: 600px; /* Asegura que no sea demasiado ancho */
         gap: 30px;
       }
       .logo img {
@@ -912,7 +912,7 @@
       <div class="welcome-screen">
         <div class="welcome-card">
           <div class="logo">
-            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWlsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdoQpib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RleHQ+Cjwvc3ZnPg=='"/>
+            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWlsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdoQpib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHGOwoPC9zdmc+'; this.src='logo.png'" />
           </div>
 
           <h1 class="welcome-title">Bienvenido</h1>
@@ -1027,7 +1027,7 @@
         <div class="summary-fixed-header">
           <div class="summary-header">
             <div class="summary-logo">
-              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RleHQ+Cjwvc3ZnPg=='"/>
+              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWlsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdoQpib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHGOwoPC9zdmc+'; this.src='logo.png'" />
             </div>
             <h1 class="summary-title">Cotización - GlobalMediTH</h1>
             <div class="persuasive-message">
@@ -1093,6 +1093,7 @@
     let selectedProducts = new Map();
     let currentScreen = 1;
     let clientData = {};
+    const productsGrid = document.getElementById('productsGrid'); // Referencia directa
 
     function generateTrackingId() {
         const date = new Date();
@@ -1105,6 +1106,9 @@
         const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
         return `COT-${year}${month}${day}-${hours}${minutes}-${random}`;
     }
+
+    // Fallback SVG más robusto y genérico si la imagen no carga
+    const FALLBACK_LOGO_SVG = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zz4KPHJlY3Qgd2lkdGg9IjE1MCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHGOwoPC9zdmc+';
 
     function getBase64Image(imgUrl, callback) {
         var img = new Image();
@@ -1119,9 +1123,8 @@
             callback(dataURL);
         };
         img.onerror = function() {
-            console.error("Error al cargar la imagen para Base64. Usando fallback SVG.");
-            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fuc2ktc2VyaWYiIGZvbnQtc2l6ZT0iMTAiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TGVkZW5kb3M8L3RleHQ+Cjwvc3ZnPg==';
-            callback(fallbackSvg);
+            console.error("Error al cargar la imagen: " + imgUrl + ". Usando fallback SVG.");
+            callback(FALLBACK_LOGO_SVG);
         };
     }
 
@@ -1164,18 +1167,19 @@
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         medicamentos = await res.json();
-        if (medicamentos.length > 0 && medicamentos[0].codigoBarras === "Codigo de Barras") {
+        // Verificar y limpiar la fila de cabecera si existe
+        if (medicamentos.length > 0 && medicamentos[0].hasOwnProperty('codigoBarras') && medicamentos[0].codigoBarras === "Codigo de Barras") {
           medicamentos.shift();
         }
+        // console.log("Medicamentos cargados:", medicamentos); // Para depuración
       } catch (error) {
         console.error("Error al cargar los medicamentos:", error);
-        document.getElementById('productsGrid').innerHTML =
+        productsGrid.innerHTML =
           "<p style='text-align: center; color: #dc3545;'>Error al cargar el catálogo. Por favor, intente más tarde.</p>";
       }
     };
 
     function renderProducts(productsToRender) {
-      const productsGrid = document.getElementById('productsGrid');
       productsGrid.innerHTML = '';
       productsGrid.classList.remove('empty-message');
 
@@ -1187,16 +1191,11 @@
 
       productsToRender.forEach((product) => {
         const isSelected = selectedProducts.has(product.codigoBarras);
-        // Cantidad inicial 0 si no está seleccionado, sino la cantidad actual
         const quantity = isSelected ? selectedProducts.get(product.codigoBarras).cantidad : 0;
         
         const card = document.createElement('div');
         card.className = `product-card ${isSelected ? 'selected' : ''}`;
         
-        // CORRECCIÓN para cantidad inicial en 0 y lógica de selección
-        // Eliminar card.onclick = () => toggleProduct(product); para que la tarjeta no alterne la selección
-        // La selección/deselección ahora solo ocurre al interactuar con el input de cantidad
-
         // Asegurar que product.codigoBarras se lea correctamente.
         const displayCodigoBarras = product.codigoBarras || 'No disponible';
 
@@ -1217,72 +1216,42 @@
       updateCart();
     }
 
-    // Ya no se usa toggleProduct porque la selección se maneja por el input de cantidad
-    /*
-    function toggleProduct(product) {
-      if (selectedProducts.has(product.codigoBarras)) {
-        selectedProducts.delete(product.codigoBarras);
-      } else {
-        const inputElement = document.querySelector(`.product-card[onclick*="${product.codigoBarras}"] .quantity-input`);
-        const quantityToAdd = parseInt(inputElement ? inputElement.value : '0'); // Leer el valor actual
-        selectedProducts.set(product.codigoBarras, { ...product, cantidad: quantityToAdd > 0 ? quantityToAdd : 1 }); // Si 0, poner 1
-      }
-      const searchTerm = document.getElementById('busqueda').value.toLowerCase();
-      const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
-      renderProducts(filtered);
-      updateCart();
-    }
-    */
-
-
-    let searchTimeout; // Para el debounce del buscador
+    let searchTimeout;
 
     function updateQuantity(codigo, cantidadStr) {
-      const qty = parseInt(cantidadStr) || 0; // Si es NaN o "", será 0
-
-      if (qty < 0) return; // No permitir cantidades negativas
+      const qty = parseInt(cantidadStr) || 0;
+      
+      const cardElement = document.querySelector(`.product-card .quantity-input[onchange*="${codigo}"]`)?.closest('.product-card');
 
       if (selectedProducts.has(codigo)) {
         if (qty > 0) {
           const product = selectedProducts.get(codigo);
           product.cantidad = qty;
           selectedProducts.set(codigo, product);
+          if (cardElement) cardElement.classList.add('selected');
         } else {
-          // Si la cantidad es 0, eliminar de la selección
           selectedProducts.delete(codigo);
+          if (cardElement) cardElement.classList.remove('selected');
         }
       } else if (qty > 0) {
-        // Si no estaba seleccionado y el usuario pone una cantidad > 0, lo agrega
         const product = medicamentos.find(p => p.codigoBarras === codigo);
         if (product) {
           selectedProducts.set(codigo, { ...product, cantidad: qty });
+          if (cardElement) cardElement.classList.add('selected');
         }
-      }
-      // Re-renderizar solo la tarjeta afectada para no redibujar todo
-      // Opcional: Para el estado 'selected', podrías añadir o remover la clase.
-      const cardElement = document.querySelector(`.product-card .quantity-input[onchange*="${codigo}"]`).closest('.product-card');
-      if (cardElement) {
-          if (selectedProducts.has(codigo)) {
-              cardElement.classList.add('selected');
-          } else {
-              cardElement.classList.remove('selected');
-          }
+      } else {
+          if (cardElement) cardElement.classList.remove('selected');
       }
       updateCart();
     }
 
     function removeItemFromCart(codigo) {
       selectedProducts.delete(codigo);
-      // Actualiza el input de cantidad en la tarjeta del catálogo a 0 si existe
       const inputElement = document.querySelector(`.product-card .quantity-input[onchange*="${codigo}"]`);
       if (inputElement) {
         inputElement.value = 0;
-        inputElement.closest('.product-card').classList.remove('selected'); // Quita el estilo de seleccionado
+        inputElement.closest('.product-card').classList.remove('selected');
       }
-      // Re-renderiza solo los productos filtrados para mantener la vista consistente
-      const searchTerm = document.getElementById('busqueda').value.toLowerCase();
-      const filtered = medicamentos.filter(m => filterProduct(m, searchTerm));
-      renderProducts(filtered);
       updateCart();
     }
 
@@ -1321,8 +1290,8 @@
     }
 
     document.getElementById('busqueda').addEventListener('keyup', function() {
-      clearTimeout(searchTimeout); // Limpiar cualquier timeout anterior
-      searchTimeout = setTimeout(() => { // Establecer un nuevo timeout
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
         const searchTerm = this.value.toLowerCase().trim();
         if (searchTerm.length > 0) {
           const filteredProducts = medicamentos.filter(product => {
@@ -1330,11 +1299,10 @@
           });
           renderProducts(filteredProducts);
         } else {
-          const productsGrid = document.getElementById('productsGrid');
           productsGrid.innerHTML = '<p class="empty-message">Por favor, usa el buscador para encontrar productos.</p>';
           productsGrid.classList.add('empty-message');
         }
-      }, 300); // Espera 300ms antes de ejecutar la búsqueda
+      }, 300); // Debounce de 300ms
     });
 
     function filterProduct(product, searchTerm) {
@@ -1401,85 +1369,87 @@
 
         getBase64Image('logo.png', function(logoBase64) {
             const pageWidth = doc.internal.pageSize.getWidth();
+            const margin = 10;
+            let y = margin;
+
+            // Logo centrado
             const imgWidth = 50;
             const imgHeight = (imgWidth * 420) / 1488;
             const imgX = (pageWidth - imgWidth) / 2;
-            let y = 10; // Inicio Y para el contenido
+            doc.addImage(logoBase64, 'PNG', imgX, y, imgWidth, imgHeight);
+            y += imgHeight + 10;
 
-            if (logoBase64) {
-                doc.addImage(logoBase64, 'PNG', imgX, y, imgWidth, imgHeight);
-            } else {
-                // Fallback a un SVG genérico si la imagen no carga
-                const fallbackSvgBase64 = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zz4KPHJlY3Qgd2lkdGg9IjE1MCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9vcj0ibWlkZGxlIj5HbG9iYWxNZWRpVEg8L3RleHQ+Cjx0ZXh0IHg9Ijc1IiB5PSI2NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9vcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHGOwoPC9zdmc+';
-                doc.addImage(fallbackSvgBase64, 'PNG', imgX, y, imgWidth, imgHeight);
-            }
-            y += imgHeight + 10; /* Espacio después del logo */
-
-
-            // Encabezado principal
+            // Título de Cotización
             doc.setFontSize(20);
-            doc.setTextColor(44, 62, 80);
+            doc.setTextColor(44, 62, 80); /* #2c3e50 */
             doc.text("Cotización - GlobalMediTH", pageWidth / 2, y, { align: "center" });
             y += 8;
             doc.setFontSize(9);
-            doc.setTextColor(50, 150, 70);
+            doc.setTextColor(50, 150, 70); /* #329646 */
             doc.text("¡Medicamentos de calidad con atención personalizada para tu tranquilidad!", pageWidth / 2, y, { align: "center" });
-            y += 15; /* Espacio después del mensaje persuasivo */
+            y += 15;
 
             // Datos de Contacto de Ventas y Datos del Cliente (diseño en columnas simulado)
-            const lineHeight = 5;
-            const startX_col1 = 10;
-            const startX_col2 = pageWidth / 2 + 5; // Inicia la segunda columna un poco a la derecha del centro
+            const boxPadding = 5;
+            const lineHeight = 4.5;
+            const boxContentHeight = 4 * lineHeight + 5; /* 4 líneas de texto + espacio del título */
+            const boxFullHeight = boxContentHeight + boxPadding * 2; /* Contenido + paddings superior/inferior */
+            const boxWidth = (pageWidth / 2) - (margin + 5);
 
-            doc.setFontSize(9);
-
-            // Datos de Contacto de Ventas
-            doc.setDrawColor(233, 236, 239); /* Color de borde */
+            // Caja de Contacto de Ventas
             doc.setFillColor(248, 249, 250); /* Fondo #f8f9fa */
-            doc.rect(startX_col1 - 3, y - 3, (pageWidth / 2) - startX_col1 - 2, 4 * lineHeight + 15, 'FD'); /* Fondo para la caja 1 */
-            doc.setTextColor(44, 62, 80);
-            doc.setFont(undefined, 'bold');
-            doc.text("Datos de Contacto de Ventas:", startX_col1, y);
-            y += lineHeight + 3;
-            doc.setFont(undefined, 'normal');
-            doc.setTextColor(73, 80, 87); /* Color de texto #495057 */
-            doc.text(`Celular: 2381646718`, startX_col1, y);
-            y += lineHeight;
-            doc.text(`Correo: globalmedith@gmail.com`, startX_col1, y);
-            y += lineHeight;
-            doc.text(`Ubicación: Tehuacán, Puebla`, startX_col1, y);
-            y_col1_end = y; // Guarda la altura final de la columna 1
+            doc.rect(margin, y, boxWidth, boxFullHeight, 'F');
+            doc.setDrawColor(233, 236, 239); /* Borde #e9ecef */
+            doc.setLineWidth(0.5); /* Grosor del borde de la caja */
+            doc.rect(margin, y, boxWidth, boxFullHeight, 'S'); /* Dibujar borde */
 
-            // Datos del Cliente (posicionado a la derecha de la columna 1)
-            let y_client = y_contact_start = y_contact_start_logo = y - (3 * lineHeight + 13); /* Reusa el inicio Y de la caja de contacto */
+            let currentY_col1 = y + boxPadding;
+            doc.setFontSize(9);
+            doc.setTextColor(44, 62, 80); /* #2c3e50 */
+            doc.setFont(undefined, 'bold');
+            doc.text("Datos de Contacto de Ventas:", margin + boxPadding, currentY_col1);
+            currentY_col1 += lineHeight + 2; /* Título + espacio */
+            doc.setFont(undefined, 'normal');
+            doc.setTextColor(73, 80, 87); /* #495057 */
+            doc.text(`Celular: 2381646718`, margin + boxPadding, currentY_col1);
+            currentY_col1 += lineHeight;
+            doc.text(`Correo: globalmedith@gmail.com`, margin + boxPadding, currentY_col1);
+            currentY_col1 += lineHeight;
+            doc.text(`Ubicación: Tehuacán, Puebla`, margin + boxPadding, currentY_col1);
+
+            // Caja de Datos del Cliente
+            let yClientBox = y; /* Mismo Y inicial que la caja de contacto */
             doc.setFillColor(227, 242, 253); /* Fondo #e3f2fd */
-            doc.rect(startX_col2 - 3, y_client - 3, (pageWidth / 2) - startX_col1 - 2, 4 * lineHeight + 15, 'FD'); /* Fondo para la caja 2 */
+            doc.rect(pageWidth / 2 + 5, yClientBox, boxWidth, boxFullHeight, 'F');
+            doc.setDrawColor(233, 236, 239);
+            doc.rect(pageWidth / 2 + 5, yClientBox, boxWidth, boxFullHeight, 'S'); /* Dibujar borde */
+
+            let currentY_col2 = yClientBox + boxPadding;
+            doc.setFontSize(9);
             doc.setTextColor(44, 62, 80);
             doc.setFont(undefined, 'bold');
-            doc.text("Datos del Cliente:", startX_col2, y_client);
-            y_client += lineHeight + 3;
+            doc.text("Datos del Cliente:", pageWidth / 2 + 5 + boxPadding, currentY_col2);
+            currentY_col2 += lineHeight + 2;
             doc.setFont(undefined, 'normal');
             doc.setTextColor(73, 80, 87);
-            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, startX_col2, y_client);
-            y_client += lineHeight;
-            doc.text(`Celular: ${clientData.celular || 'N/A'}`, startX_col2, y_client);
-            y_client += lineHeight;
-            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, startX_col2, y_client);
-            y_client += lineHeight;
-            doc.text(`Correo: ${clientData.correo || 'N/A'}`, startX_col2, y_client);
-            y_col2_end = y_client;
+            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, pageWidth / 2 + 5 + boxPadding, currentY_col2);
+            currentY_col2 += lineHeight;
+            doc.text(`Celular: ${clientData.celular || 'N/A'}`, pageWidth / 2 + 5 + boxPadding, currentY_col2);
+            currentY_col2 += lineHeight;
+            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, pageWidth / 2 + 5 + boxPadding, currentY_col2);
+            currentY_col2 += lineHeight;
+            doc.text(`Correo: ${clientData.correo || 'N/A'}`, pageWidth / 2 + 5 + boxPadding, currentY_col2);
 
-            // Ajustar el Y para el contenido siguiente (productos)
-            y = Math.max(y_col1_end, y_col2_end) + 15; /* El mayor de los dos finales + espacio */
+            y = y + boxFullHeight + 15; /* Mueve el Y al final de las cajas + espacio */
 
-            // Productos seleccionados (usando autoTable)
+            // Título Productos Seleccionados
             doc.setFontSize(10);
             doc.setTextColor(44, 62, 80);
             doc.setFont(undefined, 'bold');
-            doc.text("Productos Seleccionados:", 10, y);
+            doc.text("Productos Seleccionados:", margin, y);
             y += 7;
-            doc.setFont(undefined, 'normal');
 
+            // Preparar datos para autoTable
             const headers = [["Código de Barras", "Descripción", "Laboratorio", "Cantidad"]];
             const data = Array.from(selectedProducts.values()).map(p => [
               p.codigoBarras || 'N/A',
@@ -1499,22 +1469,22 @@
                 cellPadding: 2,
                 overflow: 'linebreak',
                 textColor: [51, 51, 51], /* Color de texto general */
-                lineColor: [229, 229, 229], /* Color de líneas, similar a #ddd */
-                lineWidth: 0.1 /* Grosor de líneas */
+                lineColor: [221, 221, 221], /* Color de líneas, similar a #ddd */
+                lineWidth: 0.1
               },
               headStyles: {
                 fillColor: [248, 249, 250], /* Fondo gris claro para encabezado #f8f9fa */
                 textColor: [44, 62, 80], /* Color de texto oscuro #2c3e50 */
                 fontStyle: 'bold',
                 halign: 'left',
-                lineColor: [229, 229, 229],
+                lineColor: [221, 221, 221],
                 lineWidth: 0.1
               },
               bodyStyles: {
                 fillColor: [241, 248, 233], /* Color de fondo para filas impares #f1f8e9 */
                 alternateFillColor: [255, 255, 255], /* Color de fondo para filas pares (blanco) */
                 textColor: [51, 51, 51],
-                lineColor: [229, 229, 229],
+                lineColor: [221, 221, 221],
                 lineWidth: 0.1
               },
               columnStyles: {
@@ -1523,9 +1493,9 @@
                 2: { cellWidth: 25 }, /* Laboratorio */
                 3: { cellWidth: 15, halign: 'center' } /* Cantidad (centrado) */
               },
-              margin: { left: 10, right: 10 },
+              margin: { left: margin, right: margin },
               didDrawPage: function(data) {
-                // Dibujar un rectángulo alrededor de la tabla para simular el borde de la caja
+                // Rectángulo alrededor de la tabla para simular el borde de la caja de productos
                 doc.setDrawColor(229, 229, 229); /* Color de borde */
                 doc.setLineWidth(0.5); /* Grosor del borde */
                 doc.rect(
