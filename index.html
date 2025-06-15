@@ -19,18 +19,18 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #333;
-      min-height: 100vh; /* Asegura que el body siempre tenga al menos la altura de la vista */
+      height: 100%; /* Asegura que el body ocupe el 100% de la altura del viewport */
       width: 100%; /* Asegura que el body ocupe el 100% del ancho */
-      overflow-x: hidden; /* Evita scroll horizontal no deseado */
+      overflow: hidden; /* Oculta el scroll global del body; el .container lo manejará en desktop, las pantallas en móvil */
       position: relative; /* Para que el fondo cubra todo el viewport */
     }
 
     .container {
       width: 100%;
-      max-width: 100%; /* Por defecto 100% en móvil */
-      min-height: 100vh; /* Ocupa al menos el 100% de la altura del viewport en móvil */
+      max-width: 100%; /* Ocupa el 100% del ancho del viewport en móvil */
+      min-height: 100vh; /* Ocupa el 100% de la altura del viewport en móvil */
       position: relative; /* Para que las .screen se posicionen absolutamente dentro */
-      overflow-y: auto; /* Permite scroll vertical en el contenedor principal en móvil */
+      overflow-y: auto; /* Permite scroll vertical en el contenedor principal en móvil si el contenido es largo */
       -webkit-overflow-scrolling: touch;
       padding: 15px; /* Padding general para móvil */
       background: transparent; /* Por defecto, no tiene fondo, el fondo del body es el degradado */
@@ -770,22 +770,24 @@
     /* Media Query para Escritorios (min-width: 1024px) */
     /* ------------------------------------------- */
     @media (min-width: 1024px) {
-      body {
-        overflow: hidden; /* Oculta el scroll global del body; el .container lo manejará */
+      html, body {
+        /* Permite que el body defina el tamaño para el centrado global de .container */
+        height: 100%;
+        overflow: hidden; /* Oculta el scroll global del body */
       }
       .container {
-        max-width: 1200px; /* Ancho más controlado para contenido principal */
+        max-width: 1000px; /* Ancho fijo para la "aplicación flotante" */
         height: calc(100vh - 60px); /* Altura de la "ventana de aplicación" en desktop */
-        min-height: calc(100vh - 60px); /* Asegura que no se colapse */
+        min-height: 700px; /* Altura mínima para que no se vea muy pequeña */
         margin: 30px auto; /* Centra y da espacio alrededor */
         background: white; /* Fondo blanco visible para el contenedor principal */
         box-shadow: 0 0 40px rgba(0,0,0,0.3); /* Sombra más pronunciada */
         border-radius: 25px; /* Bordes más redondeados */
         padding: 30px; /* Padding general más amplio para desktop */
         overflow-y: hidden; /* El contenedor principal en desktop NO SCROLLEA */
-        display: flex; /* Añadir flex para que las pantallas internas puedan distribuirse */
-        justify-content: center; /* Centrar las pantallas */
-        align-items: center; /* Centrar las pantallas */
+        display: flex; /* Para centrar y distribuir las pantallas internas */
+        justify-content: center;
+        align-items: center;
       }
 
       /* Asegurarse que las pantallas internas se adapten bien al .container */
@@ -804,7 +806,7 @@
       .screen.active {
           flex-direction: column; /* Contenido de la pantalla apilado verticalmente */
           justify-content: flex-start; /* Alinear arriba, el scroll controlará el resto */
-          /* align-items ya está en screen general */
+          align-items: center; /* Centrar horizontalmente */
       }
 
       /* PANTALLA 1 - REGISTRO */
@@ -816,17 +818,18 @@
       }
       .welcome-card {
         padding: 40px;
-        max-width: 600px; /* Asegura que no sea demasiado ancho */
+        max-width: 500px; /* CORRECCIÓN: Tamaño más compacto y estético en desktop */
+        height: auto; /* Permitir que se ajuste a su contenido */
         gap: 30px;
       }
       .logo img {
-        height: 120px;
+        height: 100px;
       }
       .welcome-title {
-        font-size: 2.8em;
+        font-size: 2.5em;
       }
       .welcome-subtitle {
-        font-size: 1.3em;
+        font-size: 1.2em;
       }
       .persuasive-message {
         padding: 20px;
@@ -1362,19 +1365,21 @@
     }
 
     async function generarPDF() {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => { // Añadimos reject para manejar errores
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
-        // Usar la función getBase64Image que ya tiene el fallback
-        getBase64Image('logo.png', function(logoBase64) {
+        // Usamos el fallback SVG directamente para la estabilidad, evitando errores de carga de logo.png
+        const logoBase64 = FALLBACK_LOGO_SVG; // Siempre usar el SVG fallback
+        
+        try {
             const pageWidth = doc.internal.pageSize.getWidth();
             const margin = 10;
             let y = margin;
 
             // Logo centrado
             const imgWidth = 50;
-            const imgHeight = (imgWidth * 420) / 1488;
+            const imgHeight = (imgWidth * 420) / 1488; // Proporción original del logo
             const imgX = (pageWidth - imgWidth) / 2;
             doc.addImage(logoBase64, 'PNG', imgX, y, imgWidth, imgHeight);
             y += imgHeight + 10;
@@ -1519,7 +1524,10 @@
             });
 
             resolve(doc.output('blob'));
-        });
+        } catch (pdfError) {
+            console.error("Error al generar PDF con jsPDF:", pdfError);
+            reject(pdfError); // Rechaza la promesa si hay un error en jsPDF
+        }
       });
     }
 
@@ -1565,9 +1573,7 @@
             whatsappBtn.disabled = true;
             whatsappBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando Cotización...';
 
-            // Aquí se llama a generarPDF, que usa la promesa.
-            // Si hay un problema en generarPDF (ej. logo no carga), la promesa no se resuelve
-            // y el await se queda esperando, causando el "congelamiento".
+            // El await generará un error aquí si generarPDF() falla o no resuelve
             const pdfBlob = await generarPDF(); // Espera a que el PDF se genere
 
             const filename = `Cotizacion_GlobalMediTH_${(clientData.nombre || 'cliente').replace(/\s/g, '_')}.pdf`;
@@ -1599,10 +1605,10 @@
             }, 700);
 
         } catch (error) {
-            console.error("Error al generar PDF o enviar WhatsApp:", error);
-            alert("Hubo un error al generar la cotización o abrir WhatsApp. Por favor, inténtalo de nuevo.");
+            console.error("Error CRÍTICO al generar PDF o enviar WhatsApp:", error);
+            alert("¡Error al generar la cotización! Por favor, verifica la consola para más detalles e inténtalo de nuevo.");
             const whatsappBtn = document.querySelector('.btn-whatsapp');
-            if (whatsappBtn) { // Asegurarse de que el botón exista antes de intentar modificarlo
+            if (whatsappBtn) {
               whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar por WhatsApp';
               whatsappBtn.disabled = false;
             }
