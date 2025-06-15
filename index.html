@@ -19,18 +19,18 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #333;
-      height: 100%; /* Asegura que el body ocupe el 100% de la altura del viewport */
-      width: 100%;
-      overflow: hidden; /* Oculta el scroll global del body; el .container lo manejará en desktop, las pantallas en móvil */
-      position: relative; /* Para que el fondo cubra todo */
+      min-height: 100vh; /* Asegura que el body siempre tenga al menos la altura de la vista */
+      width: 100%; /* Asegura que el body ocupe el 100% del ancho */
+      overflow-x: hidden; /* Evita scroll horizontal no deseado */
+      position: relative; /* Para que el fondo cubra todo el viewport */
     }
 
     .container {
       width: 100%;
-      max-width: 100%; /* Ocupa el 100% del ancho del viewport en móvil */
-      min-height: 100vh; /* Ocupa el 100% de la altura del viewport en móvil */
+      max-width: 100%; /* Por defecto 100% en móvil */
+      min-height: 100vh; /* Ocupa al menos el 100% de la altura del viewport en móvil */
       position: relative; /* Para que las .screen se posicionen absolutamente dentro */
-      overflow-y: auto; /* Permite scroll vertical en el contenedor principal en móvil si el contenido es largo */
+      overflow-y: auto; /* Permite scroll vertical en el contenedor principal en móvil */
       -webkit-overflow-scrolling: touch;
       padding: 15px; /* Padding general para móvil */
       background: transparent; /* Por defecto, no tiene fondo, el fondo del body es el degradado */
@@ -912,7 +912,7 @@
       <div class="welcome-screen">
         <div class="welcome-card">
           <div class="logo">
-            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWlsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdoQpib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHGOwoPC9zdmc+'; this.src='logo.png'" />
+            <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src = FALLBACK_LOGO_SVG; console.error('Error al cargar logo.png, usando fallback SVG.');" />
           </div>
 
           <h1 class="welcome-title">Bienvenido</h1>
@@ -1027,7 +1027,7 @@
         <div class="summary-fixed-header">
           <div class="summary-header">
             <div class="summary-logo">
-              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiLz4KPHRleHQgeD0iNzUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWlsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdoQpib2xkIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2xvYmFsTWVkaVRIPC90ZXh0Pgo8dGV4dCB4PSI3NSIgeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHGOwoPC9zdmc+'; this.src='logo.png'" />
+              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src = FALLBACK_LOGO_SVG; console.error('Error al cargar logo.png, usando fallback SVG.');" />
             </div>
             <h1 class="summary-title">Cotización - GlobalMediTH</h1>
             <div class="persuasive-message">
@@ -1124,7 +1124,7 @@
         };
         img.onerror = function() {
             console.error("Error al cargar la imagen: " + imgUrl + ". Usando fallback SVG.");
-            callback(FALLBACK_LOGO_SVG);
+            callback(FALLBACK_LOGO_SVG); // Usar el SVG fallback definido globalmente
         };
     }
 
@@ -1167,11 +1167,11 @@
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         medicamentos = await res.json();
-        // Verificar y limpiar la fila de cabecera si existe
+        // Verificar y limpiar la fila de cabecera si existe (manejo robusto de hasOwnProperty)
         if (medicamentos.length > 0 && medicamentos[0].hasOwnProperty('codigoBarras') && medicamentos[0].codigoBarras === "Codigo de Barras") {
           medicamentos.shift();
         }
-        // console.log("Medicamentos cargados:", medicamentos); // Para depuración
+        // console.log("Medicamentos cargados:", medicamentos); // Para depuración, descomentar si es necesario
       } catch (error) {
         console.error("Error al cargar los medicamentos:", error);
         productsGrid.innerHTML =
@@ -1196,7 +1196,6 @@
         const card = document.createElement('div');
         card.className = `product-card ${isSelected ? 'selected' : ''}`;
         
-        // Asegurar que product.codigoBarras se lea correctamente.
         const displayCodigoBarras = product.codigoBarras || 'No disponible';
 
         card.innerHTML = `
@@ -1367,6 +1366,7 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
+        // Usar la función getBase64Image que ya tiene el fallback
         getBase64Image('logo.png', function(logoBase64) {
             const pageWidth = doc.internal.pageSize.getWidth();
             const margin = 10;
@@ -1389,11 +1389,17 @@
             doc.text("¡Medicamentos de calidad con atención personalizada para tu tranquilidad!", pageWidth / 2, y, { align: "center" });
             y += 15;
 
-            // Datos de Contacto de Ventas y Datos del Cliente (diseño en columnas simulado)
+            // Datos de Contacto y Cliente (diseño en columnas simulado)
             const boxPadding = 5;
-            const lineHeight = 4.5;
-            const boxContentHeight = 4 * lineHeight + 5; /* 4 líneas de texto + espacio del título */
-            const boxFullHeight = boxContentHeight + boxPadding * 2; /* Contenido + paddings superior/inferior */
+            const lineHeight = 4.5; /* Altura de una línea de texto */
+            const titleLineHeight = 6; /* Altura de la línea del título de la caja */
+            const numLinesContact = 3; /* Celular, Correo, Ubicación */
+            const numLinesClient = 4; /* Nombre, Celular, Ciudad, Correo */
+
+            const boxContentHeightContact = numLinesContact * lineHeight + titleLineHeight + (numLinesContact -1)*1; /* Contenido + espacio entre lineas */
+            const boxContentHeightClient = numLinesClient * lineHeight + titleLineHeight + (numLinesClient -1)*1;
+            const boxFullHeight = Math.max(boxContentHeightContact, boxContentHeightClient) + boxPadding * 2 + 5; /* Altura de la caja + paddings superior/inferior + ajuste extra */
+            
             const boxWidth = (pageWidth / 2) - (margin + 5);
 
             // Caja de Contacto de Ventas
@@ -1403,7 +1409,7 @@
             doc.setLineWidth(0.5); /* Grosor del borde de la caja */
             doc.rect(margin, y, boxWidth, boxFullHeight, 'S'); /* Dibujar borde */
 
-            let currentY_col1 = y + boxPadding;
+            let currentY_col1 = y + boxPadding + 3; /* +3 para ajuste visual del título */
             doc.setFontSize(9);
             doc.setTextColor(44, 62, 80); /* #2c3e50 */
             doc.setFont(undefined, 'bold');
@@ -1424,7 +1430,7 @@
             doc.setDrawColor(233, 236, 239);
             doc.rect(pageWidth / 2 + 5, yClientBox, boxWidth, boxFullHeight, 'S'); /* Dibujar borde */
 
-            let currentY_col2 = yClientBox + boxPadding;
+            let currentY_col2 = yClientBox + boxPadding + 3;
             doc.setFontSize(9);
             doc.setTextColor(44, 62, 80);
             doc.setFont(undefined, 'bold');
@@ -1559,7 +1565,11 @@
             whatsappBtn.disabled = true;
             whatsappBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando Cotización...';
 
-            const pdfBlob = await generarPDF();
+            // Aquí se llama a generarPDF, que usa la promesa.
+            // Si hay un problema en generarPDF (ej. logo no carga), la promesa no se resuelve
+            // y el await se queda esperando, causando el "congelamiento".
+            const pdfBlob = await generarPDF(); // Espera a que el PDF se genere
+
             const filename = `Cotizacion_GlobalMediTH_${(clientData.nombre || 'cliente').replace(/\s/g, '_')}.pdf`;
 
             const url = URL.createObjectURL(pdfBlob);
@@ -1592,8 +1602,10 @@
             console.error("Error al generar PDF o enviar WhatsApp:", error);
             alert("Hubo un error al generar la cotización o abrir WhatsApp. Por favor, inténtalo de nuevo.");
             const whatsappBtn = document.querySelector('.btn-whatsapp');
-            whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar por WhatsApp';
-            whatsappBtn.disabled = false;
+            if (whatsappBtn) { // Asegurarse de que el botón exista antes de intentar modificarlo
+              whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar por WhatsApp';
+              whatsappBtn.disabled = false;
+            }
         }
     }
   </script>
