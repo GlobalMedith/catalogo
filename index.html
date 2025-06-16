@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GlobalMediTH - Sistema de Cotización</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
   <style>
     /* Estilos Generales - Mobile First (para pantallas pequeñas por defecto) */
     * {
@@ -1099,7 +1097,7 @@
             </div>
             <button class="btn btn-success" onclick="goToSummary()" id="quoteBtnMain" disabled>
               <i class="fas fa-file-invoice"></i>
-              Generar Cotización
+              Enviar Cotización por WhatsApp
             </button>
           </div>
         </div>
@@ -1111,7 +1109,7 @@
         <div class="summary-fixed-header">
           <div class="summary-header">
             <div class="summary-logo">
-              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCBxPSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
+              <img src="logo.png" alt="GlobalMediTH Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCBxPSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlpaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4='"/>
             </div>
             <h1 class="summary-title">Cotización - GlobalMediTH</h1>
             <div class="persuasive-message">
@@ -1162,9 +1160,9 @@
         </div>
 
         <div class="summary-actions">
-          <button class="btn btn-whatsapp" onclick="generarPDFyEnviarWhatsApp()">
+          <button class="btn btn-success" onclick="goToSummary()" id="quoteBtnMain" disabled>
             <i class="fab fa-whatsapp"></i>
-            Enviar por WhatsApp
+            Enviar Cotización por WhatsApp
           </button>
         </div>
       </div>
@@ -1200,26 +1198,7 @@
         const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
         return `COT-${year}${month}${day}-${hours}${minutes}-${random}`;
     }
-
-    function getBase64Image(imgUrl, callback) {
-        var img = new Image();
-        img.src = imgUrl;
-        img.onload = function () {
-            var canvas = document.createElement("canvas");
-            canvas.width = img.width;
-            canvas.height = img.height;
-            var ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0);
-            var dataURL = canvas.toDataURL("image/png");
-            callback(dataURL);
-        };
-        img.onerror = function() {
-            console.error("Error al cargar la imagen para Base64. Usando fallback SVG.");
-            const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCBxPSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=';
-            callback(fallbackSvg);
-        };
-    }
-
+    
     function goToScreen(screenNumber) {
       document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
@@ -1454,193 +1433,19 @@
              codigoBarras.includes(searchTerm);
     }
 
+    // Modificada para llamar a enviarCotizacionPorWhatsApp directamente
     function goToSummary() {
       if (selectedProducts.size === 0) {
-        showCustomAlert('Error de Cotización', 'Por favor, selecciona al menos un producto para generar la cotización.');
+        showCustomAlert('Error de Cotización', 'Por favor, selecciona al menos un producto para enviar la cotización.');
         return;
       }
-      populateSummary();
-      goToScreen(3);
+      enviarCotizacionPorWhatsApp();
     }
 
-    function populateSummary() {
-      const clientSummaryDiv = document.getElementById('clientSummary');
-      clientSummaryDiv.innerHTML = `
-        <div class="contact-item">
-          <i class="fas fa-user"></i>
-          <span>Nombre: ${clientData.nombre || 'N/A'}</span>
-        </div>
-        <div class="contact-item">
-          <i class="fas fa-phone"></i>
-          <span>Celular: ${clientData.celular || 'N/A'}</span>
-        </div>
-        <div class="contact-item">
-          <i class="fas fa-map-marker-alt"></i>
-          <span>Ciudad: ${clientData.ciudad || 'N/A'}</span>
-        </div>
-        <div class="contact-item">
-          <i class="fas fa-envelope"></i>
-          <span>Correo: ${clientData.correo || 'N/A'}</span>
-        </div>
-      `;
-
-      const summaryTableBody = document.querySelector('#summaryTable tbody');
-      summaryTableBody.innerHTML = '';
-      if (selectedProducts.size === 0) {
-        summaryTableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; font-style: italic;">No hay productos seleccionados para la cotización.</td></tr>`;
-      } else {
-        selectedProducts.forEach(product => {
-          const row = summaryTableBody.insertRow();
-          row.insertCell().textContent = product.codigoBarras || 'N/A';
-          row.insertCell().textContent = product.descripcion || 'Sin descripción';
-          row.insertCell().textContent = product.laboratorio || 'No especificado';
-          row.insertCell().textContent = product.cantidad;
-        });
-      }
-    }
-
+    // Función "simulada" de generarPDF, siempre resuelve inmediatamente.
+    // Mantenemos su esqueleto porque la función enviarCotizacionPorWhatsApp la "await"a.
     async function generarPDF() {
-      return new Promise((resolve) => {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-
-        // Obtener logo en Base64
-        getBase64Image('logo.png', function(logoBase64) {
-            const pageWidth = doc.internal.pageSize.getWidth();
-            const marginX = 15; 
-            
-            let currentY = 15; // Posición Y inicial para el encabezado
-
-            // --- Parte Superior: Logo y texto "Global MediTH" (Alineado a la izquierda) ---
-            const logoWidth = 25; // Tamaño del logo más pequeño, como en la imagen
-            const logoHeight = (logoWidth * 420) / 1488; 
-            doc.addImage(logoBase64 || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9IiMyNzQ5YjgiPgo8dGV4dCBxPSI3NSI yeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmllbCwgYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdsb2JhbE1lZGlUSDwvdGV4dD4KPHRleHQyeD0iNzUgc2kyeT0iNjUiIGZvbnQtZmFtaWx5PSJhcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5NZWRpY2FtZW50b3M8L2RldHh0Pgo8L3N2Zz4=', 'PNG', marginX, currentY, logoWidth, logoHeight);
-            
-            doc.setFontSize(9); 
-            doc.setTextColor(44, 62, 80);
-            doc.setFont(undefined, 'bold');
-            doc.text("Global MediTH", marginX + logoWidth + 3, currentY + logoHeight / 2 + 1); // Posición a la derecha del logo
-            
-            // --- Título "Cotización - GlobalMediTH" y Mensaje Persuasivo (Alineado a la izquierda, como en la imagen) ---
-            currentY += logoHeight + 5; // Mover Y debajo del logo y su texto
-            doc.setFontSize(16); 
-            doc.setTextColor(44, 62, 80);
-            doc.setFont(undefined, 'bold');
-            doc.text("Cotización - GlobalMediTH", marginX, currentY); // Alineado a la izquierda
-            currentY += 8; 
-
-            doc.setFontSize(7.5);
-            doc.setTextColor(50, 150, 70);
-            doc.setFont(undefined, 'normal');
-            doc.text("¡Medicamentos de calidad con atención personalizada para tu tranquilidad!", marginX, currentY); // Alineado a la izquierda
-            currentY += 12; 
-
-            // --- SECCIÓN DE DATOS (dos bloques posicionados manualmente para imitar la imagen) ---
-            const col1X = marginX; // Columna izquierda de datos (Datos de Contacto)
-            const col2X = pageWidth / 2 + 15; // Columna derecha de datos (Datos del Cliente + Folio), ajustada para que el texto de la izquierda no se superponga
-            
-            let yCol1 = currentY; // Y inicial para la columna izquierda de datos
-            let yCol2 = currentY; // Y inicial para la columna derecha de datos, alineada con la izquierda
-
-            // Datos de Contacto de Ventas (Columna Izquierda)
-            doc.setFontSize(8); 
-            doc.setTextColor(0, 0, 0);
-            doc.setFont(undefined, 'bold');
-            doc.text("Datos de Contacto de Ventas:", col1X, yCol1);
-            yCol1 += 4;
-            doc.setFont(undefined, 'normal');
-            doc.setFontSize(6.5);
-            doc.text(`Celular: 2381646718`, col1X, yCol1);
-            yCol1 += 3.5;
-            doc.text(`Correo: globalmedith@gmail.com`, col1X, yCol1);
-            yCol1 += 3.5;
-            doc.text(`Ubicación: Tehuacán, Puebla`, col1X, yCol1);
-            yCol1 += 3.5; 
-
-            // Datos del Cliente y Folio (Columna Derecha)
-            doc.setFontSize(8);
-            doc.setTextColor(0, 0, 0);
-            doc.setFont(undefined, 'bold');
-            doc.text("Datos del Cliente:", col2X, yCol2);
-            yCol2 += 4;
-
-            doc.setFontSize(7.5); // Nombre del Cliente más grande y en negrita
-            doc.setFont(undefined, 'bold');
-            doc.text(`Nombre: ${clientData.nombre || 'N/A'}`, col2X, yCol2);
-            yCol2 += 4.5;
-
-            doc.setFont(undefined, 'normal');
-            doc.setFontSize(6.5);
-            doc.text(`Celular: ${clientData.celular || 'N/A'}`, col2X, yCol2);
-            yCol2 += 3.5;
-            doc.text(`Ciudad: ${clientData.ciudad || 'N/A'}`, col2X, yCol2);
-            yCol2 += 3.5;
-            doc.text(`Correo: ${clientData.correo || 'N/A'}`, col2X, yCol2);
-            yCol2 += 3.5;
-
-            // Folio de Cotización (debajo de Datos del Cliente)
-            doc.setFontSize(8);
-            doc.setTextColor(0, 0, 0);
-            doc.setFont(undefined, 'bold');
-            doc.text(`Folio de Cotización: ${clientData.folio || 'N/A'}`, col2X, yCol2 + 2); // Espacio después del correo
-            yCol2 += 10; // Final de la sección de datos del cliente
-
-            // Determinar la posición Y para la tabla de productos (debajo de la columna de datos más baja)
-            let startYForTable = Math.max(yCol1, yCol2) + 8; 
-
-            // Título "Productos Seleccionados"
-            doc.setFontSize(9);
-            doc.setFont(undefined, 'bold');
-            doc.text("Productos Seleccionados:", marginX, startYForTable);
-            startYForTable += 5;
-
-            const headers = [["Código de Barras", "Descripción", "Laboratorio", "Cantidad"]];
-            const data = Array.from(selectedProducts.values()).map(p => [
-              p.codigoBarras || 'N/A',
-              p.descripcion || 'Sin descripción',
-              p.laboratorio || 'No especificado',
-              p.cantidad
-            ]);
-
-            doc.autoTable({
-              startY: startYForTable,
-              head: headers,
-              body: data,
-              theme: 'striped',
-              styles: {
-                fontSize: 6.5,
-                cellPadding: 1.2,
-                overflow: 'linebreak', // Permitir que el texto se ajuste a múltiples líneas
-                textColor: [51, 51, 51]
-              },
-              headStyles: {
-                fillColor: [248, 249, 250],
-                textColor: [44, 62, 80],
-                fontStyle: 'bold',
-                halign: 'left'
-              },
-              bodyStyles: {
-                fillColor: [241, 248, 233],
-                alternateFillColor: [255, 255, 255]
-              },
-              columnStyles: {
-                // Ajustados según la imagen de referencia para evitar recortes y amontonamientos
-                0: { cellWidth: 20 }, // Código de Barras (ajustado para ser estrecho)
-                1: { cellWidth: 75 }, // CLAVE: Descripción (¡Más ancho!)
-                2: { cellWidth: 25 }, // Laboratorio (ancho medio)
-                3: { cellWidth: 10, halign: 'center' } // Cantidad (estrecho y centrado)
-              },
-              margin: { left: marginX, right: marginX },
-              didDrawPage: function(data) {
-                doc.setFontSize(8);
-                const pageCount = doc.internal.getNumberOfPages();
-                doc.text(`Página ${data.pageNumber} de ${pageCount}`, data.settings.margin.left, doc.internal.pageSize.height - 10);
-              }
-            });
-
-            resolve(doc.output('blob'));
-        });
-      });
+      return Promise.resolve(true); 
     }
 
     function generateWhatsAppMessage() {
@@ -1650,9 +1455,11 @@
         const ciudad = clientData.ciudad || 'N/A';
         const correo = clientData.correo || 'N/A';
 
-        let message = `*Solicitud de Cotización - Global MediTH*\n\n`;
+        let message = `*Cotización de Medicamentos - Global MediTH*\n\n`;
 
-        message += `\u{1F4C3} *Folio:* ${folio}\n`;
+        message += `\u{1F4C3} *Folio de Cotización:* ${folio}\n\n`;
+
+        message += `*Datos del Cliente:*\n`;
         message += `  🧑‍💻 *Nombre:* ${nombre}\n`;
         message += `  📱 *Celular:* ${celular}\n`;
         message += `  🏙️ *Ciudad:* ${ciudad}\n`;
@@ -1665,57 +1472,54 @@
             selectedProducts.forEach(product => {
                 const codigo = product.codigoBarras || 'N/A';
                 message += `  • ${product.descripcion || 'Sin descripción'} (${codigo})\n`;
+                message += `    Laboratorio: ${product.laboratorio || 'N/A'}\n`;
                 message += `    Cantidad: ${product.cantidad}\n\n`;
             });
         }
-        message += `Gracias por su preferencia.`;
+        message += `¡Gracias por tu preferencia y por confiar en Global MediTH!`;
 
         return message;
     }
 
 
-    async function generarPDFyEnviarWhatsApp() {
+    // Función principal para enviar por WhatsApp
+    async function enviarCotizacionPorWhatsApp() {
         if (selectedProducts.size === 0) {
-            showCustomAlert('Error de Cotización', 'Por favor, selecciona al menos un producto para generar la cotización.');
+            showCustomAlert('Error de Cotización', 'Por favor, selecciona al menos un producto para enviar la cotización.');
             return;
         }
 
-        const whatsappBtn = document.querySelector('.btn-whatsapp');
-        whatsappBtn.disabled = true;
-        whatsappBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando Cotización...';
+        const whatsappBtn = document.querySelector('.btn-success');
+        if (whatsappBtn) {
+            whatsappBtn.disabled = true;
+            whatsappBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+        }
 
         try {
-            const pdfBlob = await generarPDF();
-            const filename = `Cotizacion_GlobalMediTH_${(clientData.nombre || 'cliente').replace(/\s/g, '_')}.pdf`;
-
-            const url = URL.createObjectURL(pdfBlob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-
-            showCustomAlert(
-                '¡Cotización Lista! ✅',
-                "Tu cotización en PDF (`" + filename + "`) se ha descargado a tu dispositivo.\n\n" +
-                "Ahora, se abrirá WhatsApp. Por favor, realiza estos 2 pasos:\n" +
-                "1️⃣ Busca y adjunta el archivo PDF que acabas de descargar.\n" +
-                "2️⃣ Envía el mensaje (el texto de la cotización ya está listo).\n\n" +
-                "¡Gracias por tu paciencia! 😉"
-            );
+            // Se llama a generarPDF, pero como ahora es una función simulada, resuelve inmediatamente.
+            await generarPDF(); 
 
             const whatsappMessage = generateWhatsAppMessage();
             const whatsappUrl = `https://wa.me/522381646718?text=${encodeURIComponent(whatsappMessage)}`;
+            
+            // Abrir WhatsApp directamente
             window.open(whatsappUrl, '_blank');
+
+            // Mensaje de éxito en el modal, sin mencionar PDF
+            showCustomAlert(
+                'Cotización Lista para Enviar',
+                "Tu cotización está lista. ¡Revisa tu WhatsApp para completar el envío!\n\n" +
+                "¡Gracias por tu preferencia y por confiar en Global MediTH! 😉"
+            );
             
         } catch (error) {
-            console.error("Error al generar PDF o enviar WhatsApp:", error);
-            showCustomAlert('Error', 'Hubo un error al generar la cotización o abrir WhatsApp. Por favor, inténtalo de nuevo.');
+            console.error("Error al intentar abrir WhatsApp:", error);
+            showCustomAlert('Error', 'Hubo un error al intentar abrir WhatsApp. Por favor, asegúrate de tener la aplicación instalada o inténtalo de nuevo.');
         } finally {
-            whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar por WhatsApp';
-            whatsappBtn.disabled = false;
+            if (whatsappBtn) {
+                whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar Cotización por WhatsApp'; // Restaurar texto del botón
+                whatsappBtn.disabled = false;
+            }
         }
     }
 
